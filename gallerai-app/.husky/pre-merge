@@ -1,0 +1,8 @@
+#!/bin/sh
+# Check if package-lock.json changed in the last pull
+changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+
+if echo "$changed_files" | grep --quiet "package-lock.json"; then
+  echo "Detected changes in package-lock.json. Installing dependencies..."
+  cd gallerai-app && npm install
+fi
