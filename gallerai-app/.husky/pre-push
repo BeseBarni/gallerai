@@ -1,0 +1,5 @@
+#!/bin/sh
+cd gallerai-app
+
+echo "Checking types and build before push..."
+npm run build

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd gallerai-app
+npx lint-staged
