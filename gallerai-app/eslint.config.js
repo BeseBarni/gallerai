@@ -9,7 +9,7 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'src/shadcn/**/*.{ts,tsx}']),
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
@@ -35,12 +35,6 @@ export default defineConfig([
         callees: ['cn', 'cva'],
         config: 'src/index.css',
       },
-    },
-  },
-  {
-    files: ['src/shadcn/**/*.{ts,tsx}'],
-    rules: {
-      'react-refresh/only-export-components': 'off',
     },
   },
   prettierConfig,

@@ -32,4 +32,13 @@ export default defineConfig(({ mode }) => ({
     format: 'es',
     sourcemap: true,
   },
+  optimizeDeps: {
+    exclude: ['libraw-wasm'],
+  },
+  server: {
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+    },
+  },
 }))
