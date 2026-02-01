@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+  <Project Path="Gallerai.Application/Gallerai.Application.csproj" />
+  <Project Path="Gallerai.Domain/Gallerai.Domain.csproj" />
+  <Project Path="Gallerai.Infrastructure/Gallerai.Infrastructure.csproj" />
+  <Project Path="Gallerai.SharedKernel/Gallerai.SharedKernel.csproj" />
+  <Project Path="Gallerai.SourceGenerators/Gallerai.SourceGenerators.csproj" Id="3b079fac-e283-4a0e-b4c5-902a860a9ff6" />
+  <Project Path="Gallerai.WebAPI/Gallerai.WebAPI.csproj" />
+</Solution>

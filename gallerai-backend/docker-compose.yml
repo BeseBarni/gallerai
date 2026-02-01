@@ -1,0 +1,57 @@
+networks:
+  dev:
+    driver: bridge
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # RabbitMQ communication port
+      - "15672:15672" # Management UI port
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - dev
+  gallerai-db:
+    image: postgres:16-alpine
+    container_name: gallerai-db
+    ports:
+    - "5432:5432"
+    restart: unless-stopped
+    volumes:
+    - gallerai_data:/var/lib/postgresql/data
+    networks:
+    - dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gallerai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  gallerai.webapi:
+    ports:
+        - 8080:8080
+        - 8081:8081
+    container_name: gallerai-api
+    image: ${DOCKER_REGISTRY-}galleraiwebapi
+    build:
+      context: .
+      dockerfile: Gallerai.WebAPI/Dockerfile
+    depends_on:
+      gallerai-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+volumes:
+  rabbitmq_data:
+    driver: local  
+  gallerai_data:
+    driver: local

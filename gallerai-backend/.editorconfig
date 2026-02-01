@@ -1,0 +1,48 @@
+# Top-level settings
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+
+[*.{cs,csx,vb,vbx}]
+# --- MODERN C# PREFERENCES ---
+
+# Use file-scoped namespaces (Top-level namespaces)
+csharp_style_namespace_declarations = file_scoped:suggestion
+
+# --- BRACES & GUARD CLAUSES ---
+
+# Allow blank lines between statements (good for readability)
+csharp_style_allow_blank_lines_between_consecutive_braces = true
+
+# Disable "Fix braces" to allow guard clauses without braces: if (condition) return;
+csharp_prefer_braces = false:none
+
+# --- CODE STYLE & CLEANUP ---
+
+# Use 'var' when type is apparent
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+# Sort using directives with System first
+dotnet_separate_import_directive_groups = false
+dotnet_sort_system_directives_first = true
+
+# Use expression-bodied members for small methods/properties
+csharp_style_expression_bodied_methods = when_possible:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+
+# --- NAMING CONVENTIONS ---
+
+# Interfaces must start with I
+dotnet_naming_rule.interface_should_be_begins_with_i.severity = suggestion
+dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface_types
+dotnet_naming_rule.interface_should_be_begins_with_i.style = prefix_i
+
+dotnet_naming_symbols.interface_types.applicable_kinds = interface
+dotnet_naming_style.prefix_i.required_prefix = I
+dotnet_naming_style.prefix_i.capitalization = pascal_case

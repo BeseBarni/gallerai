@@ -1,0 +1,30 @@
+services:
+  rabbitmq:
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+  gallerai-db:
+    environment:
+      - POSTGRES_DB=gallerai
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Password123!
+    ports:
+      - "5432"
+  gallerai.webapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - Database__ConnectionString=Host=gallerai-db;Port=5432;Database=gallerai;Username=postgres;Password=Password123!;Include Error Detail=true
+      - APPLY_MIGRATIONS=true
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+    ports:
+      - "8080"
+      - "8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
