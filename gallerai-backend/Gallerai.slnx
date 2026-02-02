@@ -3,6 +3,9 @@
     <File Path=".editorconfig" />
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Folder Name="/Tools/">
+    <Project Path="Gallerai.Tools.SchemaExtractor/Gallerai.Tools.SchemaExtractor.csproj" Id="50d25ff4-dea2-414a-ae37-21693a562085" />
+  </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>

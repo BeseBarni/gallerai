@@ -1,3 +1,4 @@
+import { useGalleraiWebAPIEndpointsHelloHelloEndpoint } from '@/api/gallerai.gen'
 import { Button } from '@/shadcn/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shadcn/card'
 import { createFileRoute } from '@tanstack/react-router'
@@ -7,6 +8,7 @@ export const Route = createFileRoute('/')({
 })
 
 function RouteComponent() {
+  const { data } = useGalleraiWebAPIEndpointsHelloHelloEndpoint()
   return (
     <div className="bg-background flex min-h-screen flex-col items-center justify-center space-y-8 p-6">
       <div className="max-w-2xl space-y-4 text-center">
@@ -22,6 +24,7 @@ function RouteComponent() {
         <CardHeader>
           <CardTitle>Library Status</CardTitle>
           <CardDescription>If you see this styled card, shadcn/ui is active.</CardDescription>
+          <CardDescription>{data?.message ?? 'No data available'}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <p className="text-foreground/80 text-sm">
