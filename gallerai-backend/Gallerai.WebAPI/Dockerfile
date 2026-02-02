@@ -18,6 +18,7 @@ COPY ["Gallerai.Domain/Gallerai.Domain.csproj", "Gallerai.Domain/"]
 COPY ["Gallerai.SharedKernel/Gallerai.SharedKernel.csproj", "Gallerai.SharedKernel/"]
 COPY ["Gallerai.Infrastructure/Gallerai.Infrastructure.csproj", "Gallerai.Infrastructure/"]
 COPY ["Gallerai.SourceGenerators/Gallerai.SourceGenerators.csproj", "Gallerai.SourceGenerators/"]
+COPY ["Directory.Packages.props","Directory.Packages.props"]
 RUN dotnet restore "./Gallerai.WebAPI/Gallerai.WebAPI.csproj"
 COPY . .
 WORKDIR "/src/Gallerai.WebAPI"

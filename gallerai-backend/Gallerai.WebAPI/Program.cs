@@ -1,5 +1,4 @@
 using FastEndpoints;
-using FastEndpoints.Swagger;
 using Gallerai.Application;
 using Gallerai.Infrastructure;
 using Gallerai.WebAPI.Extensions;
@@ -12,15 +11,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddHealthChecks();
 
 builder.Services.AddFastEndpoints();
-builder.Services.SwaggerDocument(o =>
-{
-    o.DocumentSettings = s =>
-    {
-        s.Title = "Gallerai API";
-        s.Version = "v1";
-        s.Description = "API for Gallerai system";
-    };
-});
+builder.Services.AddGalleraiSwagger();
 
 builder.Services.AddOpenApi();
 
@@ -35,10 +26,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHealthChecks("/health");
-app.UseFastEndpoints(c =>
-{
-    c.Endpoints.RoutePrefix = "api";
-});
 
+app.UseGalleraiFastEndpoints();
 app.Run();
 

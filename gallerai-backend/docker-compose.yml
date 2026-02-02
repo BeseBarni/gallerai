@@ -49,7 +49,21 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-
+    networks:
+    - dev
+  gallerai.frontend:
+    ports:
+        - 5173:80
+    container_name: gallerai-frontend
+    build:
+      context: ../gallerai-app
+      dockerfile: Dockerfile
+    depends_on:
+      gallerai.webapi:
+        condition: service_started
+    restart: always
+    networks:
+    - dev
 volumes:
   rabbitmq_data:
     driver: local  
