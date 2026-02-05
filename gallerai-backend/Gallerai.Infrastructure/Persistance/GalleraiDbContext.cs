@@ -1,4 +1,5 @@
-﻿using Gallerai.Application.Interfaces;
+using Gallerai.Application.Interfaces;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gallerai.Infrastructure.Persistance;
@@ -14,5 +15,9 @@ public class GalleraiDbContext : DbContext, IGalleraiDbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(GalleraiDbContext).Assembly);
+
+        modelBuilder.AddInboxStateEntity();
+        modelBuilder.AddOutboxMessageEntity();
+        modelBuilder.AddOutboxStateEntity();
     }
 }

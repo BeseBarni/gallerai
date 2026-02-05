@@ -23,8 +23,8 @@
     <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.2" />
 
     <!-- MassTransit -->
-    <PackageVersion Include="MassTransit.EntityFrameworkCore" Version="9.0.0" />
-    <PackageVersion Include="MassTransit.RabbitMQ" Version="9.0.0" />
+    <PackageVersion Include="MassTransit.EntityFrameworkCore" Version="8.3.4" />
+    <PackageVersion Include="MassTransit.RabbitMQ" Version="8.3.4" />
 
     <!-- Application Layer -->
     <PackageVersion Include="FluentValidation" Version="12.1.1" />

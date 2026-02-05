@@ -36,9 +36,12 @@ export default defineConfig(({ mode }) => ({
     exclude: ['libraw-wasm'],
   },
   server: {
-    headers: {
-      'Cross-Origin-Embedder-Policy': 'require-corp',
-      'Cross-Origin-Opener-Policy': 'same-origin',
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5100',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 }))
