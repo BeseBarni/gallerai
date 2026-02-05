@@ -7,18 +7,57 @@
     "version": "v1"
   },
   "paths": {
-    "/api/hello": {
-      "get": {
-        "tags": ["Hello"],
-        "summary": "Simple hello-world test endpoint",
-        "operationId": "GalleraiWebAPIEndpointsHelloHelloEndpoint",
+    "/api/images/presigned-url": {
+      "post": {
+        "tags": ["Images"],
+        "operationId": "ImagePresignedUrl",
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesImagesGetImagePresignedURL_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiWebAPIEndpointsHelloHelloResponse"
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/hello": {
+      "get": {
+        "tags": ["Hello"],
+        "summary": "Simple hello-world test endpoint",
+        "operationId": "HelloEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiWebAPIFeaturesHelloHelloResponse"
                 }
               }
             }
@@ -29,7 +68,70 @@
   },
   "components": {
     "schemas": {
-      "GalleraiWebAPIEndpointsHelloHelloResponse": {
+      "GalleraiSharedKernelModelsResultOfResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesImagesGetImagePresignedURL_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsError": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesImagesGetImagePresignedURL_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "uploadUrl": {
+            "type": "string"
+          },
+          "imageId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "key": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesImagesGetImagePresignedURL_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileName": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiWebAPIFeaturesHelloHelloResponse": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

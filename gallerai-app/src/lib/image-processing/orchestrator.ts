@@ -17,15 +17,6 @@ export const startImagePipeline = async (id: string) => {
     const localUrl = URL.createObjectURL(blob)
     store.updateImage(id, { localUrl, status: 'uploading' })
 
-    const ticketResponse = await fetch(`/api/upload/ticket?id=${id}`)
-    const { uploadUrl } = await ticketResponse.json()
-
-    await fetch(uploadUrl, {
-      method: 'PUT',
-      body: blob,
-      headers: { 'Content-Type': 'image/jpeg' },
-    })
-
     store.updateImage(id, { status: 'ai_processing' })
   } catch (error) {
     store.updateImage(id, { status: 'error' })

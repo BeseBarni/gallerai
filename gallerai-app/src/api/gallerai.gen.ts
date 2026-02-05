@@ -6,90 +6,163 @@
  * OpenAPI spec version: v1
  */
 import {
+  useMutation,
   useQuery,
   type DataTag,
   type DefinedInitialDataOptions,
   type DefinedUseQueryResult,
+  type MutationFunction,
   type QueryClient,
   type QueryFunction,
   type QueryKey,
   type UndefinedInitialDataOptions,
+  type UseMutationOptions,
+  type UseMutationResult,
   type UseQueryOptions,
   type UseQueryResult,
 } from '@tanstack/react-query'
 
-import { axiosInstance, type ErrorType } from '../lib/api-client'
-import type { GalleraiWebAPIEndpointsHelloHelloResponse } from './schemas'
+import { axiosInstance, type BodyType, type ErrorType } from '../lib/api-client'
+import type {
+  GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest,
+  GalleraiSharedKernelModelsResultOfResponse,
+  GalleraiWebAPIFeaturesHelloHelloResponse,
+} from './schemas'
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+export const imagePresignedUrl = (
+  galleraiApplicationFeaturesImagesGetImagePresignedURLRequest: BodyType<GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest>,
+  options?: SecondParameter<typeof axiosInstance>,
+  signal?: AbortSignal,
+) => {
+  return axiosInstance<GalleraiSharedKernelModelsResultOfResponse>(
+    {
+      url: `/api/images/presigned-url`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: galleraiApplicationFeaturesImagesGetImagePresignedURLRequest,
+      signal,
+    },
+    options,
+  )
+}
+
+export const getImagePresignedUrlMutationOptions = <
+  TError = ErrorType<void>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof imagePresignedUrl>>,
+    TError,
+    { data: BodyType<GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest> },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof imagePresignedUrl>>,
+  TError,
+  { data: BodyType<GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest> },
+  TContext
+> => {
+  const mutationKey = ['imagePresignedUrl']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof imagePresignedUrl>>,
+    { data: BodyType<GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest> }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return imagePresignedUrl(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type ImagePresignedUrlMutationResult = NonNullable<
+  Awaited<ReturnType<typeof imagePresignedUrl>>
+>
+export type ImagePresignedUrlMutationBody =
+  BodyType<GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest>
+export type ImagePresignedUrlMutationError = ErrorType<void>
+
+export const useImagePresignedUrl = <TError = ErrorType<void>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof imagePresignedUrl>>,
+      TError,
+      { data: BodyType<GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest> },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosInstance>
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof imagePresignedUrl>>,
+  TError,
+  { data: BodyType<GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest> },
+  TContext
+> => {
+  return useMutation(getImagePresignedUrlMutationOptions(options), queryClient)
+}
 
 /**
  * @summary Simple hello-world test endpoint
  */
-export const galleraiWebAPIEndpointsHelloHelloEndpoint = (
+export const helloEndpoint = (
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<GalleraiWebAPIEndpointsHelloHelloResponse>(
+  return axiosInstance<GalleraiWebAPIFeaturesHelloHelloResponse>(
     { url: `/api/hello`, method: 'GET', signal },
     options,
   )
 }
 
-export const getGalleraiWebAPIEndpointsHelloHelloEndpointQueryKey = () => {
+export const getHelloEndpointQueryKey = () => {
   return [`/api/hello`] as const
 }
 
-export const getGalleraiWebAPIEndpointsHelloHelloEndpointQueryOptions = <
-  TData = Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
+export const getHelloEndpointQueryOptions = <
+  TData = Awaited<ReturnType<typeof helloEndpoint>>,
   TError = ErrorType<unknown>,
 >(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
-      TError,
-      TData
-    >
-  >
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>>
   request?: SecondParameter<typeof axiosInstance>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGalleraiWebAPIEndpointsHelloHelloEndpointQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getHelloEndpointQueryKey()
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>
-  > = ({ signal }) => galleraiWebAPIEndpointsHelloHelloEndpoint(requestOptions, signal)
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof helloEndpoint>>> = ({ signal }) =>
+    helloEndpoint(requestOptions, signal)
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
+    Awaited<ReturnType<typeof helloEndpoint>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GalleraiWebAPIEndpointsHelloHelloEndpointQueryResult = NonNullable<
-  Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>
->
-export type GalleraiWebAPIEndpointsHelloHelloEndpointQueryError = ErrorType<unknown>
+export type HelloEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof helloEndpoint>>>
+export type HelloEndpointQueryError = ErrorType<unknown>
 
-export function useGalleraiWebAPIEndpointsHelloHelloEndpoint<
-  TData = Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
+export function useHelloEndpoint<
+  TData = Awaited<ReturnType<typeof helloEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
-        TError,
-        TData
-      >
-    > &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
+          Awaited<ReturnType<typeof helloEndpoint>>,
           TError,
-          Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>
+          Awaited<ReturnType<typeof helloEndpoint>>
         >,
         'initialData'
       >
@@ -97,23 +170,17 @@ export function useGalleraiWebAPIEndpointsHelloHelloEndpoint<
   },
   queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGalleraiWebAPIEndpointsHelloHelloEndpoint<
-  TData = Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
+export function useHelloEndpoint<
+  TData = Awaited<ReturnType<typeof helloEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
-        TError,
-        TData
-      >
-    > &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
+          Awaited<ReturnType<typeof helloEndpoint>>,
           TError,
-          Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>
+          Awaited<ReturnType<typeof helloEndpoint>>
         >,
         'initialData'
       >
@@ -121,18 +188,12 @@ export function useGalleraiWebAPIEndpointsHelloHelloEndpoint<
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGalleraiWebAPIEndpointsHelloHelloEndpoint<
-  TData = Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
+export function useHelloEndpoint<
+  TData = Awaited<ReturnType<typeof helloEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
-        TError,
-        TData
-      >
-    >
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>>
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
@@ -141,23 +202,17 @@ export function useGalleraiWebAPIEndpointsHelloHelloEndpoint<
  * @summary Simple hello-world test endpoint
  */
 
-export function useGalleraiWebAPIEndpointsHelloHelloEndpoint<
-  TData = Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
+export function useHelloEndpoint<
+  TData = Awaited<ReturnType<typeof helloEndpoint>>,
   TError = ErrorType<unknown>,
 >(
   options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof galleraiWebAPIEndpointsHelloHelloEndpoint>>,
-        TError,
-        TData
-      >
-    >
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>>
     request?: SecondParameter<typeof axiosInstance>
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGalleraiWebAPIEndpointsHelloHelloEndpointQueryOptions(options)
+  const queryOptions = getHelloEndpointQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>

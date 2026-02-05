@@ -1,0 +1,72 @@
+using Gallerai.Domain.Entities.Abstract;
+using Gallerai.Domain.Enums;
+
+namespace Gallerai.Domain.Entities.ImageEntities;
+
+public sealed class Image : ImageIdEntity
+{
+    private readonly List<ImageEvent> _imageEvents = new();
+    private readonly List<ImageTag> _imageTags = new();
+
+    private Image()
+    {
+    }
+    public string? R2Key { get; set; }
+    public string? Url { get; private set; } = null!;
+    public DateTime? UploadedAt { get; private set; }
+
+    public ImageState Status { get; private set; } = null!;
+    public ImageAnalysis Analysis { get; private set; } = null!;
+    public ImageMetadata Metadata { get; private set; } = null!;
+
+    public IReadOnlyCollection<ImageEvent> ImageEvents => _imageEvents;
+    public IReadOnlyCollection<ImageTag> ImageTags => _imageTags;
+
+    public static Image Create()
+    {
+        var image = new Image();
+        var status = ImageStatus.UPLOADING;
+        image.SetStatus(new ImageState(status));
+        image.AddEvent(new ImageEvent(status, DateTime.UtcNow));
+
+        return image;
+    }
+    public void SetStorageKey(string key)
+    {
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
+        R2Key = key;
+    }
+    public void SetStatus(ImageState status)
+    {
+        Status = status ?? throw new ArgumentNullException(nameof(status));
+    }
+
+    public void SetAnalysis(ImageAnalysis analysis)
+    {
+        Analysis = analysis ?? throw new ArgumentNullException(nameof(analysis));
+    }
+
+    public void SetMetadata(ImageMetadata metadata)
+    {
+        Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
+    }
+
+    public void AddEvent(ImageEvent imageEvent)
+    {
+        if (imageEvent == null) throw new ArgumentNullException(nameof(imageEvent));
+        _imageEvents.Add(imageEvent);
+    }
+
+    public void AddTag(ImageTag tag)
+    {
+        if (tag == null) throw new ArgumentNullException(nameof(tag));
+        if (_imageTags.Contains(tag)) return;
+        _imageTags.Add(tag);
+    }
+
+    public void RemoveTag(ImageTag tag)
+    {
+        if (tag == null) throw new ArgumentNullException(nameof(tag));
+        _imageTags.Remove(tag);
+    }
+}

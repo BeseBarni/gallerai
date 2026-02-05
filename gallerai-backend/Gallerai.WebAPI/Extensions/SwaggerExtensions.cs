@@ -15,6 +15,8 @@ public static class SwaggerExtensions
                 s.Title = SwaggerConsts.ApiTitle;
                 s.Version = SwaggerConsts.ApiVersion;
                 s.Description = SwaggerConsts.ApiDescription;
+                o.ShortSchemaNames = true;
+                o.RemoveEmptyRequestSchema = true;
             };
         });
     }
@@ -24,6 +26,7 @@ public static class SwaggerExtensions
         return app.UseFastEndpoints(c =>
         {
             c.Endpoints.RoutePrefix = "api";
+            c.Endpoints.ShortNames = true;
         });
     }
 }
