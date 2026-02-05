@@ -1,4 +1,4 @@
-import { useGalleraiWebAPIEndpointsHelloHelloEndpoint } from '@/api/gallerai.gen'
+import { useHelloEndpoint } from '@/api/gallerai.gen'
 import { Button } from '@/shadcn/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shadcn/card'
 import { createFileRoute } from '@tanstack/react-router'
@@ -8,7 +8,7 @@ export const Route = createFileRoute('/')({
 })
 
 function RouteComponent() {
-  const { data } = useGalleraiWebAPIEndpointsHelloHelloEndpoint()
+  const { data } = useHelloEndpoint()
   return (
     <div className="bg-background flex min-h-screen flex-col items-center justify-center space-y-8 p-6">
       <div className="max-w-2xl space-y-4 text-center">
