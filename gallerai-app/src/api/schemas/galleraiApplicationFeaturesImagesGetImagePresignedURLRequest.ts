@@ -7,6 +7,7 @@
  */
 
 export interface GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest {
+  key?: string
   fileName?: string
   contentType?: string
 }

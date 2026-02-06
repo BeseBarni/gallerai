@@ -15,7 +15,7 @@ public class ImagePresignedUrl(IMediator mediator) : Endpoint<GetImagePresignedU
 
     public override async Task HandleAsync(GetImagePresignedURL.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new GetImagePresignedURL.Command(req.FileName, req.ContentType), ct);
+        var result = await mediator.Send(new GetImagePresignedURL.Command(req.Key, req.FileName, req.ContentType), ct);
 
         await Send.OkAsync(result, cancellation: ct);
     }

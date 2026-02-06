@@ -14,18 +14,23 @@ interface ImageStore {
 
 export const useImageStore = create<ImageStore>((set) => ({
   images: {},
-  addImage: () => {
-    const id = crypto.randomUUID()
+  addImage: ({ id, localUrl, status }) => {
     set((state) => ({
       images: {
         ...state.images,
-        [id]: { id, localUrl: null, status: 'waiting' },
+        [id]: { id, localUrl, status },
       },
     }))
     return id
   },
   updateImage: (id, updates) =>
-    set((state) => ({
-      images: { ...state.images, [id]: { ...state.images[id], ...updates } },
-    })),
+    set((state) => {
+      console.log('Updating image', id, state.images, updates, state.images[id], {
+        ...state.images[id],
+        ...updates,
+      })
+      return {
+        images: { ...state.images, [id]: { ...state.images[id], ...updates } },
+      }
+    }),
 }))

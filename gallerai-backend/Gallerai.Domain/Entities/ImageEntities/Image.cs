@@ -22,9 +22,10 @@ public sealed class Image : ImageIdEntity
     public IReadOnlyCollection<ImageEvent> ImageEvents => _imageEvents;
     public IReadOnlyCollection<ImageTag> ImageTags => _imageTags;
 
-    public static Image Create()
+    public static Image Create(Guid guid)
     {
         var image = new Image();
+        image.ImageId = guid;
         var status = ImageStatus.UPLOADING;
         image.SetStatus(new ImageState(status));
         image.AddEvent(new ImageEvent(status, DateTime.UtcNow));

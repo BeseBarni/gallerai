@@ -16,13 +16,6 @@ function RouteComponent() {
   const onUpload = (newFiles: File[]) => {
     newFiles.forEach((file) => {
       const id = crypto.randomUUID()
-
-      useImageStore.getState().addImage({
-        id,
-        status: 'waiting',
-        localUrl: null,
-      })
-
       startImagePipeline(id, file)
     })
   }

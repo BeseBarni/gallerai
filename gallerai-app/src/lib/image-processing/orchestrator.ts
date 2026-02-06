@@ -5,10 +5,9 @@ import { imageProcessor } from '@/workers/image/worker-pool'
 
 export const startImagePipeline = async (id: string, file: File) => {
   const store = useImageStore.getState()
-
-  store.updateImage(id, { status: 'developing' })
-
+  console.log('Starting pipeline for', id, file)
   try {
+    store.addImage({ id, localUrl: null, status: 'waiting' })
     const processedData = await imageProcessor.process(file)
     const type = 'image/jpeg'
     const blob = new Blob([processedData], { type: type })
@@ -17,6 +16,7 @@ export const startImagePipeline = async (id: string, file: File) => {
     store.updateImage(id, { localUrl, status: 'uploading' })
 
     const result = await imagePresignedUrl({
+      key: id,
       fileName: `${id}.jpg`,
       contentType: 'image/jpeg',
     }).then((p) => p.value)
@@ -28,11 +28,9 @@ export const startImagePipeline = async (id: string, file: File) => {
       contentType: type,
       onProgress: () => {},
     })
-
-    const publicUrl = `${result.cdnUrl}/${result.key}`
-
+    console.log('uplopaf', id, result)
     store.updateImage(id, {
-      localUrl: publicUrl,
+      localUrl: result.cdnUrl,
       status: 'ai_processing',
     })
   } catch (error) {

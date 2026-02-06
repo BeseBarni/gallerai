@@ -49,7 +49,7 @@ export const imagePresignedUrl = (
 }
 
 export const getImagePresignedUrlMutationOptions = <
-  TError = ErrorType<void>,
+  TError = ErrorType<unknown>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -89,9 +89,9 @@ export type ImagePresignedUrlMutationResult = NonNullable<
 >
 export type ImagePresignedUrlMutationBody =
   BodyType<GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest>
-export type ImagePresignedUrlMutationError = ErrorType<void>
+export type ImagePresignedUrlMutationError = ErrorType<unknown>
 
-export const useImagePresignedUrl = <TError = ErrorType<void>, TContext = unknown>(
+export const useImagePresignedUrl = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof imagePresignedUrl>>,

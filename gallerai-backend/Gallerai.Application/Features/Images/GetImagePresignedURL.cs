@@ -8,15 +8,15 @@ namespace Gallerai.Application.Features.Images;
 
 public static class GetImagePresignedURL
 {
-    public record Request(string FileName, string ContentType);
-    public record Command(string FileName, string ContentType) : IRequest<Result<Response>>;
+    public record Request(Guid Key, string FileName, string ContentType);
+    public record Command(Guid Key, string FileName, string ContentType) : IRequest<Result<Response>>;
     public record Response(string UploadUrl, Guid ImageId, string Key, string CDNUrl);
 
     public sealed class Handler(IImageService ImageService, IGalleraiDbContext Context, CloudflareR2Settings cloudflareR2Settings) : IRequestHandler<Command, Result<Response>>
     {
         public async Task<Result<Response>> Handle(Command request, CancellationToken ct)
         {
-            var image = Image.Create();
+            var image = Image.Create(request.Key);
 
             var extension = Path.GetExtension(request.FileName);
             var storageKey = $"{image.ImageId}{extension}";
@@ -39,7 +39,7 @@ public static class GetImagePresignedURL
 
             await Context.SaveChangesAsync(ct);
 
-            return new Response(uploadUrl, image.ImageId, storageKey, cloudflareR2Settings.Endpoint);
+            return new Response(uploadUrl, image.ImageId, storageKey, string.Join('/', cloudflareR2Settings.PublicURL, storageKey));
         }
     }
 }

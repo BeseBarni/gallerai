@@ -13,7 +13,7 @@ class ImageProcessorPool {
   private workers: { api: Comlink.Remote<ImageWorkerAPI>; busy: boolean }[] = []
   private queue: ImageQueueItem[] = []
 
-  private readonly MAX_CONCURRENT = Math.min(navigator.hardwareConcurrency || 4, 3)
+  private readonly MAX_CONCURRENT = navigator.hardwareConcurrency - 1
 
   constructor() {}
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useImageStore } from '@/store/useImageStore'
 
 interface RawPreviewProps {
@@ -10,6 +10,10 @@ export const RawPreview: React.FC<RawPreviewProps> = ({ id }) => {
   // We use a selector so this component ONLY re-renders if THIS image changes
   const image = useImageStore((state) => state.images[id])
 
+  useEffect(() => {
+    // 2. Safety check: If the image doesn't exist yet, we can choose to do nothing or show a placeholder
+    console.log('image updated for id:', image)
+  }, [image])
   // Safety check: If the ID doesn't exist in store yet
   if (!image) return null
 

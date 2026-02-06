@@ -34,16 +34,8 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
           }
-        },
-        "security": [
-          {
-            "JWTBearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/api/hello": {
@@ -126,6 +118,10 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "key": {
+            "type": "string",
+            "format": "guid"
+          },
           "fileName": {
             "type": "string"
           },

@@ -9,5 +9,6 @@ public sealed class CloudflareR2Settings : ISettings
     public string SecretAccessKey { get; set; } = string.Empty;
     public string Endpoint { get; set; } = string.Empty;
     public string Bucket { get; set; } = string.Empty;
+    public string PublicURL { get; set; } = string.Empty;
     public int ExpiryMinutes { get; set; } = 1;
 }
