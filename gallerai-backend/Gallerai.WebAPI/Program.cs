@@ -28,7 +28,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHealthChecks("/health");
-
 app.UseGalleraiFastEndpoints();
 app.Run();
 

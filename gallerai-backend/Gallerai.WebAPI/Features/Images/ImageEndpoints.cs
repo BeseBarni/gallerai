@@ -10,6 +10,7 @@ public class ImagePresignedUrl(IMediator mediator) : Endpoint<GetImagePresignedU
     public override void Configure()
     {
         Post("/images/presigned-url");
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(GetImagePresignedURL.Request req, CancellationToken ct)

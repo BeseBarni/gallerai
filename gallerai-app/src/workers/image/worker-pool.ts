@@ -1,58 +1,68 @@
 import * as Comlink from 'comlink'
 
 import type { ImageWorkerAPI } from './image.worker'
+import ImageWorker from './image.worker.ts?worker'
 
 type ImageQueueItem = {
   file: File
-  resolve: (value: Uint8Array) => void
+  resolve: (value: ArrayBuffer) => void
   reject: (reason?: unknown) => void
 }
 
 class ImageProcessorPool {
-  private workers: Comlink.Remote<ImageWorkerAPI>[] = []
+  private workers: { api: Comlink.Remote<ImageWorkerAPI>; busy: boolean }[] = []
   private queue: ImageQueueItem[] = []
-
-  private activeTasks = 0
 
   private readonly MAX_CONCURRENT = Math.min(navigator.hardwareConcurrency || 4, 3)
 
-  constructor() {
-    for (let i = 0; i < this.MAX_CONCURRENT; i++) {
-      const worker = new Worker(new URL('./image.worker.ts', import.meta.url), {
-        type: 'module',
-      })
-      this.workers.push(Comlink.wrap<ImageWorkerAPI>(worker))
-    }
-  }
+  constructor() {}
 
-  public async process(file: File): Promise<Uint8Array> {
+  public async process(file: File): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
       this.queue.push({ file, resolve, reject })
       this.next()
     })
   }
 
+  private getFreeWorker() {
+    const idleWorker = this.workers.find((w) => !w.busy)
+    if (idleWorker) return idleWorker
+
+    if (this.workers.length < this.MAX_CONCURRENT) {
+      const newWorkerInstance = new ImageWorker()
+
+      const newWorker = {
+        api: Comlink.wrap<ImageWorkerAPI>(newWorkerInstance),
+        busy: false,
+      }
+
+      this.workers.push(newWorker)
+      return newWorker
+    }
+
+    return null
+  }
+
   private async next() {
-    if (this.activeTasks >= this.MAX_CONCURRENT || this.queue.length === 0) return
+    if (this.queue.length === 0) return
+
+    const worker = this.getFreeWorker()
+
+    if (!worker) return
 
     const task = this.queue.shift()
     if (!task) return
 
-    this.activeTasks++
-
-    const workerIndex = this.activeTasks % this.workers.length
-    const worker = this.workers[workerIndex]
+    worker.busy = true
 
     try {
       const buffer = await task.file.arrayBuffer()
-
-      const result = await worker.process(Comlink.transfer(buffer, [buffer]))
-
+      const result = await worker.api.process(Comlink.transfer(buffer, [buffer]))
       task.resolve(result)
     } catch (err) {
       task.reject(err)
     } finally {
-      this.activeTasks--
+      worker.busy = false
       this.next()
     }
   }

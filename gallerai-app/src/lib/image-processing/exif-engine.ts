@@ -1,6 +1,6 @@
 import ExifReader from 'exifreader'
 
-export const extractPreview = (buffer: ArrayBuffer): Uint8Array | null => {
+export const extractPreview = (buffer: ArrayBuffer): ArrayBuffer | null => {
   try {
     const tags = ExifReader.load(buffer)
 
@@ -10,12 +10,11 @@ export const extractPreview = (buffer: ArrayBuffer): Uint8Array | null => {
       tags['JpgFromRaw'] ||
       tags['Thumbnail']) as unknown as { image: ArrayBuffer }
 
-    if (preview && preview.image) {
-      const imageBytes = new Uint8Array(preview.image)
-      if (imageBytes.length > 500000) {
-        return imageBytes
-      }
-    }
+    if (!preview || !preview.image) return null
+
+    if (preview.image.byteLength < 500000) return null
+
+    return preview.image
   } catch (error) {
     console.warn('EXIF Extraction failed, falling back to WASM:', error)
   }

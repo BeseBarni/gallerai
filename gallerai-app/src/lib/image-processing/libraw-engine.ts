@@ -1,7 +1,7 @@
 import { encodeToJpeg } from '@/utils/image-helpers'
 import LibRaw from 'libraw-wasm'
 
-export const developRaw = async (buffer: ArrayBuffer): Promise<Uint8Array | null> => {
+export const developRaw = async (buffer: ArrayBuffer): Promise<ArrayBuffer | null> => {
   try {
     const instance = new LibRaw()
 
@@ -16,7 +16,7 @@ export const developRaw = async (buffer: ArrayBuffer): Promise<Uint8Array | null
     const imageData = await instance.imageData()
     const previewBlob = await encodeToJpeg(imageData)
 
-    return new Uint8Array(await previewBlob.arrayBuffer())
+    return await previewBlob.arrayBuffer()
   } catch (error) {
     console.error('WASM Processing failed:', error)
     return null
