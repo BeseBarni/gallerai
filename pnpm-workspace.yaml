@@ -1,0 +1,4 @@
+packages:
+  - 'gallerai-app'
+  - 'r2-notifier'
+  - 'shared'

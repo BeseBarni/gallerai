@@ -8,9 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "cd .. && husky gallerai-app/.husky",
-    "schema:gen": "dotnet run --project ../gallerai-backend/Gallerai.Tools.SchemaExtractor/Gallerai.Tools.SchemaExtractor.csproj --configuration Release",
-    "codegen:api": "npm run schema:gen && orval --config orval.config.ts"
+    "prepare": "cd .. && husky gallerai-app/.husky"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -19,6 +17,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query": "^5.90.16",
+    "@gallerai/shared": "workspace:*",
     "@tanstack/react-query-devtools": "^5.91.2",
     "@tanstack/react-router": "^1.147.3",
     "@tanstack/react-router-devtools": "^1.149.0",

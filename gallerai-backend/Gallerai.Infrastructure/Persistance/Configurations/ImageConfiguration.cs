@@ -13,8 +13,7 @@ internal sealed class ImageConfiguration : IEntityTypeConfiguration<Image>
         builder.Property(i => i.R2Key)
             .HasMaxLength(256);
 
-        builder.Property(i => i.Url)
-            .HasMaxLength(2048);
+        builder.Property(i => i.Size);
 
         builder
             .HasOne(i => i.Status)

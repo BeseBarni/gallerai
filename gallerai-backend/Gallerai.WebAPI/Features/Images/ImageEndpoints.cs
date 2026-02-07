@@ -21,3 +21,19 @@ public class ImagePresignedUrl(IMediator mediator) : Endpoint<GetImagePresignedU
     }
 }
 
+public class ImagesUploadedEndpoint(IMediator mediator) : Endpoint<ImagesUploaded.Request, Result<ImagesUploaded.Response>>
+{
+    public override void Configure()
+    {
+        Post("/images/uploaded");
+        AllowAnonymous();
+    }
+
+    public override async Task HandleAsync(ImagesUploaded.Request req, CancellationToken ct)
+    {
+        var result = await mediator.Send(new ImagesUploaded.Command(req.Events), ct);
+
+        await Send.OkAsync(result, cancellation: ct);
+    }
+}
+

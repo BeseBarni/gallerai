@@ -1,8 +1,8 @@
-import { imagePresignedUrl } from '@/api/gallerai.gen'
 import { useImageStore } from '@/store/useImageStore'
 import { isRaw } from '@/utils/image-helpers'
 import { uploadFileWithProgress } from '@/utils/upload-helpers'
 import { imageProcessor } from '@/workers/image/worker-pool'
+import { imagePresignedUrl } from '@shared/src/api/gallerai/api.gen'
 
 export const startImagePipeline = async (id: string, file: File) => {
   const store = useImageStore.getState()

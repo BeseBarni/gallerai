@@ -6,7 +6,8 @@
  * OpenAPI spec version: v1
  */
 
-export interface GalleraiSharedKernelModelsError {
-  code?: string
-  message?: string
+export interface GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest {
+  key?: string;
+  fileName?: string;
+  contentType?: string;
 }

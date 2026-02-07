@@ -6,6 +6,8 @@
  * OpenAPI spec version: v1
  */
 
-export interface GalleraiWebAPIFeaturesHelloHelloResponse {
-  message?: string
+export interface GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest {
+  key?: string;
+  fileName?: string;
+  contentType?: string;
 }

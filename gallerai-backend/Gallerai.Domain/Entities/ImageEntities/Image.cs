@@ -11,8 +11,8 @@ public sealed class Image : ImageIdEntity
     private Image()
     {
     }
-    public string? R2Key { get; set; }
-    public string? Url { get; private set; } = null!;
+    public string? R2Key { get; private set; }
+    public long? Size { get; private set; }
     public DateTime? UploadedAt { get; private set; }
 
     public ImageState Status { get; private set; } = null!;
@@ -69,5 +69,14 @@ public sealed class Image : ImageIdEntity
     {
         if (tag == null) throw new ArgumentNullException(nameof(tag));
         _imageTags.Remove(tag);
+    }
+
+    public void MarkAsUploaded(long size, DateTime uploadedAt)
+    {
+        Size = size;
+        UploadedAt = uploadedAt;
+        var status = ImageStatus.WAITING_FOR_ANALYSIS;
+        SetStatus(new ImageState(status));
+        AddEvent(new ImageEvent(status, DateTime.UtcNow));
     }
 }
