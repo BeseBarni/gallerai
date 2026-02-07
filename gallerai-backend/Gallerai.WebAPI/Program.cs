@@ -1,8 +1,9 @@
 using FastEndpoints;
+using FastEndpoints.Swagger;
 using Gallerai.Application;
 using Gallerai.Infrastructure;
 using Gallerai.WebAPI.Extensions;
-using Scalar.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
@@ -22,11 +23,11 @@ await app.UseApplyMigrations();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.UseSwaggerGen();
+    app.UseSwaggerUi();
 }
 
 app.MapHealthChecks("/health");
-
 app.UseGalleraiFastEndpoints();
 app.Run();
 

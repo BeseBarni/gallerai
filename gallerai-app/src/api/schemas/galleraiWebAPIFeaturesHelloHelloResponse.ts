@@ -6,6 +6,6 @@
  * OpenAPI spec version: v1
  */
 
-export interface GalleraiWebAPIEndpointsHelloHelloResponse {
+export interface GalleraiWebAPIFeaturesHelloHelloResponse {
   message?: string
 }

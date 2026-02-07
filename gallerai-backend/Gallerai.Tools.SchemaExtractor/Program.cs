@@ -1,5 +1,6 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using Gallerai.Application;
 using Gallerai.SharedKernel.Consts;
 using Gallerai.WebAPI.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSwag.Generation;
 
 var bld = WebApplication.CreateBuilder();
-
+bld.Services.AddApplication();
 bld.Services.AddFastEndpoints(o =>
 {
     o.Assemblies = [typeof(SwaggerExtensions).Assembly];

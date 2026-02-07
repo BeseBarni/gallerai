@@ -1,6 +1,9 @@
+using Amazon.Runtime;
+using Amazon.S3;
 using Gallerai.Application.Interfaces;
 using Gallerai.Infrastructure.Extensions;
 using Gallerai.Infrastructure.Persistance;
+using Gallerai.Infrastructure.Services;
 using Gallerai.SharedKernel.Settings;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +21,29 @@ public static class DependencyInjection
 
         var dbConnection = configuration.GetConfiguration<DatabaseSettings>().ConnectionString;
 
+        var cloudflareR2Settings = configuration.GetConfiguration<CloudflareR2Settings>();
+
         var rabbitMqSettings = configuration.GetConfiguration<RabbitMQSettings>();
 
         services.AddDbContext<GalleraiDbContext>(options =>
             options.UseNpgsql(dbConnection));
 
         services.AddScoped<IGalleraiDbContext>(provider => provider.GetRequiredService<GalleraiDbContext>());
+
+        services.AddSingleton<IAmazonS3>(_ =>
+        {
+            var credentials = new BasicAWSCredentials(cloudflareR2Settings.AccessKeyId, cloudflareR2Settings.SecretAccessKey);
+
+            var config = new AmazonS3Config
+            {
+                ServiceURL = cloudflareR2Settings.Endpoint,
+                ForcePathStyle = true
+            };
+
+            return new AmazonS3Client(credentials, config);
+        });
+
+        services.AddScoped<IImageService, ImageService>();
 
         services.AddMassTransit(x =>
         {

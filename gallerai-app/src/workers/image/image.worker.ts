@@ -7,11 +7,11 @@ const api = {
   async process(buffer: ArrayBuffer) {
     try {
       const fastResult = await extractPreview(buffer)
-      if (fastResult && fastResult.length > 500000)
-        return Comlink.transfer(fastResult, [fastResult.buffer])
+      if (fastResult && fastResult.byteLength > 500000)
+        return Comlink.transfer(fastResult, [fastResult])
 
       const heavyResult = await developRaw(buffer)
-      if (heavyResult) return Comlink.transfer(heavyResult, [heavyResult.buffer])
+      if (heavyResult) return Comlink.transfer(heavyResult, [heavyResult])
 
       throw new Error('Unsupported image format')
     } catch (globalWorkerError) {

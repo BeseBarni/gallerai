@@ -1,0 +1,13 @@
+{
+  "name": "gallerai-dev-runner",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npm run infra:up && npx concurrently -k -p \"[{name}]\" -n \"API,WEB,MOCK\" -c \"cyan.bold,magenta.bold,yellow.bold\" \"npm:run:api\" \"npm:run:web\"",
+    "infra:up": "cd gallerai-backend && docker compose up -d rabbitmq gallerai-db",
+    "run:api": "cd gallerai-backend && dotnet watch --project Gallerai.WebAPI",
+    "run:web": "cd gallerai-app && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}

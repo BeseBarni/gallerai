@@ -1,6 +1,6 @@
 using FastEndpoints;
 
-namespace Gallerai.WebAPI.Endpoints.Hello;
+namespace Gallerai.WebAPI.Features.Hello;
 
 public class HelloResponse
 {

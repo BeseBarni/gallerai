@@ -12,6 +12,7 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\Gallerai.Application\Gallerai.Application.csproj" />
       <ProjectReference Include="..\Gallerai.WebAPI\Gallerai.WebAPI.csproj" />
     </ItemGroup>
 

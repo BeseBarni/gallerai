@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/gallerai-backend/Gallerai.WebAPI/appsettings.Development.json
+/gallerai-backend/docker-compose.override.yml
