@@ -11,7 +11,6 @@ internal sealed class ImageConfiguration : IEntityTypeConfiguration<Image>
         builder.HasKey(i => i.ImageId);
 
         builder.Property(i => i.R2Key)
-            .IsRequired()
             .HasMaxLength(256);
 
         builder.Property(i => i.Url)
@@ -28,14 +27,12 @@ internal sealed class ImageConfiguration : IEntityTypeConfiguration<Image>
             .HasOne(i => i.Metadata)
             .WithOne(m => m.Image)
             .HasForeignKey<ImageMetadata>(m => m.ImageId)
-            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(i => i.Analysis)
             .WithOne(a => a.Image)
             .HasForeignKey<ImageAnalysis>(a => a.ImageId)
-            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder

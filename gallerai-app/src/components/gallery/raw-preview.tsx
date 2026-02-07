@@ -37,6 +37,7 @@ export const RawPreview: React.FC<RawPreviewProps> = ({ id }) => {
           <img
             src={localUrl}
             className="h-full w-full object-cover transition-opacity duration-300"
+            alt={`Preview of ${id}`}
             loading="lazy"
           />
         )}
