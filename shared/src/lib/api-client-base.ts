@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  type AxiosInstance,
+  type AxiosRequestConfig,
+} from "axios";
 
 let _instance: AxiosInstance | null = null;
 
