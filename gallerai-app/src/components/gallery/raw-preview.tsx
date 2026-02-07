@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useImageStore } from '@/store/useImageStore'
 
 interface RawPreviewProps {
@@ -6,15 +6,8 @@ interface RawPreviewProps {
 }
 
 export const RawPreview: React.FC<RawPreviewProps> = ({ id }) => {
-  // 1. Subscribe to the specific image slice
-  // We use a selector so this component ONLY re-renders if THIS image changes
   const image = useImageStore((state) => state.images[id])
 
-  useEffect(() => {
-    // 2. Safety check: If the image doesn't exist yet, we can choose to do nothing or show a placeholder
-    console.log('image updated for id:', image)
-  }, [image])
-  // Safety check: If the ID doesn't exist in store yet
   if (!image) return null
 
   const { localUrl, status } = image
@@ -41,7 +34,6 @@ export const RawPreview: React.FC<RawPreviewProps> = ({ id }) => {
             </span>
           </div>
         ) : (
-          /* CASE 2: SUCCESS (Display Blob URL or CDN URL) */
           <img
             src={localUrl}
             className="h-full w-full object-cover transition-opacity duration-300"

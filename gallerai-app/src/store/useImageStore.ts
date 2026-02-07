@@ -25,10 +25,6 @@ export const useImageStore = create<ImageStore>((set) => ({
   },
   updateImage: (id, updates) =>
     set((state) => {
-      console.log('Updating image', id, state.images, updates, state.images[id], {
-        ...state.images[id],
-        ...updates,
-      })
       return {
         images: { ...state.images, [id]: { ...state.images[id], ...updates } },
       }

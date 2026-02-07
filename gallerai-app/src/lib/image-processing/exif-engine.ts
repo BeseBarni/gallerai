@@ -4,8 +4,6 @@ export const extractPreview = (buffer: ArrayBuffer): ArrayBuffer | null => {
   try {
     const tags = ExifReader.load(buffer)
 
-    console.log('EXIF Tags:', tags)
-
     const preview = (tags['PreviewImage'] ||
       tags['JpgFromRaw'] ||
       tags['Thumbnail']) as unknown as { image: ArrayBuffer }
