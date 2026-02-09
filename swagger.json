@@ -9,7 +9,9 @@
   "paths": {
     "/api/images/presigned-url": {
       "post": {
-        "tags": ["Images"],
+        "tags": [
+          "Images"
+        ],
         "operationId": "ImagePresignedUrl",
         "requestBody": {
           "x-name": "Request",
@@ -38,9 +40,44 @@
         }
       }
     },
+    "/api/images/uploaded": {
+      "post": {
+        "tags": [
+          "Images"
+        ],
+        "operationId": "ImagesUploadedEndpoint",
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesImagesImagesUploaded_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/hello": {
       "get": {
-        "tags": ["Hello"],
+        "tags": [
+          "Hello"
+        ],
         "summary": "Simple hello-world test endpoint",
         "operationId": "HelloEndpoint",
         "responses": {
@@ -127,6 +164,82 @@
           },
           "contentType": {
             "type": "string"
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfResponse2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesImagesImagesUploaded_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesImagesImagesUploaded_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "processedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "failedKeys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesImagesImagesUploaded_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/GalleraiApplicationFeaturesImagesImagesUploaded_ImageUploadedEvent"
+            }
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesImagesImagesUploaded_ImageUploadedEvent": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "bucket": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

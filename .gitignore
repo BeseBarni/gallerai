@@ -4,3 +4,4 @@
 
 /gallerai-backend/Gallerai.WebAPI/appsettings.Development.json
 /gallerai-backend/docker-compose.override.yml
+node_modules

@@ -7,6 +7,6 @@
  */
 
 export interface GalleraiSharedKernelModelsError {
-  code?: string
-  message?: string
+  code?: string;
+  message?: string;
 }

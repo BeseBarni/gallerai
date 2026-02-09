@@ -11,8 +11,8 @@ public sealed class Image : ImageIdEntity
     private Image()
     {
     }
-    public string? R2Key { get; set; }
-    public string? Url { get; private set; } = null!;
+    public string? R2Key { get; private set; }
+    public long? Size { get; private set; }
     public DateTime? UploadedAt { get; private set; }
 
     public ImageState Status { get; private set; } = null!;
@@ -31,6 +31,12 @@ public sealed class Image : ImageIdEntity
         image.AddEvent(new ImageEvent(status, DateTime.UtcNow));
 
         return image;
+    }
+    public string GetFullPath(string publicUrl)
+    {
+        if (R2Key is null) throw new InvalidOperationException("Storage key is not set.");
+
+        return string.Join('/', publicUrl.TrimEnd('/'), R2Key);
     }
     public void SetStorageKey(string key)
     {
@@ -69,5 +75,14 @@ public sealed class Image : ImageIdEntity
     {
         if (tag == null) throw new ArgumentNullException(nameof(tag));
         _imageTags.Remove(tag);
+    }
+
+    public ImageEvent MarkAsUploaded(long size, DateTime uploadedAt)
+    {
+        Size = size;
+        UploadedAt = uploadedAt;
+        var status = ImageStatus.WAITING_FOR_ANALYSIS;
+        Status.SetStatus(status);
+        return new ImageEvent(ImageId, status, DateTime.UtcNow);
     }
 }

@@ -1,5 +1,6 @@
 using Amazon.Runtime;
 using Amazon.S3;
+using Gallerai.Application.Features.Images;
 using Gallerai.Application.Interfaces;
 using Gallerai.Infrastructure.Extensions;
 using Gallerai.Infrastructure.Persistance;
@@ -53,6 +54,8 @@ public static class DependencyInjection
                 o.UsePostgres();
                 o.UseBusOutbox();
             });
+
+            x.AddConsumer<StartAIInferenceConsumer>();
 
             x.UsingRabbitMq((ctx, cfg) =>
             {

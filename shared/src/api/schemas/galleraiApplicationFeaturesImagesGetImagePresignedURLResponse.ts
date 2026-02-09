@@ -7,8 +7,8 @@
  */
 
 export interface GalleraiApplicationFeaturesImagesGetImagePresignedURLResponse {
-  uploadUrl?: string
-  imageId?: string
-  key?: string
-  cdnUrl?: string
+  uploadUrl?: string;
+  imageId?: string;
+  key?: string;
+  cdnUrl?: string;
 }

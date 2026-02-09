@@ -1,0 +1,39 @@
+{
+	"files.associations": {
+		"wrangler.json": "jsonc"
+	},
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"workbench.colorCustomizations": {
+		"editorCursor.foreground": "#fb923c",
+		"activityBar.activeBackground": "#f57634",
+		"activityBar.background": "#f57634",
+		"activityBar.foreground": "#15202b",
+		"activityBar.inactiveForeground": "#15202b99",
+		"activityBarBadge.background": "#67f898",
+		"activityBarBadge.foreground": "#15202b",
+		"commandCenter.border": "#e7e7e799",
+		"sash.hoverBorder": "#f57634",
+		"statusBar.background": "#ea580c",
+		"statusBar.foreground": "#e7e7e7",
+		"statusBarItem.hoverBackground": "#f57634",
+		"statusBarItem.remoteBackground": "#ea580c",
+		"statusBarItem.remoteForeground": "#e7e7e7",
+		"titleBar.activeBackground": "#ea580c",
+		"titleBar.activeForeground": "#e7e7e7",
+		"titleBar.inactiveBackground": "#ea580c99",
+		"titleBar.inactiveForeground": "#e7e7e799"
+	},
+	"editor.cursorSmoothCaretAnimation": "on",
+	"peacock.color": "#ea580c",
+	"editor.minimap.enabled": false,
+	"editor.stickyScroll.enabled": true,
+	"workbench.list.smoothScrolling": true,
+	"editor.cursorBlinking": "expand",
+	"window.commandCenter": true,
+	"editor.fontLigatures": true,
+	"workbench.activityBar.location": "top",
+	"workbench.layoutControl.enabled": true,
+	"workbench.productIconTheme": "fluent-icons",
+	"css.lint.unknownAtRules": "ignore"
+}

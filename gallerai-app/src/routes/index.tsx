@@ -1,6 +1,6 @@
-import { useHelloEndpoint } from '@/api/gallerai.gen'
 import { Button } from '@/shadcn/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shadcn/card'
+import { useHelloEndpoint } from '@gallerai/shared/web'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({

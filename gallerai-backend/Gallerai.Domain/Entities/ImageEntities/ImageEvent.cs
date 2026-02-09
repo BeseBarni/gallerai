@@ -1,4 +1,3 @@
-using System;
 using Gallerai.Domain.Entities.Abstract;
 using Gallerai.Domain.Enums;
 
@@ -12,6 +11,15 @@ public sealed class ImageEvent : ImageIdNavigationEntity
 
     public ImageEvent(ImageStatus status, DateTime lastUpdate, string? message = null)
     {
+        ImageEventId = Guid.NewGuid();
+        Status = status;
+        LastUpdate = lastUpdate;
+        Message = message;
+    }
+
+    public ImageEvent(Guid imageId, ImageStatus status, DateTime lastUpdate, string? message = null)
+    {
+        ImageId = imageId;
         ImageEventId = Guid.NewGuid();
         Status = status;
         LastUpdate = lastUpdate;
