@@ -19,4 +19,6 @@ public interface IGalleraiDbContext
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    
+    Task LockImagesAndStatuses(string[] keys, CancellationToken cancellationToken = default);
 }

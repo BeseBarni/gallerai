@@ -11,7 +11,7 @@ export const workerFetch = async <T>(
   options?: RequestInit
 ): Promise<T> => {
   if (!_baseUrl) {
-    throw new Error('❌ API Client not initialized! Call setBaseUrl() in your worker entry.');
+    throw new Error('API Client not initialized. Call setBaseUrl() in your worker entry.');
   }
 
   const response = await fetch(`${_baseUrl}${url}`, {
@@ -26,7 +26,13 @@ export const workerFetch = async <T>(
     throw new Error(`Worker API Error: ${response.statusText}`);
   }
 
-  return response.json() as Promise<T>;
+  const data = await response.json();
+
+  return {
+    data,
+    status: response.status,
+    headers: response.headers,
+  } as T;
 };
 
 export default workerFetch;

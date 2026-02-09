@@ -1,5 +1,6 @@
 using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Entities.ImageEntities;
+using Gallerai.Infrastructure.Extensions;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,11 @@ public class GalleraiDbContext : DbContext, IGalleraiDbContext
     public DbSet<ImageState> ImageStates { get; set; } = null!;
     public DbSet<ImageEvent> ImageEvents { get; set; } = null!;
     public DbSet<ImageTag> ImageTags { get; set; } = null!;
+
+    public Task LockImagesAndStatuses(string[] keys, CancellationToken cancellationToken = default)
+    {
+        return this.LockImagesAndStatuses(keys, cancellationToken);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

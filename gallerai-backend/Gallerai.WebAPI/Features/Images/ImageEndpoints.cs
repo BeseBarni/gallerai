@@ -31,7 +31,7 @@ public class ImagesUploadedEndpoint(IMediator mediator) : Endpoint<ImagesUploade
 
     public override async Task HandleAsync(ImagesUploaded.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new ImagesUploaded.Command(req.Events), ct);
+        var result = await mediator.Send(new ImagesUploaded.Command(req.Events ?? Array.Empty<ImagesUploaded.ImageUploadedEvent>()), ct);
 
         await Send.OkAsync(result, cancellation: ct);
     }

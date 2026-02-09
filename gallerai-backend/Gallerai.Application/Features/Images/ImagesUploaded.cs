@@ -1,5 +1,4 @@
 using System.Data;
-using Gallerai.Application.Extensions;
 using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Enums;
 using Gallerai.SharedKernel.Events;
@@ -14,7 +13,7 @@ namespace Gallerai.Application.Features.Images;
 public static class ImagesUploaded
 {
     public record ImageUploadedEvent(string Key, long Size, string Bucket, DateTime Timestamp);
-    public record Request(ImageUploadedEvent[] Events);
+    public record Request(ImageUploadedEvent[]? Events);
     public record Command(ImageUploadedEvent[] Events) : IRequest<Result<Response>>;
     public record Response(int ProcessedCount, int FailedCount, string[] FailedKeys);
 
@@ -25,6 +24,9 @@ public static class ImagesUploaded
             var processedCount = 0;
             var ignoredCount = 0;
             var failedKeys = new List<string>();
+
+            if (request.Events == null || request.Events.Length == 0)
+                return Result<Response>.Success(new Response(0, 0, Array.Empty<string>()));
 
             var keys = request.Events.Select(e => e.Key).Distinct().ToArray();
 
@@ -44,7 +46,9 @@ public static class ImagesUploaded
                     .ToDictionaryAsync(i => i.R2Key!, ct);
                 foreach (var uploadEvent in request.Events)
                 {
-                    (var flowControl, (processedCount, ignoredCount)) = await ProcessImage(processedCount, ignoredCount, failedKeys, images, uploadEvent, ct);
+                    (var flowControl, var counters) = await ProcessImage(processedCount, ignoredCount, failedKeys, images, uploadEvent, ct);
+                    processedCount = counters.processedCount;
+                    ignoredCount = counters.ignoredCount;
 
                     if (!flowControl)
                         continue;
@@ -73,7 +77,7 @@ public static class ImagesUploaded
                 if (image.Status.Status == ImageStatus.WAITING_FOR_ANALYSIS)
                 {
                     ignoredCount++;
-                    return (flowControl: false, value: default);
+                    return (flowControl: false, value: (processedCount, ignoredCount));
                 }
 
                 var imageEvent = image.MarkAsUploaded(uploadEvent.Size, uploadEvent.Timestamp);
@@ -92,7 +96,7 @@ public static class ImagesUploaded
                 failedKeys.Add(uploadEvent.Key);
             }
 
-            return (flowControl: true, value: default);
+            return (flowControl: true, value: (processedCount, ignoredCount));
         }
     }
 }

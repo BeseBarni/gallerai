@@ -1,13 +1,13 @@
-using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Entities.ImageEntities;
+using Gallerai.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-namespace Gallerai.Application.Extensions;
+namespace Gallerai.Infrastructure.Extensions;
 
 internal static class DatabaseExtensions
 {
-    public async static Task LockImagesAndStatuses(this IGalleraiDbContext context, string[] keys, CancellationToken ct)
+    public static async Task LockImagesAndStatuses(this GalleraiDbContext context, string[] keys, CancellationToken ct)
     {
         var keysParam = new NpgsqlParameter("keys", NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Text)
         {

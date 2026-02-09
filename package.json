@@ -3,11 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "start": "npm run infra:up && npx concurrently -k -p \"[{name}]\" -n \"API,WEB,MOCK\" -c \"cyan.bold,magenta.bold,yellow.bold\" \"npm:run:web\" \"npm:run:r2-worker\"",
+    "start": "npm run infra:up && npx concurrently -k -p \"[{name}]\" -n \"API,WEB,WORKER\" -c \"cyan.bold,magenta.bold,yellow.bold\" \"npm:run:api\" \"npm:run:web\" \"npm:run:r2-worker\"",
     "infra:up": "cd gallerai-backend && docker compose up -d rabbitmq gallerai-db",
     "run:api": "cd gallerai-backend && dotnet watch --project Gallerai.WebAPI",
     "run:web": "cd gallerai-app && npm run dev",
-    "run:r2-worker": "cd r2-notifier && npx wrangler tail",
+    "run:r2-worker": "cd r2-notifier && npx wrangler dev",
     "schema:gen": "dotnet run --project ./gallerai-backend/Gallerai.Tools.SchemaExtractor/Gallerai.Tools.SchemaExtractor.csproj --configuration Release",
     "codegen:api": "npm run schema:gen && orval --config orval.config.ts"
   },
