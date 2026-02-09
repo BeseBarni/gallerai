@@ -36,13 +36,12 @@ public static class ImagesUploaded
 
             try
             {
+                await context.LockImagesAndStatuses(keys, ct);
+
                 var images = await context.Images
                     .Include(x => x.Status)
                     .Where(x => keys.Contains(x.R2Key))
                     .ToDictionaryAsync(i => i.R2Key!, ct);
-
-                await context.LockImagesAndStatuses(keys, ct);
-
                 foreach (var uploadEvent in request.Events)
                 {
                     (var flowControl, (processedCount, ignoredCount)) = await ProcessImage(processedCount, ignoredCount, failedKeys, images, uploadEvent, ct);
