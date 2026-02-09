@@ -26,9 +26,14 @@ export default defineConfig({
       mode: 'split',
       target: './shared/src/api/worker/worker.gen.ts',
       schemas: './shared/src/api/schemas',
-      httpClient: 'fetch',
       prettier: true,
       clean: true,
+      override: {
+        mutator: {
+          path: './shared/src/lib/worker-client.ts',
+          name: 'workerFetch',
+        },
+      },
     },
   },
 })

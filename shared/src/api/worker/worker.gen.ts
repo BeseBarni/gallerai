@@ -10,118 +10,112 @@ import type {
   GalleraiApplicationFeaturesImagesImagesUploadedRequest,
   GalleraiSharedKernelModelsResultOfResponse,
   GalleraiSharedKernelModelsResultOfResponse2,
-  GalleraiWebAPIFeaturesHelloHelloResponse,
-} from "../schemas";
+  GalleraiWebAPIFeaturesHelloHelloResponse
+} from '../schemas';
+
+import { workerFetch } from '../../lib/worker-client';
 
 export type imagePresignedUrlResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse;
-  status: 200;
-};
-
-export type imagePresignedUrlResponseSuccess = imagePresignedUrlResponse200 & {
+  data: GalleraiSharedKernelModelsResultOfResponse
+  status: 200
+}
+    
+export type imagePresignedUrlResponseSuccess = (imagePresignedUrlResponse200) & {
   headers: Headers;
 };
-export type imagePresignedUrlResponse = imagePresignedUrlResponseSuccess;
+;
+
+export type imagePresignedUrlResponse = (imagePresignedUrlResponseSuccess)
 
 export const getImagePresignedUrlUrl = () => {
-  return `/api/images/presigned-url`;
-};
 
-export const imagePresignedUrl = async (
-  galleraiApplicationFeaturesImagesGetImagePresignedURLRequest: GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest,
-  options?: RequestInit,
-): Promise<imagePresignedUrlResponse> => {
-  const res = await fetch(getImagePresignedUrlUrl(), {
+
+  
+
+  return `/api/images/presigned-url`
+}
+
+export const imagePresignedUrl = async (galleraiApplicationFeaturesImagesGetImagePresignedURLRequest: GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest, options?: RequestInit): Promise<imagePresignedUrlResponse> => {
+  
+  return workerFetch<imagePresignedUrlResponse>(getImagePresignedUrlUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(
-      galleraiApplicationFeaturesImagesGetImagePresignedURLRequest,
-    ),
-  });
+      galleraiApplicationFeaturesImagesGetImagePresignedURLRequest,)
+  }
+);}
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
 
-  const data: imagePresignedUrlResponse["data"] = body ? JSON.parse(body) : {};
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as imagePresignedUrlResponse;
-};
 
 export type imagesUploadedEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse2;
-  status: 200;
+  data: GalleraiSharedKernelModelsResultOfResponse2
+  status: 200
+}
+    
+export type imagesUploadedEndpointResponseSuccess = (imagesUploadedEndpointResponse200) & {
+  headers: Headers;
 };
+;
 
-export type imagesUploadedEndpointResponseSuccess =
-  imagesUploadedEndpointResponse200 & {
-    headers: Headers;
-  };
-export type imagesUploadedEndpointResponse =
-  imagesUploadedEndpointResponseSuccess;
+export type imagesUploadedEndpointResponse = (imagesUploadedEndpointResponseSuccess)
 
 export const getImagesUploadedEndpointUrl = () => {
-  return `/api/images/uploaded`;
-};
 
-export const imagesUploadedEndpoint = async (
-  galleraiApplicationFeaturesImagesImagesUploadedRequest: GalleraiApplicationFeaturesImagesImagesUploadedRequest,
-  options?: RequestInit,
-): Promise<imagesUploadedEndpointResponse> => {
-  const res = await fetch(getImagesUploadedEndpointUrl(), {
+
+  
+
+  return `/api/images/uploaded`
+}
+
+export const imagesUploadedEndpoint = async (galleraiApplicationFeaturesImagesImagesUploadedRequest: GalleraiApplicationFeaturesImagesImagesUploadedRequest, options?: RequestInit): Promise<imagesUploadedEndpointResponse> => {
+  
+  return workerFetch<imagesUploadedEndpointResponse>(getImagesUploadedEndpointUrl(),
+  {      
     ...options,
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...options?.headers },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(
-      galleraiApplicationFeaturesImagesImagesUploadedRequest,
-    ),
-  });
+      galleraiApplicationFeaturesImagesImagesUploadedRequest,)
+  }
+);}
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
 
-  const data: imagesUploadedEndpointResponse["data"] = body
-    ? JSON.parse(body)
-    : {};
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as imagesUploadedEndpointResponse;
-};
 
 /**
  * @summary Simple hello-world test endpoint
  */
 export type helloEndpointResponse200 = {
-  data: GalleraiWebAPIFeaturesHelloHelloResponse;
-  status: 200;
-};
-
-export type helloEndpointResponseSuccess = helloEndpointResponse200 & {
+  data: GalleraiWebAPIFeaturesHelloHelloResponse
+  status: 200
+}
+    
+export type helloEndpointResponseSuccess = (helloEndpointResponse200) & {
   headers: Headers;
 };
-export type helloEndpointResponse = helloEndpointResponseSuccess;
+;
+
+export type helloEndpointResponse = (helloEndpointResponseSuccess)
 
 export const getHelloEndpointUrl = () => {
-  return `/api/hello`;
-};
 
-export const helloEndpoint = async (
-  options?: RequestInit,
-): Promise<helloEndpointResponse> => {
-  const res = await fetch(getHelloEndpointUrl(), {
+
+  
+
+  return `/api/hello`
+}
+
+export const helloEndpoint = async ( options?: RequestInit): Promise<helloEndpointResponse> => {
+  
+  return workerFetch<helloEndpointResponse>(getHelloEndpointUrl(),
+  {      
     ...options,
-    method: "GET",
-  });
+    method: 'GET'
+    
+    
+  }
+);}
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
 
-  const data: helloEndpointResponse["data"] = body ? JSON.parse(body) : {};
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as helloEndpointResponse;
-};
+

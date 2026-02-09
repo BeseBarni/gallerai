@@ -6,12 +6,12 @@
  * OpenAPI spec version: v1
  */
 
-export * from "./galleraiApplicationFeaturesImagesGetImagePresignedURLRequest";
-export * from "./galleraiApplicationFeaturesImagesGetImagePresignedURLResponse";
-export * from "./galleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent";
-export * from "./galleraiApplicationFeaturesImagesImagesUploadedRequest";
-export * from "./galleraiApplicationFeaturesImagesImagesUploadedResponse";
-export * from "./galleraiSharedKernelModelsError";
-export * from "./galleraiSharedKernelModelsResultOfResponse";
-export * from "./galleraiSharedKernelModelsResultOfResponse2";
-export * from "./galleraiWebAPIFeaturesHelloHelloResponse";
+export * from './galleraiApplicationFeaturesImagesGetImagePresignedURLRequest';
+export * from './galleraiApplicationFeaturesImagesGetImagePresignedURLResponse';
+export * from './galleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent';
+export * from './galleraiApplicationFeaturesImagesImagesUploadedRequest';
+export * from './galleraiApplicationFeaturesImagesImagesUploadedResponse';
+export * from './galleraiSharedKernelModelsError';
+export * from './galleraiSharedKernelModelsResultOfResponse';
+export * from './galleraiSharedKernelModelsResultOfResponse2';
+export * from './galleraiWebAPIFeaturesHelloHelloResponse';

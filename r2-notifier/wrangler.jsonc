@@ -29,7 +29,7 @@
 		},
 	],
 	"vars": {
-		"BACKEND_URL": "http://localhost:5100",
+		"BACKEND_URL": "https://api.gallerai.me",
 	},
 	/**
 	 * Smart Placement

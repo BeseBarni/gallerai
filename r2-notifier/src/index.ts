@@ -1,10 +1,5 @@
 import { imagesUploadedEndpoint } from '@shared/src/api/worker/worker.gen';
-
-interface Env {
-	IMAGES_BUCKET: R2Bucket;
-	BACKEND_URL: string;
-	BACKEND_SECRET: string; // Set via `wrangler secret put`
-}
+import { setBaseUrl } from '@shared/src/lib/worker-client';
 
 interface R2EventNotification {
 	object: {
@@ -18,14 +13,14 @@ interface R2EventNotification {
 
 export default {
 	async queue(batch: MessageBatch<R2EventNotification>, env: Env): Promise<void> {
+		setBaseUrl(env.BACKEND_URL);
+
 		const eventsToSend = [];
 
-		// 1. Unpack the Queue Batch
 		for (const message of batch.messages) {
-			// R2 events are inside message.body
 			const r2Event = message.body;
 
-			// Filter only for uploads (PutObject)
+			// Filter only for uploads
 			if (r2Event.action === 'PutObject') {
 				eventsToSend.push({
 					key: r2Event.object.key,
@@ -34,27 +29,31 @@ export default {
 					timestamp: new Date().toISOString(),
 				});
 			}
-
-			// Explicitly acknowledge this message so it doesn't get retried
-			message.ack();
+		}
+		
+		if (eventsToSend.length === 0) {
+			batch.ackAll();
+			return;
 		}
 
-		if (eventsToSend.length === 0) return;
-
-		// 2. Send Batch to .NET Backend
 		try {
-			const response = await imagesUploadedEndpoint(eventsToSend);
+			const response = await imagesUploadedEndpoint({ events: eventsToSend });
 
-			if (!response.ok) {
-				throw new Error(`Backend responded with ${response.status}`);
+			if (response.data.isSuccess) {
+				batch.ackAll();
+			} else {
+
+				batch.retryAll();
 			}
-
-			console.log(`Successfully notified backend of ${eventsToSend.length} uploads.`);
 		} catch (error) {
-			console.error('Backend notification failed:', error);
-			// If the backend is down, we FAIL the batch.
-			// Cloudflare will automatically retry these messages later.
+
 			batch.retryAll();
 		}
+	},
+
+	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		return new Response("I am a background Queue Worker. I don't speak HTTP! 👻", {
+			status: 404,
+		});
 	},
 };

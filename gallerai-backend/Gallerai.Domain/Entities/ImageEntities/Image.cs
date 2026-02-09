@@ -32,6 +32,12 @@ public sealed class Image : ImageIdEntity
 
         return image;
     }
+    public string GetFullPath(string publicUrl)
+    {
+        if (R2Key is null) throw new InvalidOperationException("Storage key is not set.");
+
+        return string.Join('/', publicUrl.TrimEnd('/'), R2Key);
+    }
     public void SetStorageKey(string key)
     {
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
@@ -71,12 +77,12 @@ public sealed class Image : ImageIdEntity
         _imageTags.Remove(tag);
     }
 
-    public void MarkAsUploaded(long size, DateTime uploadedAt)
+    public ImageEvent MarkAsUploaded(long size, DateTime uploadedAt)
     {
         Size = size;
         UploadedAt = uploadedAt;
         var status = ImageStatus.WAITING_FOR_ANALYSIS;
-        SetStatus(new ImageState(status));
-        AddEvent(new ImageEvent(status, DateTime.UtcNow));
+        Status.SetStatus(status);
+        return new ImageEvent(ImageId, status, DateTime.UtcNow);
     }
 }

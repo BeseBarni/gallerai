@@ -5,8 +5,8 @@
  * API for Gallerai system
  * OpenAPI spec version: v1
  */
-import type { GalleraiApplicationFeaturesImagesGetImagePresignedURLResponse } from "./galleraiApplicationFeaturesImagesGetImagePresignedURLResponse";
-import type { GalleraiSharedKernelModelsError } from "./galleraiSharedKernelModelsError";
+import type { GalleraiApplicationFeaturesImagesGetImagePresignedURLResponse } from './galleraiApplicationFeaturesImagesGetImagePresignedURLResponse';
+import type { GalleraiSharedKernelModelsError } from './galleraiSharedKernelModelsError';
 
 export interface GalleraiSharedKernelModelsResultOfResponse {
   isSuccess?: boolean;
