@@ -21,7 +21,7 @@ public class GalleraiDbContext : DbContext, IGalleraiDbContext
 
     public Task LockImagesAndStatuses(string[] keys, CancellationToken cancellationToken = default)
     {
-        return this.LockImagesAndStatuses(keys, cancellationToken);
+        return DatabaseExtensions.LockImagesAndStatuses(this, keys, cancellationToken);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
