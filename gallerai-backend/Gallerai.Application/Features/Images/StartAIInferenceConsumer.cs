@@ -17,7 +17,7 @@ public class StartAIInferenceConsumer : IConsumer<StartAIInferenceEvent>
     {
         _logger.LogInformation("🤖 Received Image for AI Processing: {Id} | URL: {Url}",
             context.Message.Id,
-            context.Message.publicUrl);
+            context.Message.PublicUrl);
 
         return Task.CompletedTask;
     }

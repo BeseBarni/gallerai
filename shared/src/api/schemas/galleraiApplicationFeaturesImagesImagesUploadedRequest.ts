@@ -8,5 +8,6 @@
 import type { GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent } from './galleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent';
 
 export interface GalleraiApplicationFeaturesImagesImagesUploadedRequest {
-  events?: GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent[];
+  /** @nullable */
+  events?: GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent[] | null;
 }

@@ -216,6 +216,7 @@
         "properties": {
           "events": {
             "type": "array",
+            "nullable": true,
             "items": {
               "$ref": "#/components/schemas/GalleraiApplicationFeaturesImagesImagesUploaded_ImageUploadedEvent"
             }
