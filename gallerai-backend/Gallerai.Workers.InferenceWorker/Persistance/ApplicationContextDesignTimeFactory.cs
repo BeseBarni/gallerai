@@ -9,7 +9,7 @@ public class WorkerDbContextDesignTimeFactory : IDesignTimeDbContextFactory<Work
     {
         DbContextOptionsBuilder<WorkerDbContext> optionsBuilder = new();
 
-        optionsBuilder.UseNpgsql("");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=password");
 
         return new WorkerDbContext(optionsBuilder.Options);
     }
