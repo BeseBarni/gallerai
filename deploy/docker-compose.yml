@@ -27,29 +27,14 @@ services:
     restart: unless-stopped
     volumes:
     - gallerai_data:/var/lib/postgresql/data
-    - ../scripts/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
     networks:
     - dev
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gallerai"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
-  gallerai.inference-worker:
-    profiles: ["worker"]
-    container_name: gallerai-inference-worker
-    image: ${DOCKER_REGISTRY-}galleraiinferenceworker
-    build:
-      context: .
-      dockerfile: ../gallerai-backend/Gallerai.Workers.InferenceWorker/Dockerfile
-    depends_on:
-      gallerai-db:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-    networks:
-    - dev
   gallerai.webapi:
     profiles: ["app"]
     ports:
@@ -59,7 +44,7 @@ services:
     image: ${DOCKER_REGISTRY-}galleraiwebapi
     build:
       context: .
-      dockerfile: ../gallerai-backend/Gallerai.WebAPI/Dockerfile
+      dockerfile: Gallerai.WebAPI/Dockerfile
     depends_on:
       gallerai-db:
         condition: service_healthy

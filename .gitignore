@@ -5,3 +5,5 @@
 /gallerai-backend/Gallerai.WebAPI/appsettings.Development.json
 /gallerai-backend/docker-compose.override.yml
 node_modules
+/deploy/docker-compose.override.yml
+/gallerai-backend/Gallerai.Workers.InferenceWorker/appsettings.Development.json

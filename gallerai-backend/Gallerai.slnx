@@ -6,6 +6,9 @@
   <Folder Name="/Tools/">
     <Project Path="Gallerai.Tools.SchemaExtractor/Gallerai.Tools.SchemaExtractor.csproj" Id="50d25ff4-dea2-414a-ae37-21693a562085" />
   </Folder>
+  <Folder Name="/Workers/">
+    <Project Path="Gallerai.Workers.InferenceWorker/Gallerai.Workers.InferenceWorker.csproj" />
+  </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>
