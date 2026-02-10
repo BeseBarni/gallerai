@@ -1,59 +1,98 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace Gallerai.SourceGenerators;
 
 [Generator]
 public class SettingsRegistrationGenerator : IIncrementalGenerator
 {
+    private const string SettingsScopeAttributeName = "Gallerai.SharedKernel.Attributes.SettingsScopeAttribute";
+    private const string SharedScope = "Shared";
+
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var settingsClasses = context.CompilationProvider.Select((compilation, token) =>
         {
             var markerSymbol = compilation.GetTypeByMetadataName("Gallerai.SharedKernel.IAssemblyMarker");
             var iSettingsSymbol = compilation.GetTypeByMetadataName("Gallerai.SharedKernel.Interfaces.ISettings");
+            var scopeAttributeSymbol = compilation.GetTypeByMetadataName(SettingsScopeAttributeName);
 
             if (markerSymbol == null || iSettingsSymbol == null)
-                return ImmutableArray<string>.Empty;
+                return (ImmutableArray<string>.Empty, string.Empty);
 
             var targetAssembly = markerSymbol.ContainingAssembly;
+            var consumingAssemblyName = compilation.AssemblyName ?? string.Empty;
 
             var foundClasses = ImmutableArray.CreateBuilder<string>();
-            ScanNamespace(targetAssembly.GlobalNamespace, iSettingsSymbol, foundClasses);
+            ScanNamespace(targetAssembly.GlobalNamespace, iSettingsSymbol, scopeAttributeSymbol, consumingAssemblyName, foundClasses);
 
-            return foundClasses.ToImmutable();
+            return (foundClasses.ToImmutable(), consumingAssemblyName);
         });
 
-        context.RegisterSourceOutput(settingsClasses, (spc, classes) =>
+        context.RegisterSourceOutput(settingsClasses, (spc, result) =>
         {
+            var (classes, targetNamespace) = result;
             if (classes.IsDefaultOrEmpty) return;
 
-            var code = GenerateCode(classes, "Gallerai.Infrastructure");
+            var code = GenerateCode(classes, targetNamespace);
             spc.AddSource("GeneratedSettingsExtensions.g.cs", SourceText.From(code, Encoding.UTF8));
         });
     }
 
-    private void ScanNamespace(INamespaceSymbol namespaceSymbol, INamedTypeSymbol interfaceSymbol, ImmutableArray<string>.Builder results)
+    private void ScanNamespace(
+        INamespaceSymbol namespaceSymbol,
+        INamedTypeSymbol interfaceSymbol,
+        INamedTypeSymbol? scopeAttributeSymbol,
+        string consumingAssemblyName,
+        ImmutableArray<string>.Builder results)
     {
         foreach (var member in namespaceSymbol.GetMembers())
         {
             if (member is INamespaceSymbol subNamespace)
             {
-                ScanNamespace(subNamespace, interfaceSymbol, results);
+                ScanNamespace(subNamespace, interfaceSymbol, scopeAttributeSymbol, consumingAssemblyName, results);
             }
             else if (member is INamedTypeSymbol typeSymbol)
             {
                 if (typeSymbol.TypeKind == TypeKind.Class && !typeSymbol.IsAbstract &&
                     typeSymbol.AllInterfaces.Contains(interfaceSymbol, SymbolEqualityComparer.Default))
                 {
-                    results.Add(typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+                    if (IsSettingInScope(typeSymbol, scopeAttributeSymbol, consumingAssemblyName))
+                    {
+                        results.Add(typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+                    }
                 }
             }
         }
     }
+
+    private bool IsSettingInScope(
+        INamedTypeSymbol typeSymbol,
+        INamedTypeSymbol? scopeAttributeSymbol,
+        string consumingAssemblyName)
+    {
+        if (scopeAttributeSymbol == null)
+            return true; // No scoping, include all
+
+        var scopeAttributes = typeSymbol.GetAttributes()
+            .Where(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, scopeAttributeSymbol))
+            .ToList();
+
+        // No scope attribute means include in all projects
+        if (!scopeAttributes.Any())
+            return true;
+
+        // Check if any scope matches the consuming assembly or is "Shared"
+        return scopeAttributes.Any(attr =>
+        {
+            var scopeValue = attr.ConstructorArguments.FirstOrDefault().Value?.ToString();
+            return scopeValue == SharedScope || scopeValue == consumingAssemblyName;
+        });
+    }
+
     private string GenerateCode(ImmutableArray<string> classNames, string targetNamespace)
     {
         var sb = new StringBuilder();
@@ -71,16 +110,13 @@ public class SettingsRegistrationGenerator : IIncrementalGenerator
 
         foreach (var className in classNames)
         {
-            sb.AppendLine($@"        // Register Options
-        services.AddOptions<{className}>()
+            sb.AppendLine($@"        services.AddOptions<{className}>()
             .Bind(configuration.GetSection({className}.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();");
 
-            sb.AppendLine($@"        // Register Singleton
-        services.AddSingleton(sp => 
+            sb.AppendLine($@"        services.AddSingleton(sp => 
             sp.GetRequiredService<IOptions<{className}>>().Value);");
-
             sb.AppendLine();
         }
 

@@ -1,7 +1,9 @@
-﻿using Gallerai.SharedKernel.Interfaces;
+using Gallerai.SharedKernel.Attributes;
+using Gallerai.SharedKernel.Interfaces;
 
 namespace Gallerai.SharedKernel.Settings;
 
+[SettingsScope(SettingsScopes.Shared)]
 public class DatabaseSettings : ISettings
 {
     public static string SectionName => "Database";

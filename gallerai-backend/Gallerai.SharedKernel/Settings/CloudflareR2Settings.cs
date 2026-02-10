@@ -1,7 +1,9 @@
+using Gallerai.SharedKernel.Attributes;
 using Gallerai.SharedKernel.Interfaces;
 
 namespace Gallerai.SharedKernel.Settings;
 
+[SettingsScope(SettingsScopes.Api)]
 public sealed class CloudflareR2Settings : ISettings
 {
     public static string SectionName => "CloudflareR2";
