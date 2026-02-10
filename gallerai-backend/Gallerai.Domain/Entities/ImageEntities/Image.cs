@@ -85,4 +85,12 @@ public sealed class Image : ImageIdEntity
         Status.SetStatus(status);
         return new ImageEvent(ImageId, status, DateTime.UtcNow);
     }
+
+    public void MarkAsAnalyzed(ImageAnalysis analysis)
+    {
+        SetAnalysis(analysis);
+        var status = ImageStatus.READY;
+        Status.SetStatus(status);
+        AddEvent(new ImageEvent(ImageId, status, DateTime.UtcNow));
+    }
 }

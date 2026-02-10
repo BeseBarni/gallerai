@@ -1,3 +1,5 @@
+using Gallerai.SharedKernel.DTOs;
+
 namespace Gallerai.SharedKernel.Events;
 
-public record AIInferenceFinishedEvent(Guid imageId, string result);
+public record AIInferenceFinishedEvent(Guid imageId, bool isSuccess, AIInferenceResult? result);

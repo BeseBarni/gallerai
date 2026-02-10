@@ -8,7 +8,7 @@ public sealed class ImageAnalysis : ImageIdNavigationEntity
     {
     }
 
-    public ImageAnalysis(double aestheticScore, string critique, IReadOnlyCollection<string>? labels = null)
+    public ImageAnalysis(double aestheticScore, string critique)
     {
         AestheticScore = aestheticScore;
         Critique = critique ?? throw new ArgumentNullException(nameof(critique));

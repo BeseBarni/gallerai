@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gallerai.Workers.InferenceWorker.Persistance;
 
-public sealed class WorkerDbContext : DbContext
+public class WorkerDbContext : DbContext
 {
     public WorkerDbContext(DbContextOptions options) : base(options)
     {
