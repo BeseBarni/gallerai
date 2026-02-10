@@ -19,7 +19,8 @@ __pycache__/
 merged_qwen_vl/
 lora_adapters/
 outputs/
-
+unsloth_compiled_cache
+bbarni/
 # --- Environment Variables (Secrets) ---
 .env
 .env.local
