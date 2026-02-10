@@ -1,0 +1,28 @@
+# --- Python Virtual Environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Python Bytecode (Generated automatically) ---
+__pycache__/
+*.py[cod]
+
+# --- AI/ML Models (CRITICAL: Do not commit these!) ---
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+
+# Specific folders we created/will create
+merged_qwen_vl/
+lora_adapters/
+outputs/
+
+# --- Environment Variables (Secrets) ---
+.env
+.env.local
+
+# --- IDE Settings (Optional but recommended) ---
+.idea/
