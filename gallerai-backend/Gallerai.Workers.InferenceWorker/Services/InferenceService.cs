@@ -10,7 +10,7 @@ namespace Gallerai.Workers.InferenceWorker.Services;
 
 public interface IInferenceService
 {
-    Task<AIInferenceResult> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default);
+    Task<AIInferenceResult?> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default);
 }
 
 public sealed class InferenceService : IInferenceService
@@ -30,28 +30,27 @@ public sealed class InferenceService : IInferenceService
         _chatClient = openAiClient.GetChatClient(config.ModelId);
     }
 
-    public async Task<AIInferenceResult> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
+    public async Task<AIInferenceResult?> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
     {
-        var imagePart = ChatMessageContentPart.CreateImagePart(new Uri(imageUrl));
-        var textPart = ChatMessageContentPart.CreateTextPart(ChatConsts.UserPrompt);
-
-        ChatCompletion completion = await _chatClient.CompleteChatAsync(
-            [new UserChatMessage(textPart, imagePart)],
-            cancellationToken: cancellationToken);
-
-        var jsonResponse = completion.Content[0].Text;
-
-        jsonResponse = CleanJsonResponse(jsonResponse);
-
         try
         {
-            return JsonSerializer.Deserialize<AIInferenceResult>(jsonResponse, JsonOptions)
-                ?? throw new InvalidOperationException("Deserialization returned null");
+            var imagePart = ChatMessageContentPart.CreateImagePart(new Uri(imageUrl));
+            var textPart = ChatMessageContentPart.CreateTextPart(ChatConsts.UserPrompt);
+
+            ChatCompletion completion = await _chatClient.CompleteChatAsync(
+                [new UserChatMessage(textPart, imagePart)],
+                cancellationToken: cancellationToken);
+
+            var jsonResponse = completion.Content[0].Text;
+
+            jsonResponse = CleanJsonResponse(jsonResponse);
+
+            return JsonSerializer.Deserialize<AIInferenceResult>(jsonResponse, JsonOptions);
         }
-        catch (JsonException ex)
+        catch (Exception)
         {
-            // Log the raw response here so you can see exactly what failed
-            throw new Exception($"Failed to parse AI response: {jsonResponse}", ex);
+            // Return null on any failure
+            return null;
         }
     }
 
@@ -75,9 +74,9 @@ public sealed class InferenceService : IInferenceService
 
 public sealed class FakeInferenceService : IInferenceService
 {
-    public Task<AIInferenceResult> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
+    public Task<AIInferenceResult?> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(new AIInferenceResult(1, "critique"));
+        return Task.FromResult<AIInferenceResult?>(new AIInferenceResult(1, "critique"));
     }
 }
 
