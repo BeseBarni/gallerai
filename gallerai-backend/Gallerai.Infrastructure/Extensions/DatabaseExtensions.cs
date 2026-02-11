@@ -34,6 +34,11 @@ internal static class DatabaseExtensions
         }
         catch (DbUpdateException ex) when (IsDuplicateKeyException(ex))
         {
+            var entry = context.Entry(imageEvent);
+            if (entry != null)
+            {
+                entry.State = EntityState.Detached;
+            }
             return false;
         }
     }
