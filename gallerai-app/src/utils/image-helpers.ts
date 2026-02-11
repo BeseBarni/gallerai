@@ -38,7 +38,6 @@ export async function encodeToJpeg(raw: RawImageData): Promise<Blob> {
 export const optimizeStandardImage = async (file: File): Promise<Blob> => {
   if (file.size < 2 * 1024 * 1024) return file
 
-  console.log('Optimizing large JPEG...')
   const options = {
     maxSizeMB: 1,
     maxWidthOrHeight: 1920,

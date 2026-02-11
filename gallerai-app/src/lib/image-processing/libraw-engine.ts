@@ -13,8 +13,6 @@ export const developRaw = async (buffer: ArrayBuffer): Promise<ArrayBuffer | nul
       const thumb = await instance.thumbnailData()
 
       if (thumb && thumb.data && thumb.data.length > 50000) {
-        console.log(`🚀 Fast extraction successful: ${thumb.width}x${thumb.height}`)
-
         const cleanBuffer = new Uint8Array(thumb.data).buffer
 
         return cleanBuffer as ArrayBuffer
@@ -22,8 +20,6 @@ export const developRaw = async (buffer: ArrayBuffer): Promise<ArrayBuffer | nul
     } catch (thumbError) {
       console.warn('Fast extraction failed, falling back to raw development', thumbError)
     }
-
-    console.log('🐢 Processing raw sensor data...')
 
     await instance.open(uint8View, {
       useCameraWb: true,

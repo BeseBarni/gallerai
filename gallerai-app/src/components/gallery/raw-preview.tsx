@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useImageStore } from '@/store/useImageStore'
 
 interface RawPreviewProps {
@@ -8,9 +8,6 @@ interface RawPreviewProps {
 export const RawPreview: React.FC<RawPreviewProps> = ({ id }) => {
   const image = useImageStore((state) => state.images[id])
 
-  useEffect(() => {
-    console.log('RawPreview received image update:', { image })
-  }, [image])
   if (!image) return null
 
   const { localUrl, status, critique, score } = image
