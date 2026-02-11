@@ -1,3 +1,5 @@
+import { imageProcessor } from '@/workers/image/worker-pool'
+import imageCompression from 'browser-image-compression'
 import type { RawImageData } from 'libraw-wasm'
 
 export function toStandardBlob(data: Uint8Array<ArrayBufferLike>, type: string): Blob {
@@ -30,5 +32,30 @@ export async function encodeToJpeg(raw: RawImageData): Promise<Blob> {
   const imgData = new ImageData(rgba, width, height)
   ctx.putImageData(imgData, 0, 0)
 
-  return await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 })
+  return await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.6 })
+}
+
+export const optimizeStandardImage = async (file: File): Promise<Blob> => {
+  if (file.size < 2 * 1024 * 1024) return file
+
+  console.log('Optimizing large JPEG...')
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+    fileType: 'image/jpeg',
+  }
+  return await imageCompression(file, options)
+}
+
+export const processImage = async (file: File) => {
+  if (isRaw(file)) {
+    const buffer = await imageProcessor.process(file)
+
+    if (!buffer) throw new Error('Failed to develop RAW')
+
+    return new Blob([buffer], { type: 'image/jpeg' })
+  }
+
+  return await optimizeStandardImage(file)
 }

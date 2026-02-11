@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Gallerai.Infrastructure.Persistance.Configurations;
 
-internal sealed class ImageEventConfiguration : IEntityTypeConfiguration<ImageEvent>
+public class ImageEventConfiguration : IEntityTypeConfiguration<ImageEvent>
 {
     public void Configure(EntityTypeBuilder<ImageEvent> builder)
     {
@@ -26,5 +26,9 @@ internal sealed class ImageEventConfiguration : IEntityTypeConfiguration<ImageEv
             .IsRequired();
 
         builder.HasIndex(e => new { e.ImageId, e.LastUpdate });
+
+        builder.HasIndex(e => new { e.ImageId, e.Status })
+            .IsUnique()
+            .HasDatabaseName("IX_ImageEvents_ImageId_Status_Unique");
     }
 }

@@ -73,3 +73,11 @@ public sealed class InferenceService : IInferenceService
     }
 }
 
+public sealed class FakeInferenceService : IInferenceService
+{
+    public Task<AIInferenceResult> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(new AIInferenceResult(1, "critique"));
+    }
+}
+

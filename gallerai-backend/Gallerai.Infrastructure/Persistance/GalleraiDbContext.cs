@@ -24,6 +24,11 @@ public class GalleraiDbContext : DbContext, IGalleraiDbContext
         return DatabaseExtensions.LockImagesAndStatuses(this, keys, cancellationToken);
     }
 
+    public Task<bool> TryAddEventAsync(ImageEvent imageEvent, CancellationToken ct = default)
+    {
+        return DatabaseExtensions.TryAddEventAsync(this, imageEvent, ct);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

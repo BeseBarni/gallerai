@@ -1,28 +1,20 @@
 import { useImageStore } from '@/store/useImageStore'
-import { isRaw } from '@/utils/image-helpers'
+import { processImage } from '@/utils/image-helpers'
 import { uploadFileWithProgress } from '@/utils/upload-helpers'
-import { imageProcessor } from '@/workers/image/worker-pool'
 import { imagePresignedUrl } from '@gallerai/shared/web'
 
 export const startImagePipeline = async (id: string, file: File) => {
   const store = useImageStore.getState()
 
+  let localUrl: string | null = null
+
   try {
     store.addImage({ id, localUrl: null, status: 'waiting' })
 
-    let imageData: ArrayBuffer | null = null
+    const blobToUpload = await processImage(file)
 
-    let type = file.type
-    if (!isRaw(file)) {
-      imageData = await file.arrayBuffer()
-    } else {
-      imageData = await imageProcessor.process(file)
-      type = 'image/jpeg'
-    }
+    localUrl = URL.createObjectURL(blobToUpload)
 
-    const blob = new Blob([imageData], { type: type })
-
-    const localUrl = URL.createObjectURL(blob)
     store.updateImage(id, { localUrl, status: 'uploading' })
 
     const result = await imagePresignedUrl({
@@ -30,12 +22,13 @@ export const startImagePipeline = async (id: string, file: File) => {
       fileName: `${id}.jpg`,
       contentType: 'image/jpeg',
     }).then((p) => p.value)
+
     if (!result?.uploadUrl) throw new Error('Failed to get upload URL')
 
     await uploadFileWithProgress({
       url: result.uploadUrl,
-      file: blob,
-      contentType: type,
+      file: blobToUpload,
+      contentType: 'image/jpeg',
       onProgress: () => {},
     })
 
@@ -46,5 +39,9 @@ export const startImagePipeline = async (id: string, file: File) => {
   } catch (error) {
     store.updateImage(id, { status: 'error' })
     console.error('Error in image pipeline:', error)
+  } finally {
+    if (localUrl) {
+      URL.revokeObjectURL(localUrl)
+    }
   }
 }
