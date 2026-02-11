@@ -27,7 +27,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "comlink": "^4.4.2",
-    "libraw-wasm": "github:BeseBarni/LibRaw-Wasm#feature/add-unpack-thumb",
+    "libraw-wasm": "github:BeseBarni/LibRaw-Wasm#98453d024cf1df7959b50fc4d6cfec9030d74d2c",
     "lucide-react": "^0.562.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
