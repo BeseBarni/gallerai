@@ -29,13 +29,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHealthChecks("/health");
-app.UseGalleraiFastEndpoints();
 
 app.UseCors(policy => policy
     .WithOrigins("http://localhost:5173")
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials());
+
+app.UseGalleraiFastEndpoints();
 
 app.MapHub<ImageNotificationsHub>("/hubs/images");
 
