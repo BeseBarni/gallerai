@@ -1,5 +1,6 @@
 using Amazon.Runtime;
 using Amazon.S3;
+using Gallerai.Application.Features.Images.Consumers;
 using Gallerai.Application.Interfaces;
 using Gallerai.Infrastructure.Extensions;
 using Gallerai.Infrastructure.Persistance;
@@ -53,6 +54,8 @@ public static class DependencyInjection
                 o.UseBusOutbox();
             });
 
+            x.AddConsumer<AIInferenceFinishedEventConsumer>();
+
             x.UsingRabbitMq((ctx, cfg) =>
             {
                 cfg.Host(rabbitMqSettings.Host, "/", h =>
@@ -67,6 +70,9 @@ public static class DependencyInjection
             });
         });
 
+        services.AddSignalR();
+
+        services.AddScoped<INotificationService, SignalRNotificationService>();
 
         return services;
     }

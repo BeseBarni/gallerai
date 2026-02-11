@@ -2,6 +2,7 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using Gallerai.Application;
 using Gallerai.Infrastructure;
+using Gallerai.Infrastructure.Notifications;
 using Gallerai.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,7 @@ builder.Services.AddFastEndpoints();
 builder.Services.AddGalleraiSwagger();
 
 builder.Services.AddOpenApi();
-
+builder.Services.AddCors();
 var app = builder.Build();
 
 await app.UseApplyMigrations();
@@ -28,6 +29,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHealthChecks("/health");
+
+app.UseCors(policy => policy
+    .WithOrigins("http://localhost:5173")
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials());
+
 app.UseGalleraiFastEndpoints();
+
+app.MapHub<ImageNotificationsHub>("/hubs/images");
+
 app.Run();
 

@@ -42,6 +42,12 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
         secure: false,
       },
+      '/hubs': {
+        target: 'http://localhost:5100',
+        ws: true,
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 }))

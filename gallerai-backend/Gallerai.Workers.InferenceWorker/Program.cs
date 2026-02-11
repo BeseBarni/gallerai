@@ -12,7 +12,15 @@ builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddGeneratedSettings(builder.Configuration);
 
-builder.Services.AddSingleton<IInferenceService, InferenceService>();
+if (Environment.GetEnvironmentVariable("USE_FAKE_INFERENCE") == "true")
+{
+    builder.Services.AddSingleton<IInferenceService, FakeInferenceService>();
+}
+else
+{
+    builder.Services.AddSingleton<IInferenceService, InferenceService>();
+}
+
 
 var rabbitMqSettings = builder.Configuration.GetConfiguration<RabbitMQSettings>();
 var dbConnection = builder.Configuration.GetConfiguration<DatabaseSettings>().ConnectionString;

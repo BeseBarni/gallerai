@@ -1,9 +1,13 @@
 import { create } from 'zustand'
 
+export type ImageState = 'waiting' | 'developing' | 'uploading' | 'ai_processing' | 'done' | 'error'
+
 interface ProcessingImage {
   id: string
   localUrl: string | null
-  status: 'waiting' | 'developing' | 'uploading' | 'ai_processing' | 'done' | 'error'
+  status: ImageState
+  score?: number
+  critique?: string
 }
 
 interface ImageStore {

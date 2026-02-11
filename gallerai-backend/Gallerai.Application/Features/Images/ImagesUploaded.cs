@@ -74,7 +74,7 @@ public static class ImagesUploaded
         {
             if (images.TryGetValue(uploadEvent.Key, out var image))
             {
-                if (image.Status.Status == ImageStatus.WAITING_FOR_ANALYSIS)
+                if (image.Status.Status != ImageStatus.UPLOADING)
                 {
                     ignoredCount++;
                     return (flowControl: false, value: (processedCount, ignoredCount));
@@ -82,14 +82,18 @@ public static class ImagesUploaded
 
                 var imageEvent = image.MarkAsUploaded(uploadEvent.Size, uploadEvent.Timestamp);
 
-                await context.ImageEvents.AddAsync(imageEvent, ct);
+                if (await context.TryAddEventAsync(imageEvent, ct))
+                {
+                    await publishEndpoint.Publish(new StartAIInferenceEvent(
+                        image.ImageId,
+                        image.GetFullPath(cloudflareR2Settings.PublicURL)
+                    ), ct);
 
-                await publishEndpoint.Publish(new StartAIInferenceEvent(
-                    image.ImageId,
-                    image.GetFullPath(cloudflareR2Settings.PublicURL)
-                ), ct);
+                    await context.SaveChangesAsync(ct);
 
-                processedCount++;
+                    processedCount++;
+                }
+
             }
             else
             {

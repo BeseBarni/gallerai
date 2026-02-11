@@ -15,12 +15,36 @@ internal static class DatabaseExtensions
         };
 
         var lockSql = $@"
-                    SELECT 1 FROM ""{nameof(context.Images)}"" AS ""i""
-                    JOIN ""{nameof(context.ImageStates)}"" AS ""s"" 
-                    ON ""i"".""{nameof(Image.ImageId)}"" = ""s"".""{nameof(ImageState.ImageId)}""
-                    WHERE ""i"".""{nameof(Image.R2Key)}"" = ANY(@keys)
-                    FOR UPDATE";
+                SELECT 1 FROM ""{nameof(context.Images)}"" AS ""i""
+                JOIN ""{nameof(context.ImageStates)}"" AS ""s"" 
+                ON ""i"".""{nameof(Image.ImageId)}"" = ""s"".""{nameof(ImageState.ImageId)}""
+                WHERE ""i"".""{nameof(Image.R2Key)}"" = ANY(@keys)
+                FOR UPDATE";
 
         await context.Database.ExecuteSqlRawAsync(lockSql, [keysParam], ct);
+    }
+
+    public static async Task<bool> TryAddEventAsync(this GalleraiDbContext context, ImageEvent imageEvent, CancellationToken ct)
+    {
+        try
+        {
+            await context.ImageEvents.AddAsync(imageEvent, ct);
+            await context.SaveChangesAsync(ct);
+            return true;
+        }
+        catch (DbUpdateException ex) when (IsDuplicateKeyException(ex))
+        {
+            var entry = context.Entry(imageEvent);
+            if (entry != null)
+            {
+                entry.State = EntityState.Detached;
+            }
+            return false;
+        }
+    }
+
+    private static bool IsDuplicateKeyException(DbUpdateException ex)
+    {
+        return ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505";
     }
 }

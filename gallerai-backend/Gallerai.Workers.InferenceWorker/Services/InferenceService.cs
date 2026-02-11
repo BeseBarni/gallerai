@@ -1,5 +1,9 @@
 using System.ClientModel;
+using System.Text.Json;
+using Gallerai.SharedKernel.Consts;
+using Gallerai.SharedKernel.DTOs;
 using Gallerai.SharedKernel.Settings;
+using Microsoft.Extensions.Logging;
 using OpenAI;
 using OpenAI.Chat;
 
@@ -7,15 +11,21 @@ namespace Gallerai.Workers.InferenceWorker.Services;
 
 public interface IInferenceService
 {
-    Task<string> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default);
+    Task<AIInferenceResult?> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default);
 }
 
 public sealed class InferenceService : IInferenceService
 {
     private readonly ChatClient _chatClient;
-
-    public InferenceService(InferenceClientSettings config)
+    private readonly ILogger<InferenceService> _logger;
+    private static readonly JsonSerializerOptions JsonOptions = new()
     {
+        PropertyNameCaseInsensitive = true
+    };
+
+    public InferenceService(InferenceClientSettings config, ILogger<InferenceService> logger)
+    {
+        _logger = logger;
         var openAiClient = new OpenAIClient(
             new ApiKeyCredential(config.ApiKey),
             new OpenAIClientOptions { Endpoint = new Uri(config.Endpoint) });
@@ -23,15 +33,61 @@ public sealed class InferenceService : IInferenceService
         _chatClient = openAiClient.GetChatClient(config.ModelId);
     }
 
-    public async Task<string> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
+    public async Task<AIInferenceResult?> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
     {
-        var imagePart = ChatMessageContentPart.CreateImagePart(new Uri(imageUrl));
-        var textPart = ChatMessageContentPart.CreateTextPart("Describe this image and provide 5 tags.");
+        try
+        {
+            var imagePart = ChatMessageContentPart.CreateImagePart(new Uri(imageUrl));
+            var textPart = ChatMessageContentPart.CreateTextPart(ChatConsts.UserPrompt);
 
-        ChatCompletion completion = await _chatClient.CompleteChatAsync(
-            [new UserChatMessage(textPart, imagePart)],
-            cancellationToken: cancellationToken);
+            ChatCompletion completion = await _chatClient.CompleteChatAsync(
+                [new UserChatMessage(textPart, imagePart)],
+                cancellationToken: cancellationToken);
 
-        return completion.Content[0].Text;
+            var jsonResponse = completion.Content[0].Text;
+
+            jsonResponse = CleanJsonResponse(jsonResponse);
+
+            var result = JsonSerializer.Deserialize<AIInferenceResult>(jsonResponse, JsonOptions);
+            
+            if (result is null)
+            {
+                _logger.LogError("Deserialization returned null for response: {Response}", jsonResponse);
+                return null;
+            }
+            
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to analyze image: {Url}", imageUrl);
+            return null;
+        }
+    }
+
+    private string CleanJsonResponse(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return "{}";
+
+        // Remove markdown code blocks if present
+        if (input.Contains("```json"))
+            input = input.Split("```json")[1].Split("```")[0];
+        else if (input.Contains("```"))
+            input = input.Split("```")[1];
+
+        // Remove python-style comments (# ...) that your training process left behind
+        // This regex looks for # and removes everything until the end of the line
+        input = System.Text.RegularExpressions.Regex.Replace(input, @"#.*$", "", System.Text.RegularExpressions.RegexOptions.Multiline);
+
+        return input.Trim();
     }
 }
+
+public sealed class FakeInferenceService : IInferenceService
+{
+    public Task<AIInferenceResult?> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult<AIInferenceResult?>(new AIInferenceResult(1, "critique"));
+    }
+}
+

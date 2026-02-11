@@ -51,10 +51,10 @@ services:
     networks:
     - dev
   gallerai.webapi:
-    profiles: ["app"]
+    profiles: ["api"]
     ports:
-        - 8080:8080
-        - 8081:8081
+        - 5100:8080
+        - 5101:8081
     container_name: gallerai-api
     image: ${DOCKER_REGISTRY-}galleraiwebapi
     build:
