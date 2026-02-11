@@ -54,7 +54,7 @@ class SignalRManager {
     }
   }
 
-  public on(methodName: string, callback: (...args: never[]) => void) {
+  public on(methodName: string, callback: (...args: unknown[]) => void) {
     this.connection.on(methodName, callback)
   }
 
