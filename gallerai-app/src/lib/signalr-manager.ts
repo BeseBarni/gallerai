@@ -38,6 +38,7 @@ class SignalRManager {
       } catch (err) {
         this.startPromise = null
         console.error('Error while starting SignalR:', err)
+        throw err
       } finally {
         this.startPromise = null
       }
