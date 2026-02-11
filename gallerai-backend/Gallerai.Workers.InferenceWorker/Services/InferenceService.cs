@@ -3,6 +3,7 @@ using System.Text.Json;
 using Gallerai.SharedKernel.Consts;
 using Gallerai.SharedKernel.DTOs;
 using Gallerai.SharedKernel.Settings;
+using Microsoft.Extensions.Logging;
 using OpenAI;
 using OpenAI.Chat;
 
@@ -16,13 +17,15 @@ public interface IInferenceService
 public sealed class InferenceService : IInferenceService
 {
     private readonly ChatClient _chatClient;
+    private readonly ILogger<InferenceService> _logger;
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
     };
 
-    public InferenceService(InferenceClientSettings config)
+    public InferenceService(InferenceClientSettings config, ILogger<InferenceService> logger)
     {
+        _logger = logger;
         var openAiClient = new OpenAIClient(
             new ApiKeyCredential(config.ApiKey),
             new OpenAIClientOptions { Endpoint = new Uri(config.Endpoint) });
@@ -45,11 +48,19 @@ public sealed class InferenceService : IInferenceService
 
             jsonResponse = CleanJsonResponse(jsonResponse);
 
-            return JsonSerializer.Deserialize<AIInferenceResult>(jsonResponse, JsonOptions);
+            var result = JsonSerializer.Deserialize<AIInferenceResult>(jsonResponse, JsonOptions);
+            
+            if (result is null)
+            {
+                _logger.LogError("Deserialization returned null for response: {Response}", jsonResponse);
+                return null;
+            }
+            
+            return result;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // Return null on any failure
+            _logger.LogError(ex, "Failed to analyze image: {Url}", imageUrl);
             return null;
         }
     }
