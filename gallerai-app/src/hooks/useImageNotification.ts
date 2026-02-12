@@ -12,6 +12,7 @@ export const useImageNotification = () => {
       score?: number
       detailed_critique?: string
     }) => {
+      console.log('Received image update:', update)
       const { imageId, score } = update
       updateImage(imageId, { aestheticScore: score })
     }

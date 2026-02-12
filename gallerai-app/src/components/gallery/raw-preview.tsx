@@ -10,18 +10,6 @@ export const RawPreview: React.FC<RawPreviewProps> = ({ image }) => {
 
   const { cdnUrl, status, aestheticScore } = image
 
-  const isError = status === 4
-
-  if (isError) {
-    return (
-      <div className="bg-card flex flex-col items-center space-y-2 rounded-lg border border-red-200 p-2">
-        <div className="flex aspect-square w-full items-center justify-center bg-red-50 text-xs text-red-500">
-          Failed
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="bg-card flex flex-col space-y-3 rounded-lg border p-2">
       {/* 1. IMAGE CONTAINER (Fixed Aspect Ratio) */}

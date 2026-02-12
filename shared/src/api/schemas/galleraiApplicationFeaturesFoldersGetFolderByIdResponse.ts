@@ -6,7 +6,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface GalleraiApplicationFeaturesFoldersGetFoldersFolderDto {
+export interface GalleraiApplicationFeaturesFoldersGetFolderByIdResponse {
   folderId?: string;
   name?: string;
   imageCount?: number;

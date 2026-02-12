@@ -295,6 +295,43 @@
             "JWTBearerAuth": []
           }
         ]
+      },
+      "get": {
+        "tags": [
+          "Folders"
+        ],
+        "operationId": "GetFolderByIdEndpoint",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse6"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
       }
     },
     "/api/folders/{folderId}/images": {
@@ -320,7 +357,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse6"
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse7"
                 }
               }
             }
@@ -387,7 +424,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse7"
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse8"
                 }
               }
             }
@@ -617,6 +654,10 @@
           },
           "name": {
             "type": "string"
+          },
+          "imageCount": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -727,6 +768,46 @@
             "nullable": true,
             "oneOf": [
               {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolderById_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersGetFolderById_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folderId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "imageCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfResponse7": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
                 "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolderImages_Response"
               }
             ]
@@ -788,7 +869,7 @@
           4
         ]
       },
-      "GalleraiSharedKernelModelsResultOfResponse7": {
+      "GalleraiSharedKernelModelsResultOfResponse8": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

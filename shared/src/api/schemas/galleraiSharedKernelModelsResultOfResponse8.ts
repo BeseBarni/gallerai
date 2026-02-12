@@ -5,12 +5,12 @@
  * API for Gallerai system
  * OpenAPI spec version: v1
  */
-import type { GalleraiApplicationFeaturesFoldersGetFolderImagesResponse } from './galleraiApplicationFeaturesFoldersGetFolderImagesResponse';
+import type { GalleraiApplicationFeaturesAuthAcquireTokenResponse } from './galleraiApplicationFeaturesAuthAcquireTokenResponse';
 import type { GalleraiSharedKernelModelsError } from './galleraiSharedKernelModelsError';
 
-export interface GalleraiSharedKernelModelsResultOfResponse7 {
+export interface GalleraiSharedKernelModelsResultOfResponse8 {
   isSuccess?: boolean;
   isFailure?: boolean;
   error?: GalleraiSharedKernelModelsError;
-  value?: GalleraiApplicationFeaturesFoldersGetFolderImagesResponse | null;
+  value?: GalleraiApplicationFeaturesAuthAcquireTokenResponse | null;
 }

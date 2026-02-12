@@ -12,6 +12,9 @@ export default defineConfig({
       httpClient: 'axios',
       prettier: true,
       override: {
+        query:{
+          useSuspenseQuery: true,
+        },
         mutator: {
           path: './shared/src/lib/api-client-base.ts',
           name: 'customInstance',

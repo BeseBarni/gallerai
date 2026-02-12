@@ -77,6 +77,27 @@ public class RemoveFolderEndpoint(IMediator mediator) : Endpoint<RemoveFolder.Re
     }
 }
 
+public class GetFolderByIdEndpoint(IMediator mediator) : Endpoint<GetFolderById.Request, Result<GetFolderById.Response>>
+{
+    public override void Configure()
+    {
+        Get("/folders/{FolderId}");
+    }
+
+    public override async Task HandleAsync(GetFolderById.Request req, CancellationToken ct)
+    {
+        var result = await mediator.Send(new GetFolderById.Command(req.FolderId), ct);
+
+        if (result.IsFailure)
+        {
+            await Send.NotFoundAsync(ct);
+            return;
+        }
+
+        await Send.OkAsync(result, cancellation: ct);
+    }
+}
+
 public class GetFolderImagesEndpoint(IMediator mediator) : Endpoint<GetFolderImages.Request, Result<GetFolderImages.Response>>
 {
     public override void Configure()

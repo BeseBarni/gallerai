@@ -7,7 +7,8 @@
  */
 import {
   useMutation,
-  useQuery
+  useQuery,
+  useSuspenseQuery
 } from '@tanstack/react-query';
 import type {
   MutationFunction,
@@ -16,7 +17,9 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
+  UseQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult
 } from '@tanstack/react-query';
 
 import type {
@@ -33,6 +36,7 @@ import type {
   GalleraiSharedKernelModelsResultOfResponse5,
   GalleraiSharedKernelModelsResultOfResponse6,
   GalleraiSharedKernelModelsResultOfResponse7,
+  GalleraiSharedKernelModelsResultOfResponse8,
   GalleraiWebAPIFeaturesHelloHelloResponse
 } from '../schemas';
 
@@ -286,6 +290,47 @@ export function useHelloEndpoint<TData = Awaited<ReturnType<typeof helloEndpoint
 
 
 
+export const getHelloEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getHelloEndpointQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof helloEndpoint>>> = ({ signal }) => helloEndpoint(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type HelloEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof helloEndpoint>>>
+export type HelloEndpointSuspenseQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Simple hello-world test endpoint
+ */
+
+export function useHelloEndpointSuspense<TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+  
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getHelloEndpointSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
 
 export const getFoldersEndpoint = (
     
@@ -340,6 +385,44 @@ export function useGetFoldersEndpoint<TData = Awaited<ReturnType<typeof getFolde
   const queryOptions = getGetFoldersEndpointQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const getGetFoldersEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<void>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFoldersEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFoldersEndpointQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFoldersEndpoint>>> = ({ signal }) => getFoldersEndpoint(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFoldersEndpoint>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetFoldersEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFoldersEndpoint>>>
+export type GetFoldersEndpointSuspenseQueryError = ErrorType<void>
+
+
+
+export function useGetFoldersEndpointSuspense<TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<void>>(
+  options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFoldersEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+  
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetFoldersEndpointSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -521,13 +604,112 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       return useMutation(getRemoveFolderEndpointMutationOptions(options));
     }
     
-export const getFolderImagesEndpoint = (
+export const getFolderByIdEndpoint = (
     folderId: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<GalleraiSharedKernelModelsResultOfResponse6>(
+      {url: `/api/folders/${folderId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetFolderByIdEndpointQueryKey = (folderId: string,) => {
+    return [
+    `/api/folders/${folderId}`
+    ] as const;
+    }
+
+    
+export const getGetFolderByIdEndpointQueryOptions = <TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<void>>(folderId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFolderByIdEndpointQueryKey(folderId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolderByIdEndpoint>>> = ({ signal }) => getFolderByIdEndpoint(folderId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(folderId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetFolderByIdEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderByIdEndpoint>>>
+export type GetFolderByIdEndpointQueryError = ErrorType<void>
+
+
+
+export function useGetFolderByIdEndpoint<TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetFolderByIdEndpointQueryOptions(folderId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const getGetFolderByIdEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<void>>(folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFolderByIdEndpointQueryKey(folderId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolderByIdEndpoint>>> = ({ signal }) => getFolderByIdEndpoint(folderId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetFolderByIdEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderByIdEndpoint>>>
+export type GetFolderByIdEndpointSuspenseQueryError = ErrorType<void>
+
+
+
+export function useGetFolderByIdEndpointSuspense<TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+  
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetFolderByIdEndpointSuspenseQueryOptions(folderId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+export const getFolderImagesEndpoint = (
+    folderId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GalleraiSharedKernelModelsResultOfResponse7>(
       {url: `/api/folders/${folderId}/images`, method: 'GET', signal
     },
       options);
@@ -574,6 +756,44 @@ export function useGetFolderImagesEndpoint<TData = Awaited<ReturnType<typeof get
   const queryOptions = getGetFolderImagesEndpointQueryOptions(folderId,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const getGetFolderImagesEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<void>>(folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFolderImagesEndpointQueryKey(folderId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFolderImagesEndpoint>>> = ({ signal }) => getFolderImagesEndpoint(folderId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetFolderImagesEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderImagesEndpoint>>>
+export type GetFolderImagesEndpointSuspenseQueryError = ErrorType<void>
+
+
+
+export function useGetFolderImagesEndpointSuspense<TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<void>>(
+ folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+  
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetFolderImagesEndpointSuspenseQueryOptions(folderId,options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
@@ -642,6 +862,44 @@ export function useGoogleLoginEndpoint<TData = Awaited<ReturnType<typeof googleL
 
 
 
+export const getGoogleLoginEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGoogleLoginEndpointQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof googleLoginEndpoint>>> = ({ signal }) => googleLoginEndpoint(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GoogleLoginEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof googleLoginEndpoint>>>
+export type GoogleLoginEndpointSuspenseQueryError = ErrorType<unknown>
+
+
+
+export function useGoogleLoginEndpointSuspense<TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+  
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGoogleLoginEndpointSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
 
 export const googleCallbackEndpoint = (
     
@@ -703,6 +961,44 @@ export function useGoogleCallbackEndpoint<TData = Awaited<ReturnType<typeof goog
 
 
 
+export const getGoogleCallbackEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGoogleCallbackEndpointQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof googleCallbackEndpoint>>> = ({ signal }) => googleCallbackEndpoint(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GoogleCallbackEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof googleCallbackEndpoint>>>
+export type GoogleCallbackEndpointSuspenseQueryError = ErrorType<unknown>
+
+
+
+export function useGoogleCallbackEndpointSuspense<TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+  
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGoogleCallbackEndpointSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions) as  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
 
 export const acquireTokenEndpoint = (
     galleraiApplicationFeaturesAuthAcquireTokenRequest: GalleraiApplicationFeaturesAuthAcquireTokenRequest,
@@ -710,7 +1006,7 @@ export const acquireTokenEndpoint = (
 ) => {
       
       
-      return customInstance<GalleraiSharedKernelModelsResultOfResponse7>(
+      return customInstance<GalleraiSharedKernelModelsResultOfResponse8>(
       {url: `/api/auth/acquire-token`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: galleraiApplicationFeaturesAuthAcquireTokenRequest, signal

@@ -14,7 +14,7 @@ public static class GetFolders
     {
         public string? UserId { get; set; }
     }
-    public record FolderDto(Guid FolderId, string Name);
+    public record FolderDto(Guid FolderId, string Name, int ImageCount);
     public record Response(IReadOnlyCollection<FolderDto> Folders);
 
     public sealed class Handler(IGalleraiDbContext context, ICacheService cacheService) : IRequestHandler<Command, Result<Response>>
@@ -28,8 +28,9 @@ public static class GetFolders
             var folders = await cacheService.GetOrSetAsync(
                 cacheKey,
                 async () => await context.Folders
+                    .Include(p => p.ImageList)
                     .Where(f => f.UserId == request.UserId && f.DeletedAt == null)
-                    .Select(f => new FolderDto(f.FolderId, f.Name))
+                    .Select(f => new FolderDto(f.FolderId, f.Name, f.ImageList.Count()))
                     .ToListAsync(ct),
                 CacheExpiration);
 

@@ -14,6 +14,7 @@ import { Route as _authenticatedRouteImport } from './routes/__authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as _authenticatedDashboardIndexRouteImport } from './routes/__authenticated/dashboard/index'
+import { Route as _authenticatedDashboardFolderRouteImport } from './routes/__authenticated/dashboard/folder'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -40,17 +41,25 @@ const _authenticatedDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => _authenticatedRoute,
   } as any)
+const _authenticatedDashboardFolderRoute =
+  _authenticatedDashboardFolderRouteImport.update({
+    id: '/dashboard/folder',
+    path: '/dashboard/folder',
+    getParentRoute: () => _authenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/dashboard/folder': typeof _authenticatedDashboardFolderRoute
   '/dashboard/': typeof _authenticatedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/dashboard/folder': typeof _authenticatedDashboardFolderRoute
   '/dashboard': typeof _authenticatedDashboardIndexRoute
 }
 export interface FileRoutesById {
@@ -59,19 +68,26 @@ export interface FileRoutesById {
   '/__authenticated': typeof _authenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/__authenticated/dashboard/folder': typeof _authenticatedDashboardFolderRoute
   '/__authenticated/dashboard/': typeof _authenticatedDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/auth/callback' | '/dashboard/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/auth/callback'
+    | '/dashboard/folder'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/auth/callback' | '/dashboard'
+  to: '/' | '/login' | '/auth/callback' | '/dashboard/folder' | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/__authenticated'
     | '/login'
     | '/auth/callback'
+    | '/__authenticated/dashboard/folder'
     | '/__authenticated/dashboard/'
   fileRoutesById: FileRoutesById
 }
@@ -119,14 +135,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof _authenticatedDashboardIndexRouteImport
       parentRoute: typeof _authenticatedRoute
     }
+    '/__authenticated/dashboard/folder': {
+      id: '/__authenticated/dashboard/folder'
+      path: '/dashboard/folder'
+      fullPath: '/dashboard/folder'
+      preLoaderRoute: typeof _authenticatedDashboardFolderRouteImport
+      parentRoute: typeof _authenticatedRoute
+    }
   }
 }
 
 interface _authenticatedRouteChildren {
+  _authenticatedDashboardFolderRoute: typeof _authenticatedDashboardFolderRoute
   _authenticatedDashboardIndexRoute: typeof _authenticatedDashboardIndexRoute
 }
 
 const _authenticatedRouteChildren: _authenticatedRouteChildren = {
+  _authenticatedDashboardFolderRoute: _authenticatedDashboardFolderRoute,
   _authenticatedDashboardIndexRoute: _authenticatedDashboardIndexRoute,
 }
 

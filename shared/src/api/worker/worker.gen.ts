@@ -19,6 +19,7 @@ import type {
   GalleraiSharedKernelModelsResultOfResponse5,
   GalleraiSharedKernelModelsResultOfResponse6,
   GalleraiSharedKernelModelsResultOfResponse7,
+  GalleraiSharedKernelModelsResultOfResponse8,
   GalleraiWebAPIFeaturesHelloHelloResponse
 } from '../schemas';
 
@@ -338,8 +339,48 @@ export const removeFolderEndpoint = async (folderId: string, options?: RequestIn
 
 
 
-export type getFolderImagesEndpointResponse200 = {
+export type getFolderByIdEndpointResponse200 = {
   data: GalleraiSharedKernelModelsResultOfResponse6
+  status: 200
+}
+
+export type getFolderByIdEndpointResponse401 = {
+  data: void
+  status: 401
+}
+    
+export type getFolderByIdEndpointResponseSuccess = (getFolderByIdEndpointResponse200) & {
+  headers: Headers;
+};
+export type getFolderByIdEndpointResponseError = (getFolderByIdEndpointResponse401) & {
+  headers: Headers;
+};
+
+export type getFolderByIdEndpointResponse = (getFolderByIdEndpointResponseSuccess | getFolderByIdEndpointResponseError)
+
+export const getGetFolderByIdEndpointUrl = (folderId: string,) => {
+
+
+  
+
+  return `/api/folders/${folderId}`
+}
+
+export const getFolderByIdEndpoint = async (folderId: string, options?: RequestInit): Promise<getFolderByIdEndpointResponse> => {
+  
+  return workerFetch<getFolderByIdEndpointResponse>(getGetFolderByIdEndpointUrl(folderId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type getFolderImagesEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResultOfResponse7
   status: 200
 }
 
@@ -445,7 +486,7 @@ export const googleCallbackEndpoint = async ( options?: RequestInit): Promise<go
 
 
 export type acquireTokenEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse7
+  data: GalleraiSharedKernelModelsResultOfResponse8
   status: 200
 }
     
