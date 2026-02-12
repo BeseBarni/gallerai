@@ -36,8 +36,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
       }
     },
     "/api/images/uploaded": {
@@ -87,6 +95,79 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GalleraiWebAPIFeaturesHelloHelloResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/google": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "GoogleLoginEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfExternalAuthProperties"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/google/callback": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "GoogleCallbackEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfLoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/acquire-token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "AcquireTokenEndpoint",
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesAuthAcquireToken_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse3"
                 }
               }
             }
@@ -248,6 +329,128 @@
         "additionalProperties": false,
         "properties": {
           "message": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfExternalAuthProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiSharedKernelDTOsExternalAuthProperties"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiSharedKernelDTOsExternalAuthProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "redirectUrl": {
+            "type": "string"
+          },
+          "items": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfLoginResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiSharedKernelDTOsLoginResponse"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiSharedKernelDTOsLoginResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfResponse3": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesAuthAcquireToken_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesAuthAcquireToken_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesAuthAcquireToken_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "oneTimeCode": {
             "type": "string"
           }
         }

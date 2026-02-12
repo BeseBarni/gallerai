@@ -6,10 +6,14 @@
  * OpenAPI spec version: v1
  */
 import type {
+  GalleraiApplicationFeaturesAuthAcquireTokenRequest,
   GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest,
   GalleraiApplicationFeaturesImagesImagesUploadedRequest,
+  GalleraiSharedKernelModelsResultOfExternalAuthProperties,
+  GalleraiSharedKernelModelsResultOfLoginResponse,
   GalleraiSharedKernelModelsResultOfResponse,
   GalleraiSharedKernelModelsResultOfResponse2,
+  GalleraiSharedKernelModelsResultOfResponse3,
   GalleraiWebAPIFeaturesHelloHelloResponse
 } from '../schemas';
 
@@ -19,13 +23,20 @@ export type imagePresignedUrlResponse200 = {
   data: GalleraiSharedKernelModelsResultOfResponse
   status: 200
 }
+
+export type imagePresignedUrlResponse401 = {
+  data: void
+  status: 401
+}
     
 export type imagePresignedUrlResponseSuccess = (imagePresignedUrlResponse200) & {
   headers: Headers;
 };
-;
+export type imagePresignedUrlResponseError = (imagePresignedUrlResponse401) & {
+  headers: Headers;
+};
 
-export type imagePresignedUrlResponse = (imagePresignedUrlResponseSuccess)
+export type imagePresignedUrlResponse = (imagePresignedUrlResponseSuccess | imagePresignedUrlResponseError)
 
 export const getImagePresignedUrlUrl = () => {
 
@@ -114,6 +125,106 @@ export const helloEndpoint = async ( options?: RequestInit): Promise<helloEndpoi
     method: 'GET'
     
     
+  }
+);}
+
+
+
+export type googleLoginEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResultOfExternalAuthProperties
+  status: 200
+}
+    
+export type googleLoginEndpointResponseSuccess = (googleLoginEndpointResponse200) & {
+  headers: Headers;
+};
+;
+
+export type googleLoginEndpointResponse = (googleLoginEndpointResponseSuccess)
+
+export const getGoogleLoginEndpointUrl = () => {
+
+
+  
+
+  return `/api/auth/google`
+}
+
+export const googleLoginEndpoint = async ( options?: RequestInit): Promise<googleLoginEndpointResponse> => {
+  
+  return workerFetch<googleLoginEndpointResponse>(getGoogleLoginEndpointUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type googleCallbackEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResultOfLoginResponse
+  status: 200
+}
+    
+export type googleCallbackEndpointResponseSuccess = (googleCallbackEndpointResponse200) & {
+  headers: Headers;
+};
+;
+
+export type googleCallbackEndpointResponse = (googleCallbackEndpointResponseSuccess)
+
+export const getGoogleCallbackEndpointUrl = () => {
+
+
+  
+
+  return `/api/auth/google/callback`
+}
+
+export const googleCallbackEndpoint = async ( options?: RequestInit): Promise<googleCallbackEndpointResponse> => {
+  
+  return workerFetch<googleCallbackEndpointResponse>(getGoogleCallbackEndpointUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type acquireTokenEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResultOfResponse3
+  status: 200
+}
+    
+export type acquireTokenEndpointResponseSuccess = (acquireTokenEndpointResponse200) & {
+  headers: Headers;
+};
+;
+
+export type acquireTokenEndpointResponse = (acquireTokenEndpointResponseSuccess)
+
+export const getAcquireTokenEndpointUrl = () => {
+
+
+  
+
+  return `/api/auth/acquire-token`
+}
+
+export const acquireTokenEndpoint = async (galleraiApplicationFeaturesAuthAcquireTokenRequest: GalleraiApplicationFeaturesAuthAcquireTokenRequest, options?: RequestInit): Promise<acquireTokenEndpointResponse> => {
+  
+  return workerFetch<acquireTokenEndpointResponse>(getAcquireTokenEndpointUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      galleraiApplicationFeaturesAuthAcquireTokenRequest,)
   }
 );}
 

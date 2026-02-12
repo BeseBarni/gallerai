@@ -2,11 +2,12 @@ using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Entities.ImageEntities;
 using Gallerai.Infrastructure.Extensions;
 using MassTransit;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gallerai.Infrastructure.Persistance;
 
-public class GalleraiDbContext : DbContext, IGalleraiDbContext
+public class GalleraiDbContext : IdentityDbContext, IGalleraiDbContext
 {
     public GalleraiDbContext(DbContextOptions options) : base(options)
     {

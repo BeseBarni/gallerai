@@ -20,10 +20,14 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  GalleraiApplicationFeaturesAuthAcquireTokenRequest,
   GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest,
   GalleraiApplicationFeaturesImagesImagesUploadedRequest,
+  GalleraiSharedKernelModelsResultOfExternalAuthProperties,
+  GalleraiSharedKernelModelsResultOfLoginResponse,
   GalleraiSharedKernelModelsResultOfResponse,
   GalleraiSharedKernelModelsResultOfResponse2,
+  GalleraiSharedKernelModelsResultOfResponse3,
   GalleraiWebAPIFeaturesHelloHelloResponse
 } from '../schemas';
 
@@ -55,7 +59,7 @@ export const imagePresignedUrl = (
   
 
 
-export const getImagePresignedUrlMutationOptions = <TError = ErrorType<unknown>,
+export const getImagePresignedUrlMutationOptions = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof imagePresignedUrl>>, TError,{data: GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof imagePresignedUrl>>, TError,{data: GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest}, TContext> => {
 
@@ -84,9 +88,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ImagePresignedUrlMutationResult = NonNullable<Awaited<ReturnType<typeof imagePresignedUrl>>>
     export type ImagePresignedUrlMutationBody = GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest
-    export type ImagePresignedUrlMutationError = ErrorType<unknown>
+    export type ImagePresignedUrlMutationError = ErrorType<void>
 
-    export const useImagePresignedUrl = <TError = ErrorType<unknown>,
+    export const useImagePresignedUrl = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof imagePresignedUrl>>, TError,{data: GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof imagePresignedUrl>>,
@@ -222,3 +226,183 @@ export function useHelloEndpoint<TData = Awaited<ReturnType<typeof helloEndpoint
 
 
 
+export const googleLoginEndpoint = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GalleraiSharedKernelModelsResultOfExternalAuthProperties>(
+      {url: `/api/auth/google`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGoogleLoginEndpointQueryKey = () => {
+    return [
+    `/api/auth/google`
+    ] as const;
+    }
+
+    
+export const getGoogleLoginEndpointQueryOptions = <TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGoogleLoginEndpointQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof googleLoginEndpoint>>> = ({ signal }) => googleLoginEndpoint(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GoogleLoginEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof googleLoginEndpoint>>>
+export type GoogleLoginEndpointQueryError = ErrorType<unknown>
+
+
+
+export function useGoogleLoginEndpoint<TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGoogleLoginEndpointQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+export const googleCallbackEndpoint = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GalleraiSharedKernelModelsResultOfLoginResponse>(
+      {url: `/api/auth/google/callback`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGoogleCallbackEndpointQueryKey = () => {
+    return [
+    `/api/auth/google/callback`
+    ] as const;
+    }
+
+    
+export const getGoogleCallbackEndpointQueryOptions = <TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGoogleCallbackEndpointQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof googleCallbackEndpoint>>> = ({ signal }) => googleCallbackEndpoint(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GoogleCallbackEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof googleCallbackEndpoint>>>
+export type GoogleCallbackEndpointQueryError = ErrorType<unknown>
+
+
+
+export function useGoogleCallbackEndpoint<TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+  
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGoogleCallbackEndpointQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+export const acquireTokenEndpoint = (
+    galleraiApplicationFeaturesAuthAcquireTokenRequest: GalleraiApplicationFeaturesAuthAcquireTokenRequest,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GalleraiSharedKernelModelsResultOfResponse3>(
+      {url: `/api/auth/acquire-token`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: galleraiApplicationFeaturesAuthAcquireTokenRequest, signal
+    },
+      options);
+    }
+  
+
+
+export const getAcquireTokenEndpointMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof acquireTokenEndpoint>>, TError,{data: GalleraiApplicationFeaturesAuthAcquireTokenRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof acquireTokenEndpoint>>, TError,{data: GalleraiApplicationFeaturesAuthAcquireTokenRequest}, TContext> => {
+
+const mutationKey = ['acquireTokenEndpoint'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof acquireTokenEndpoint>>, {data: GalleraiApplicationFeaturesAuthAcquireTokenRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  acquireTokenEndpoint(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AcquireTokenEndpointMutationResult = NonNullable<Awaited<ReturnType<typeof acquireTokenEndpoint>>>
+    export type AcquireTokenEndpointMutationBody = GalleraiApplicationFeaturesAuthAcquireTokenRequest
+    export type AcquireTokenEndpointMutationError = ErrorType<unknown>
+
+    export const useAcquireTokenEndpoint = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof acquireTokenEndpoint>>, TError,{data: GalleraiApplicationFeaturesAuthAcquireTokenRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof acquireTokenEndpoint>>,
+        TError,
+        {data: GalleraiApplicationFeaturesAuthAcquireTokenRequest},
+        TContext
+      > => {
+      return useMutation(getAcquireTokenEndpointMutationOptions(options));
+    }
+    

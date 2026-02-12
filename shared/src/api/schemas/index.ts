@@ -6,12 +6,20 @@
  * OpenAPI spec version: v1
  */
 
+export * from './galleraiApplicationFeaturesAuthAcquireTokenRequest';
+export * from './galleraiApplicationFeaturesAuthAcquireTokenResponse';
 export * from './galleraiApplicationFeaturesImagesGetImagePresignedURLRequest';
 export * from './galleraiApplicationFeaturesImagesGetImagePresignedURLResponse';
 export * from './galleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent';
 export * from './galleraiApplicationFeaturesImagesImagesUploadedRequest';
 export * from './galleraiApplicationFeaturesImagesImagesUploadedResponse';
+export * from './galleraiSharedKernelDTOsExternalAuthProperties';
+export * from './galleraiSharedKernelDTOsExternalAuthPropertiesItems';
+export * from './galleraiSharedKernelDTOsLoginResponse';
 export * from './galleraiSharedKernelModelsError';
+export * from './galleraiSharedKernelModelsResultOfExternalAuthProperties';
+export * from './galleraiSharedKernelModelsResultOfLoginResponse';
 export * from './galleraiSharedKernelModelsResultOfResponse';
 export * from './galleraiSharedKernelModelsResultOfResponse2';
+export * from './galleraiSharedKernelModelsResultOfResponse3';
 export * from './galleraiWebAPIFeaturesHelloHelloResponse';

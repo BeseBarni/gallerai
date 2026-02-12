@@ -36,6 +36,7 @@ export default defineConfig(({ mode }) => ({
     exclude: ['libraw-wasm'],
   },
   server: {
+    allowedHosts: ['localhost', 'gallerai.me'],
     proxy: {
       '/api': {
         target: 'http://localhost:5100',
