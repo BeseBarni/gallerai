@@ -65,6 +65,22 @@ internal sealed class RedisCacheService : ICacheService
         return value;
     }
 
+    public async Task<T?> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan expiration)
+    {
+        var cached = await GetAsync<T>(key);
+
+        if (cached is not null) return cached;
+
+        var value = await factory();
+
+        if (value is not null)
+        {
+            await SetAsync(key, value, expiration);
+        }
+
+        return value;
+    }
+
     public async Task<T?> PopAsync<T>(string key)
     {
         var value = await db.StringGetDeleteAsync(CreateKey(key));

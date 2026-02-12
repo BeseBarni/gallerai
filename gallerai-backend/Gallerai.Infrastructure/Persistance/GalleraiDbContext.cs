@@ -1,4 +1,5 @@
 using Gallerai.Application.Interfaces;
+using Gallerai.Domain.Entities;
 using Gallerai.Domain.Entities.ImageEntities;
 using Gallerai.Infrastructure.Extensions;
 using MassTransit;
@@ -13,6 +14,7 @@ public class GalleraiDbContext : IdentityDbContext, IGalleraiDbContext
     {
     }
 
+    public DbSet<Folder> Folders { get; set; } = null!;
     public DbSet<Image> Images { get; set; } = null!;
     public DbSet<ImageMetadata> ImageMetadata { get; set; } = null!;
     public DbSet<ImageAnalysis> ImageAnalyses { get; set; } = null!;

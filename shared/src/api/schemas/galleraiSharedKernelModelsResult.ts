@@ -5,12 +5,10 @@
  * API for Gallerai system
  * OpenAPI spec version: v1
  */
-import type { GalleraiSharedKernelDTOsExternalAuthProperties } from './galleraiSharedKernelDTOsExternalAuthProperties';
 import type { GalleraiSharedKernelModelsError } from './galleraiSharedKernelModelsError';
 
-export interface GalleraiSharedKernelModelsResultOfExternalAuthProperties {
+export interface GalleraiSharedKernelModelsResult {
   isSuccess?: boolean;
   isFailure?: boolean;
   error?: GalleraiSharedKernelModelsError;
-  value?: GalleraiSharedKernelDTOsExternalAuthProperties | null;
 }

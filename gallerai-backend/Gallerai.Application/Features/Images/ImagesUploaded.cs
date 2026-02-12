@@ -86,6 +86,7 @@ public static class ImagesUploaded
                 {
                     await publishEndpoint.Publish(new StartAIInferenceEvent(
                         image.ImageId,
+                        image.UserId,
                         image.GetFullPath(cloudflareR2Settings.PublicURL)
                     ), ct);
 

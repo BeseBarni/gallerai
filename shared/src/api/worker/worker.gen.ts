@@ -7,13 +7,18 @@
  */
 import type {
   GalleraiApplicationFeaturesAuthAcquireTokenRequest,
+  GalleraiApplicationFeaturesFoldersAddFolderRequest,
+  GalleraiApplicationFeaturesFoldersRenameFolderRequest,
   GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest,
   GalleraiApplicationFeaturesImagesImagesUploadedRequest,
-  GalleraiSharedKernelModelsResultOfExternalAuthProperties,
-  GalleraiSharedKernelModelsResultOfLoginResponse,
+  GalleraiSharedKernelModelsResult,
   GalleraiSharedKernelModelsResultOfResponse,
   GalleraiSharedKernelModelsResultOfResponse2,
   GalleraiSharedKernelModelsResultOfResponse3,
+  GalleraiSharedKernelModelsResultOfResponse4,
+  GalleraiSharedKernelModelsResultOfResponse5,
+  GalleraiSharedKernelModelsResultOfResponse6,
+  GalleraiSharedKernelModelsResultOfResponse7,
   GalleraiWebAPIFeaturesHelloHelloResponse
 } from '../schemas';
 
@@ -94,6 +99,46 @@ export const imagesUploadedEndpoint = async (galleraiApplicationFeaturesImagesIm
 
 
 
+export type removeImageEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResult
+  status: 200
+}
+
+export type removeImageEndpointResponse401 = {
+  data: void
+  status: 401
+}
+    
+export type removeImageEndpointResponseSuccess = (removeImageEndpointResponse200) & {
+  headers: Headers;
+};
+export type removeImageEndpointResponseError = (removeImageEndpointResponse401) & {
+  headers: Headers;
+};
+
+export type removeImageEndpointResponse = (removeImageEndpointResponseSuccess | removeImageEndpointResponseError)
+
+export const getRemoveImageEndpointUrl = (imageId: string,) => {
+
+
+  
+
+  return `/api/images/${imageId}`
+}
+
+export const removeImageEndpoint = async (imageId: string, options?: RequestInit): Promise<removeImageEndpointResponse> => {
+  
+  return workerFetch<removeImageEndpointResponse>(getRemoveImageEndpointUrl(imageId),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
 /**
  * @summary Simple hello-world test endpoint
  */
@@ -130,12 +175,215 @@ export const helloEndpoint = async ( options?: RequestInit): Promise<helloEndpoi
 
 
 
-export type googleLoginEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfExternalAuthProperties
+export type getFoldersEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResultOfResponse3
   status: 200
 }
+
+export type getFoldersEndpointResponse401 = {
+  data: void
+  status: 401
+}
     
-export type googleLoginEndpointResponseSuccess = (googleLoginEndpointResponse200) & {
+export type getFoldersEndpointResponseSuccess = (getFoldersEndpointResponse200) & {
+  headers: Headers;
+};
+export type getFoldersEndpointResponseError = (getFoldersEndpointResponse401) & {
+  headers: Headers;
+};
+
+export type getFoldersEndpointResponse = (getFoldersEndpointResponseSuccess | getFoldersEndpointResponseError)
+
+export const getGetFoldersEndpointUrl = () => {
+
+
+  
+
+  return `/api/folders`
+}
+
+export const getFoldersEndpoint = async ( options?: RequestInit): Promise<getFoldersEndpointResponse> => {
+  
+  return workerFetch<getFoldersEndpointResponse>(getGetFoldersEndpointUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type addFolderEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResultOfResponse4
+  status: 200
+}
+
+export type addFolderEndpointResponse401 = {
+  data: void
+  status: 401
+}
+    
+export type addFolderEndpointResponseSuccess = (addFolderEndpointResponse200) & {
+  headers: Headers;
+};
+export type addFolderEndpointResponseError = (addFolderEndpointResponse401) & {
+  headers: Headers;
+};
+
+export type addFolderEndpointResponse = (addFolderEndpointResponseSuccess | addFolderEndpointResponseError)
+
+export const getAddFolderEndpointUrl = () => {
+
+
+  
+
+  return `/api/folders`
+}
+
+export const addFolderEndpoint = async (galleraiApplicationFeaturesFoldersAddFolderRequest: GalleraiApplicationFeaturesFoldersAddFolderRequest, options?: RequestInit): Promise<addFolderEndpointResponse> => {
+  
+  return workerFetch<addFolderEndpointResponse>(getAddFolderEndpointUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      galleraiApplicationFeaturesFoldersAddFolderRequest,)
+  }
+);}
+
+
+
+export type renameFolderEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResultOfResponse5
+  status: 200
+}
+
+export type renameFolderEndpointResponse401 = {
+  data: void
+  status: 401
+}
+    
+export type renameFolderEndpointResponseSuccess = (renameFolderEndpointResponse200) & {
+  headers: Headers;
+};
+export type renameFolderEndpointResponseError = (renameFolderEndpointResponse401) & {
+  headers: Headers;
+};
+
+export type renameFolderEndpointResponse = (renameFolderEndpointResponseSuccess | renameFolderEndpointResponseError)
+
+export const getRenameFolderEndpointUrl = (folderId: string,) => {
+
+
+  
+
+  return `/api/folders/${folderId}`
+}
+
+export const renameFolderEndpoint = async (folderId: string,
+    galleraiApplicationFeaturesFoldersRenameFolderRequest: GalleraiApplicationFeaturesFoldersRenameFolderRequest, options?: RequestInit): Promise<renameFolderEndpointResponse> => {
+  
+  return workerFetch<renameFolderEndpointResponse>(getRenameFolderEndpointUrl(folderId),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      galleraiApplicationFeaturesFoldersRenameFolderRequest,)
+  }
+);}
+
+
+
+export type removeFolderEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResult
+  status: 200
+}
+
+export type removeFolderEndpointResponse401 = {
+  data: void
+  status: 401
+}
+    
+export type removeFolderEndpointResponseSuccess = (removeFolderEndpointResponse200) & {
+  headers: Headers;
+};
+export type removeFolderEndpointResponseError = (removeFolderEndpointResponse401) & {
+  headers: Headers;
+};
+
+export type removeFolderEndpointResponse = (removeFolderEndpointResponseSuccess | removeFolderEndpointResponseError)
+
+export const getRemoveFolderEndpointUrl = (folderId: string,) => {
+
+
+  
+
+  return `/api/folders/${folderId}`
+}
+
+export const removeFolderEndpoint = async (folderId: string, options?: RequestInit): Promise<removeFolderEndpointResponse> => {
+  
+  return workerFetch<removeFolderEndpointResponse>(getRemoveFolderEndpointUrl(folderId),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+
+
+
+export type getFolderImagesEndpointResponse200 = {
+  data: GalleraiSharedKernelModelsResultOfResponse6
+  status: 200
+}
+
+export type getFolderImagesEndpointResponse401 = {
+  data: void
+  status: 401
+}
+    
+export type getFolderImagesEndpointResponseSuccess = (getFolderImagesEndpointResponse200) & {
+  headers: Headers;
+};
+export type getFolderImagesEndpointResponseError = (getFolderImagesEndpointResponse401) & {
+  headers: Headers;
+};
+
+export type getFolderImagesEndpointResponse = (getFolderImagesEndpointResponseSuccess | getFolderImagesEndpointResponseError)
+
+export const getGetFolderImagesEndpointUrl = (folderId: string,) => {
+
+
+  
+
+  return `/api/folders/${folderId}/images`
+}
+
+export const getFolderImagesEndpoint = async (folderId: string, options?: RequestInit): Promise<getFolderImagesEndpointResponse> => {
+  
+  return workerFetch<getFolderImagesEndpointResponse>(getGetFolderImagesEndpointUrl(folderId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+export type googleLoginEndpointResponse204 = {
+  data: void
+  status: 204
+}
+    
+export type googleLoginEndpointResponseSuccess = (googleLoginEndpointResponse204) & {
   headers: Headers;
 };
 ;
@@ -147,7 +395,7 @@ export const getGoogleLoginEndpointUrl = () => {
 
   
 
-  return `/api/auth/google`
+  return `/api/google`
 }
 
 export const googleLoginEndpoint = async ( options?: RequestInit): Promise<googleLoginEndpointResponse> => {
@@ -163,12 +411,12 @@ export const googleLoginEndpoint = async ( options?: RequestInit): Promise<googl
 
 
 
-export type googleCallbackEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfLoginResponse
-  status: 200
+export type googleCallbackEndpointResponse204 = {
+  data: void
+  status: 204
 }
     
-export type googleCallbackEndpointResponseSuccess = (googleCallbackEndpointResponse200) & {
+export type googleCallbackEndpointResponseSuccess = (googleCallbackEndpointResponse204) & {
   headers: Headers;
 };
 ;
@@ -180,7 +428,7 @@ export const getGoogleCallbackEndpointUrl = () => {
 
   
 
-  return `/api/auth/google/callback`
+  return `/api/google/callback`
 }
 
 export const googleCallbackEndpoint = async ( options?: RequestInit): Promise<googleCallbackEndpointResponse> => {
@@ -197,7 +445,7 @@ export const googleCallbackEndpoint = async ( options?: RequestInit): Promise<go
 
 
 export type acquireTokenEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse3
+  data: GalleraiSharedKernelModelsResultOfResponse7
   status: 200
 }
     

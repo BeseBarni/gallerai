@@ -120,7 +120,11 @@ public static class DependencyInjection
             });
         });
 
-        services.AddSignalR();
+        services.AddSignalR()
+            .AddStackExchangeRedis(redisSettings.ConnectionString, options =>
+            {
+                options.Configuration.ChannelPrefix = RedisChannel.Literal("Gallerai");
+            });
 
         services.AddSingleton<IConnectionMultiplexer>(config =>
         {
@@ -133,6 +137,9 @@ public static class DependencyInjection
 
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuthService, AuthService>();
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         return services;
     }

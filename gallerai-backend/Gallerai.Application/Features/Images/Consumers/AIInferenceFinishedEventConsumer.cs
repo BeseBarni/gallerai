@@ -19,7 +19,7 @@ public class AIInferenceFinishedEventConsumer(IGalleraiDbContext dbContext, INot
         var image = await dbContext.Images
             .Include(p => p.Status)
             .Include(p => p.Analysis)
-            .FirstOrDefaultAsync(p => p.ImageId == message.imageId, ct);
+            .FirstOrDefaultAsync(p => p.ImageId == message.ImageId, ct);
 
         if (image is null) return;
 
@@ -27,18 +27,18 @@ public class AIInferenceFinishedEventConsumer(IGalleraiDbContext dbContext, INot
         if (image.Status.Status is ImageStatus.READY or ImageStatus.ERROR)
             return;
 
-        if (!message.isSuccess)
+        if (!message.IsSuccess)
         {
             await dbContext.TryAddEventAsync(image.MarkAsError(), ct);
             return;
         }
 
-        var analysis = new ImageAnalysis(message.result!.Score, message.result.Critique);
+        var analysis = new ImageAnalysis(message.Result!.Score, message.Result.Critique);
         var imageEvent = image.MarkAsAnalyzed(analysis);
 
         if (await dbContext.TryAddEventAsync(imageEvent, ct))
         {
-            await notificationService.NotifyUserUpdate("", message.result);
+            await notificationService.NotifyUserUpdate(message.UserId, message.Result);
         }
     }
 

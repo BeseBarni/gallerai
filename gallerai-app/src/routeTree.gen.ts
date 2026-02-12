@@ -9,19 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UploadRouteImport } from './routes/upload'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as _authenticatedRouteImport } from './routes/__authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as _authenticatedDashboardIndexRouteImport } from './routes/__authenticated/dashboard/index'
 
-const UploadRoute = UploadRouteImport.update({
-  id: '/upload',
-  path: '/upload',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const _authenticatedRoute = _authenticatedRouteImport.update({
+  id: '/__authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -34,55 +34,68 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const _authenticatedDashboardIndexRoute =
+  _authenticatedDashboardIndexRouteImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => _authenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/upload': typeof UploadRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/dashboard/': typeof _authenticatedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/upload': typeof UploadRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/dashboard': typeof _authenticatedDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/__authenticated': typeof _authenticatedRouteWithChildren
   '/login': typeof LoginRoute
-  '/upload': typeof UploadRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/__authenticated/dashboard/': typeof _authenticatedDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/upload' | '/auth/callback'
+  fullPaths: '/' | '/login' | '/auth/callback' | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/upload' | '/auth/callback'
-  id: '__root__' | '/' | '/login' | '/upload' | '/auth/callback'
+  to: '/' | '/login' | '/auth/callback' | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/__authenticated'
+    | '/login'
+    | '/auth/callback'
+    | '/__authenticated/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  _authenticatedRoute: typeof _authenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
-  UploadRoute: typeof UploadRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/upload': {
-      id: '/upload'
-      path: '/upload'
-      fullPath: '/upload'
-      preLoaderRoute: typeof UploadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/__authenticated': {
+      id: '/__authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof _authenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -99,13 +112,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/__authenticated/dashboard/': {
+      id: '/__authenticated/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof _authenticatedDashboardIndexRouteImport
+      parentRoute: typeof _authenticatedRoute
+    }
   }
 }
 
+interface _authenticatedRouteChildren {
+  _authenticatedDashboardIndexRoute: typeof _authenticatedDashboardIndexRoute
+}
+
+const _authenticatedRouteChildren: _authenticatedRouteChildren = {
+  _authenticatedDashboardIndexRoute: _authenticatedDashboardIndexRoute,
+}
+
+const _authenticatedRouteWithChildren = _authenticatedRoute._addFileChildren(
+  _authenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  _authenticatedRoute: _authenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
-  UploadRoute: UploadRoute,
   AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,10 +1,18 @@
 import { Button } from '@/shadcn/button'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useHelloEndpoint } from '@gallerai/shared/web'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
+  beforeLoad: () => {
+    const user = useAuthStore.getState()
+    if (user.isAuthenticated) {
+      throw redirect({
+        to: '/dashboard',
+      })
+    }
+  },
 })
 
 function RouteComponent() {

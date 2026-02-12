@@ -6,9 +6,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface GalleraiSharedKernelDTOsLoginResponse {
-  userId?: string;
-  email?: string;
-  /** @nullable */
-  userName?: string | null;
+export interface GalleraiApplicationFeaturesFoldersRenameFolderResponse {
+  folderId?: string;
+  name?: string;
 }

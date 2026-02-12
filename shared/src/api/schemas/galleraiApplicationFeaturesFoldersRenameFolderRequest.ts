@@ -6,4 +6,6 @@
  * OpenAPI spec version: v1
  */
 
-export type GalleraiSharedKernelDTOsExternalAuthPropertiesItems = {[key: string]: string | null};
+export interface GalleraiApplicationFeaturesFoldersRenameFolderRequest {
+  newName?: string;
+}

@@ -7,6 +7,6 @@ public interface ICacheService
     Task PersistAsync<T>(string key, T value);
     Task RemoveAsync(string key);
     Task<T?> GetOrSetAsync<T>(string key, Func<T> factory, TimeSpan expiration);
+    Task<T?> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan expiration);
     Task<T?> PopAsync<T>(string key);
-
 }

@@ -22,10 +22,41 @@ namespace Gallerai.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Gallerai.Domain.Entities.Folder", b =>
+                {
+                    b.Property<Guid>("FolderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("FolderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Folders");
+                });
+
             modelBuilder.Entity("Gallerai.Domain.Entities.ImageEntities.Image", b =>
                 {
                     b.Property<Guid>("ImageId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("FolderId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("R2Key")
@@ -38,12 +69,22 @@ namespace Gallerai.Infrastructure.Migrations
                     b.Property<DateTime?>("UploadedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("ImageId");
+
+                    b.HasIndex("DeletedAt");
+
+                    b.HasIndex("FolderId");
 
                     b.HasIndex("R2Key")
                         .IsUnique();
 
                     b.HasIndex("UploadedAt");
+
+                    b.HasIndex("UserId", "FolderId");
 
                     b.ToTable("Images");
                 });
@@ -529,6 +570,32 @@ namespace Gallerai.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Gallerai.Domain.Entities.Folder", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Gallerai.Domain.Entities.ImageEntities.Image", b =>
+                {
+                    b.HasOne("Gallerai.Domain.Entities.Folder", "Folder")
+                        .WithMany("ImageList")
+                        .HasForeignKey("FolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Folder");
+                });
+
             modelBuilder.Entity("Gallerai.Domain.Entities.ImageEntities.ImageAnalysis", b =>
                 {
                     b.HasOne("Gallerai.Domain.Entities.ImageEntities.Image", "Image")
@@ -719,6 +786,11 @@ namespace Gallerai.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Gallerai.Domain.Entities.Folder", b =>
+                {
+                    b.Navigation("ImageList");
                 });
 
             modelBuilder.Entity("Gallerai.Domain.Entities.ImageEntities.Image", b =>

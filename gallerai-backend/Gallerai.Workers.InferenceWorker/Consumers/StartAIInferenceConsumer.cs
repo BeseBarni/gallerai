@@ -31,12 +31,12 @@ public sealed class StartAIInferenceConsumer(
                 message.Id,
                 message.PublicUrl);
 
-            publishEvent = new AIInferenceFinishedEvent(message.Id, false, null);
+            publishEvent = new AIInferenceFinishedEvent(message.Id, message.UserId, false, null);
         }
         else
         {
             result.ImageId = message.Id;
-            publishEvent = new AIInferenceFinishedEvent(message.Id, true, result);
+            publishEvent = new AIInferenceFinishedEvent(message.Id, message.UserId, true, result);
         }
 
 
