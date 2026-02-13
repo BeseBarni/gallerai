@@ -4,7 +4,7 @@ namespace Gallerai.Domain.Entities;
 
 public class Folder
 {
-    private List<Image> _imageList = new();
+    private readonly List<Image> _imageList = new();
     public Guid FolderId { get; set; }
     public string UserId { get; set; } = null!;
     public string Name { get; set; } = null!;
