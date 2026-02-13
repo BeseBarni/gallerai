@@ -13,7 +13,6 @@ interface ImageStore {
 export const useImageStore = create<ImageStore>((set) => ({
   images: {},
   addImage: (image) => {
-    console.log('Adding image to store:', image)
     set((state) => ({
       images: {
         ...state.images,
@@ -23,7 +22,6 @@ export const useImageStore = create<ImageStore>((set) => ({
     return image.imageId!
   },
   updateImage: (id, updates) => {
-    console.log('Updating image in store:', { id, updates })
     set((state) => {
       return {
         images: { ...state.images, [id]: { ...state.images[id], ...updates } },

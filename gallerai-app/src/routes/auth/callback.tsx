@@ -10,7 +10,6 @@ export const Route = createFileRoute('/auth/callback')({
   },
   loaderDeps: ({ search: { oneTimeCode } }) => ({ oneTimeCode }),
   loader: async ({ deps: { oneTimeCode } }) => {
-    console.log('Received OTP:', oneTimeCode)
     const response = await acquireTokenEndpoint({
       oneTimeCode: oneTimeCode,
     })

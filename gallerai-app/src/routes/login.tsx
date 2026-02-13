@@ -22,7 +22,6 @@ function LoginPage() {
   }, [isAuthenticated, navigate])
 
   const handleGoogleLogin = () => {
-    console.log('Redirecting to Google Auth URL:', env.VITE_GOOGLE_AUTH_URL)
     window.location.href = env.VITE_GOOGLE_AUTH_URL
   }
 

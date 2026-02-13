@@ -20,7 +20,6 @@ function FolderImages() {
   )
 
   const displayImages = useMemo(() => {
-    console.log(uploadingImages, imageQuery.data)
     const serverImages = imageQuery.data?.value?.images ?? []
     return [...serverImages, ...uploadingImages]
   }, [imageQuery.data, uploadingImages])
