@@ -1,3 +1,4 @@
+using Gallerai.Domain.Entities;
 using Gallerai.Domain.Entities.ImageEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -7,6 +8,7 @@ namespace Gallerai.Application.Interfaces;
 
 public interface IGalleraiDbContext
 {
+    DbSet<Folder> Folders { get; }
     DbSet<Image> Images { get; }
     DbSet<ImageMetadata> ImageMetadata { get; }
     DbSet<ImageAnalysis> ImageAnalyses { get; }

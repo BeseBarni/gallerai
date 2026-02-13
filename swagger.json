@@ -36,8 +36,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
       }
     },
     "/api/images/uploaded": {
@@ -73,6 +81,45 @@
         }
       }
     },
+    "/api/images/{imageId}": {
+      "delete": {
+        "tags": [
+          "Images"
+        ],
+        "operationId": "RemoveImageEndpoint",
+        "parameters": [
+          {
+            "name": "imageId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/hello": {
       "get": {
         "tags": [
@@ -87,6 +134,297 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GalleraiWebAPIFeaturesHelloHelloResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/folders": {
+      "get": {
+        "tags": [
+          "Folders"
+        ],
+        "operationId": "GetFoldersEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse3"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Folders"
+        ],
+        "operationId": "AddFolderEndpoint",
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersAddFolder_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse4"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/folders/{folderId}": {
+      "put": {
+        "tags": [
+          "Folders"
+        ],
+        "operationId": "RenameFolderEndpoint",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersRenameFolder_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse5"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Folders"
+        ],
+        "operationId": "RemoveFolderEndpoint",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Folders"
+        ],
+        "operationId": "GetFolderByIdEndpoint",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse6"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/folders/{folderId}/images": {
+      "get": {
+        "tags": [
+          "Folders"
+        ],
+        "operationId": "GetFolderImagesEndpoint",
+        "parameters": [
+          {
+            "name": "folderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse7"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/google": {
+      "get": {
+        "tags": [
+          "Google"
+        ],
+        "operationId": "GoogleLoginEndpoint",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/google/callback": {
+      "get": {
+        "tags": [
+          "Google"
+        ],
+        "operationId": "GoogleCallbackEndpoint",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/auth/acquire-token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "AcquireTokenEndpoint",
+        "requestBody": {
+          "x-name": "Request",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesAuthAcquireToken_Request"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse8"
                 }
               }
             }
@@ -164,6 +502,10 @@
           },
           "contentType": {
             "type": "string"
+          },
+          "folderId": {
+            "type": "string",
+            "format": "guid"
           }
         }
       },
@@ -243,11 +585,327 @@
           }
         }
       },
+      "GalleraiSharedKernelModelsResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          }
+        }
+      },
       "GalleraiWebAPIFeaturesHelloHelloResponse": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "message": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfResponse3": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolders_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersGetFolders_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolders_FolderDto"
+            }
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersGetFolders_FolderDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folderId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "imageCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfResponse4": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersAddFolder_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersAddFolder_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folderId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersAddFolder_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfResponse5": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersRenameFolder_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersRenameFolder_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folderId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersRenameFolder_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "newName": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfResponse6": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolderById_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersGetFolderById_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folderId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "imageCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GalleraiSharedKernelModelsResultOfResponse7": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolderImages_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersGetFolderImages_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolderImages_ImageDto"
+            }
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesFoldersGetFolderImages_ImageDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "imageId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "folderId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "cdnUrl": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/GalleraiDomainEnumsImageStatus"
+          },
+          "aestheticScore": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        }
+      },
+      "GalleraiDomainEnumsImageStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "UPLOADING",
+          "WAITING_FOR_ANALYSIS",
+          "ANALYZING",
+          "READY",
+          "ERROR"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "GalleraiSharedKernelModelsResultOfResponse8": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "isFailure": {
+            "type": "boolean"
+          },
+          "error": {
+            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GalleraiApplicationFeaturesAuthAcquireToken_Response"
+              }
+            ]
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesAuthAcquireToken_Response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "GalleraiApplicationFeaturesAuthAcquireToken_Request": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "oneTimeCode": {
             "type": "string"
           }
         }

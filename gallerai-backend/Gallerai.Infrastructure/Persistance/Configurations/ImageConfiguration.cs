@@ -1,4 +1,5 @@
 using Gallerai.Domain.Entities.ImageEntities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -47,5 +48,15 @@ internal sealed class ImageConfiguration : IEntityTypeConfiguration<Image>
 
         builder.HasIndex(i => i.R2Key).IsUnique();
         builder.HasIndex(i => i.UploadedAt);
+
+        builder
+            .HasOne<IdentityUser>()
+            .WithMany()
+            .HasForeignKey(i => i.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(i => new { i.UserId, i.FolderId });
+        builder.HasIndex(i => i.DeletedAt);
     }
 }

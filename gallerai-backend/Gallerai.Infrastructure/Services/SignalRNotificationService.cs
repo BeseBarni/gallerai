@@ -8,6 +8,6 @@ internal sealed class SignalRNotificationService(IHubContext<ImageNotificationsH
 {
     public async Task NotifyUserUpdate<T>(string userId, T message)
     {
-        await hubContext.Clients.All.SendAsync("ReceiveImageNotification", message);
+        await hubContext.Clients.User(userId).SendAsync("ReceiveImageNotification", message);
     }
 }

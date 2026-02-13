@@ -11,21 +11,25 @@ public sealed class Image : ImageIdEntity
     private Image()
     {
     }
+    public string UserId { get; private set; } = null!;
+    public Guid FolderId { get; private set; }
     public string? R2Key { get; private set; }
     public long? Size { get; private set; }
     public DateTime? UploadedAt { get; private set; }
-
+    public Folder Folder { get; private set; } = null!;
     public ImageState Status { get; private set; } = null!;
     public ImageAnalysis Analysis { get; private set; } = null!;
     public ImageMetadata Metadata { get; private set; } = null!;
 
     public IReadOnlyCollection<ImageEvent> ImageEvents => _imageEvents;
     public IReadOnlyCollection<ImageTag> ImageTags => _imageTags;
-
-    public static Image Create(Guid guid)
+    public DateTime? DeletedAt { get; set; }
+    public static Image Create(Guid guid, string userId, Guid folderId)
     {
         var image = new Image();
         image.ImageId = guid;
+        image.UserId = userId;
+        image.FolderId = folderId;
         var status = ImageStatus.UPLOADING;
         image.SetStatus(new ImageState(status));
         image.AddEvent(new ImageEvent(status, DateTime.UtcNow));
@@ -99,5 +103,10 @@ public sealed class Image : ImageIdEntity
         var status = ImageStatus.ERROR;
         Status.SetStatus(status);
         return new ImageEvent(ImageId, status, DateTime.UtcNow);
+    }
+
+    public void MarkAsDeleted()
+    {
+        DeletedAt = DateTime.UtcNow;
     }
 }

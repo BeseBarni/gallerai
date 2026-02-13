@@ -1,3 +1,4 @@
+using System.Text;
 using Amazon.Runtime;
 using Amazon.S3;
 using Gallerai.Application.Features.Images.Consumers;
@@ -7,10 +8,14 @@ using Gallerai.Infrastructure.Persistance;
 using Gallerai.Infrastructure.Services;
 using Gallerai.SharedKernel.Settings;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 namespace Gallerai.Infrastructure;
 
 public static class DependencyInjection
@@ -25,8 +30,53 @@ public static class DependencyInjection
 
         var rabbitMqSettings = configuration.GetConfiguration<RabbitMQSettings>();
 
+        var googleAuthSettings = configuration.GetConfiguration<GoogleAuthSettings>();
+
+        var jwtSettings = configuration.GetConfiguration<JwtSettings>();
+
+        var redisSettings = configuration.GetConfiguration<RedisSettings>();
+
         services.AddDbContext<GalleraiDbContext>(options =>
             options.UseNpgsql(dbConnection));
+
+        services.AddIdentityCore<IdentityUser>(options =>
+        {
+            options.Password.RequireDigit = false;
+        })
+        .AddEntityFrameworkStores<GalleraiDbContext>()
+        .AddSignInManager<SignInManager<IdentityUser>>();
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = "Google";
+        })
+        .AddCookie(IdentityConstants.ExternalScheme)
+        .AddJwtBearer(options =>
+        {
+            options.SaveToken = true;
+            options.RequireHttpsMetadata = false;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+                ClockSkew = TimeSpan.Zero
+            };
+        })
+        .AddGoogle(options =>
+        {
+            options.ClientId = googleAuthSettings.ClientId;
+            options.ClientSecret = googleAuthSettings.ClientSecret;
+            options.SignInScheme = IdentityConstants.ExternalScheme;
+            options.CallbackPath = "/signin-google";
+            options.CorrelationCookie.SameSite = SameSiteMode.None;
+            options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+        });
 
         services.AddScoped<IGalleraiDbContext>(provider => provider.GetRequiredService<GalleraiDbContext>());
 
@@ -70,9 +120,26 @@ public static class DependencyInjection
             });
         });
 
-        services.AddSignalR();
+        services.AddSignalR()
+            .AddStackExchangeRedis(redisSettings.ConnectionString, options =>
+            {
+                options.Configuration.ChannelPrefix = RedisChannel.Literal("Gallerai");
+            });
+
+        services.AddSingleton<IConnectionMultiplexer>(config =>
+        {
+            return ConnectionMultiplexer.Connect(redisSettings.ConnectionString);
+        });
+
+        services.AddSingleton<ICacheService, RedisCacheService>();
 
         services.AddScoped<INotificationService, SignalRNotificationService>();
+
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IAuthService, AuthService>();
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         return services;
     }
