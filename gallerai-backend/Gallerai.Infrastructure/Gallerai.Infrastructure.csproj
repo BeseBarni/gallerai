@@ -10,6 +10,7 @@
     <ProjectReference Include="..\Gallerai.Application\Gallerai.Application.csproj" />
     <ProjectReference Include="..\Gallerai.Domain\Gallerai.Domain.csproj" />
     <ProjectReference Include="..\Gallerai.SharedKernel\Gallerai.SharedKernel.csproj" />
+    <ProjectReference Include="..\Gallerai.SignalR.Shared\Gallerai.SignalR.Shared.csproj" />
     <ProjectReference Include="..\Gallerai.SourceGenerators\Gallerai.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
@@ -19,6 +20,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -7,6 +7,7 @@ using Gallerai.Infrastructure.Extensions;
 using Gallerai.Infrastructure.Persistance;
 using Gallerai.Infrastructure.Services;
 using Gallerai.SharedKernel.Settings;
+using Gallerai.SignalR.Shared.Consts;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -49,7 +50,8 @@ public static class DependencyInjection
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = "Google";
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddCookie(IdentityConstants.ExternalScheme)
         .AddJwtBearer(options =>
@@ -76,6 +78,7 @@ public static class DependencyInjection
             options.CallbackPath = "/signin-google";
             options.CorrelationCookie.SameSite = SameSiteMode.None;
             options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+
         });
 
         services.AddScoped<IGalleraiDbContext>(provider => provider.GetRequiredService<GalleraiDbContext>());
@@ -105,6 +108,7 @@ public static class DependencyInjection
             });
 
             x.AddConsumer<AIInferenceFinishedEventConsumer>();
+            x.AddConsumer<ImageUploadedEventConsumer>();
 
             x.UsingRabbitMq((ctx, cfg) =>
             {
@@ -123,7 +127,7 @@ public static class DependencyInjection
         services.AddSignalR()
             .AddStackExchangeRedis(redisSettings.ConnectionString, options =>
             {
-                options.Configuration.ChannelPrefix = RedisChannel.Literal("Gallerai");
+                options.Configuration.ChannelPrefix = RedisChannel.Literal(ChannelConsts.Gallerai);
             });
 
         services.AddSingleton<IConnectionMultiplexer>(config =>

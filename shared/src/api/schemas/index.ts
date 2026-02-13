@@ -19,7 +19,7 @@ export * from './galleraiApplicationFeaturesFoldersRenameFolderRequest';
 export * from './galleraiApplicationFeaturesFoldersRenameFolderResponse';
 export * from './galleraiApplicationFeaturesImagesGetImagePresignedURLRequest';
 export * from './galleraiApplicationFeaturesImagesGetImagePresignedURLResponse';
-export * from './galleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent';
+export * from './galleraiApplicationFeaturesImagesImagesUploadedImageUploadedR2';
 export * from './galleraiApplicationFeaturesImagesImagesUploadedRequest';
 export * from './galleraiApplicationFeaturesImagesImagesUploadedResponse';
 export * from './galleraiDomainEnumsImageStatus';

@@ -2,7 +2,8 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using Gallerai.Application;
 using Gallerai.Infrastructure;
-using Gallerai.Infrastructure.Notifications;
+using Gallerai.SignalR.Shared.Consts;
+using Gallerai.SignalR.Shared.Hubs;
 using Gallerai.WebAPI.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 
@@ -38,7 +39,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapHealthChecks("/health");
-app.MapHub<ImageNotificationsHub>("/hubs/images");
+app.MapHub<ImageNotificationsHub>(HubConsts.ImagesHub);
 
 app.UseGalleraiFastEndpoints();
 

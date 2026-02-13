@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 
-namespace Gallerai.Infrastructure.Notifications;
+namespace Gallerai.SignalR.Shared.Hubs;
 
 public class ImageNotificationsHub : Hub
 {

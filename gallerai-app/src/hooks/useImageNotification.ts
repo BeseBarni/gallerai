@@ -12,14 +12,15 @@ export const useImageNotification = () => {
       score?: number
       detailed_critique?: string
     }) => {
+      console.log('Received image update notification:', update)
       const { imageId, score } = update
-      updateImage(imageId, { aestheticScore: score })
+      updateImage(imageId, { aestheticScore: score, critique: update.detailed_critique })
     }
 
-    signalRManager.on('ReceiveImageNotification', handleImageUpdate as (...args: unknown[]) => void)
+    signalRManager.on('ImageUpdate', handleImageUpdate as (...args: unknown[]) => void)
 
     return () => {
-      signalRManager.off('ReceiveImageNotification')
+      signalRManager.off('ImageUpdate')
     }
   }, [updateImage])
 }

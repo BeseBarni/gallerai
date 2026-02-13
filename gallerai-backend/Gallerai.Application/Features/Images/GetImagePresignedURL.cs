@@ -1,6 +1,8 @@
 using Gallerai.Application.Behaviors;
+using Gallerai.Application.Extensions;
 using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Entities.ImageEntities;
+using Gallerai.Domain.Enums;
 using Gallerai.SharedKernel.Models;
 using Gallerai.SharedKernel.Settings;
 using MediatR;
@@ -16,7 +18,7 @@ public static class GetImagePresignedURL
     }
     public record Response(string UploadUrl, Guid ImageId, string Key, string CDNUrl);
 
-    public sealed class Handler(IImageService ImageService, IGalleraiDbContext Context, CloudflareR2Settings cloudflareR2Settings) : IRequestHandler<Command, Result<Response>>
+    public sealed class Handler(IImageService ImageService, IGalleraiDbContext Context, CloudflareR2Settings cloudflareR2Settings, ICacheService cacheService) : IRequestHandler<Command, Result<Response>>
     {
         public async Task<Result<Response>> Handle(Command request, CancellationToken ct)
         {
@@ -42,6 +44,8 @@ public static class GetImagePresignedURL
             Context.Images.Add(image);
 
             await Context.SaveChangesAsync(ct);
+
+            await cacheService.SetAsync(image.GetImageStatusCacheKey(), ImageStatus.UPLOADING, TimeSpan.FromMinutes(5));
 
             return new Response(uploadUrl, image.ImageId, storageKey, string.Join('/', cloudflareR2Settings.PublicURL, storageKey));
         }

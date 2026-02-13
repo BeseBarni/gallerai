@@ -86,7 +86,6 @@ public sealed class Image : ImageIdEntity
         Size = size;
         UploadedAt = uploadedAt;
         var status = ImageStatus.WAITING_FOR_ANALYSIS;
-        Status.SetStatus(status);
         return new ImageEvent(ImageId, status, DateTime.UtcNow);
     }
 

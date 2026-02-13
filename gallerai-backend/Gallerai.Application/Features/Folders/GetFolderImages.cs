@@ -2,10 +2,10 @@ using Gallerai.Application.Behaviors;
 using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Enums;
 using Gallerai.SharedKernel.Models;
+using Gallerai.SharedKernel.Settings;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Gallerai.SharedKernel.Settings;
 
 namespace Gallerai.Application.Features.Folders;
 
@@ -22,7 +22,8 @@ public static class GetFolderImages
         Guid FolderId,
         string CdnUrl,
         ImageStatus Status,
-        double? AestheticScore);
+        double? AestheticScore,
+        string? Critique);
 
     public record Response(IReadOnlyCollection<ImageDto> Images);
 
@@ -53,7 +54,8 @@ public static class GetFolderImages
                     i.FolderId,
                     i.R2Key != null ? $"{publicUrl.TrimEnd('/')}/{i.R2Key}" : string.Empty,
                     i.Status.Status,
-                    i.Analysis != null ? i.Analysis.AestheticScore : null))
+                    i.Analysis != null ? i.Analysis.AestheticScore : null,
+                    i.Analysis != null ? i.Analysis.Critique : null))
                 .ToListAsync(ct);
 
             return new Response(images);

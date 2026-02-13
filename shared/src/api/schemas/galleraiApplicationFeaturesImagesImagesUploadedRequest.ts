@@ -5,9 +5,9 @@
  * API for Gallerai system
  * OpenAPI spec version: v1
  */
-import type { GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent } from './galleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent';
+import type { GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedR2 } from './galleraiApplicationFeaturesImagesImagesUploadedImageUploadedR2';
 
 export interface GalleraiApplicationFeaturesImagesImagesUploadedRequest {
   /** @nullable */
-  events?: GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent[] | null;
+  events?: GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedR2[] | null;
 }
