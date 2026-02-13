@@ -27,7 +27,7 @@ function FolderImages() {
   return (
     <>
       {displayImages.map((image, index) => (
-        <RawPreview key={`${image.imageId || image.imageId || index}`} image={image} />
+        <RawPreview key={`${image.imageId || index}`} image={image} />
       ))}
     </>
   )
