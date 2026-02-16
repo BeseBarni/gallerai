@@ -6,15 +6,11 @@ import { RouterProvider } from '@tanstack/react-router'
 import axiosInstance from '@/lib/api-client'
 import { queryClient } from '@/lib/query-client'
 import { router } from '@/lib/router'
-import { useImageNotification } from '@/hooks/useImageNotification'
-import { useSignalRConnection } from '@/hooks/useSignalRConnection'
+import { InitSignalRBridge } from '@/lib/signalr/signalr-bridge'
 
 export default function AppProvider() {
   setAxiosInstance(axiosInstance)
-
-  useSignalRConnection()
-  useImageNotification()
-
+  InitSignalRBridge()
   return (
     <>
       <QueryClientProvider client={queryClient}>

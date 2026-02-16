@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.SignalR;
 
 public class RedisPublisher(IHubContext<ImageNotificationsHub> hubContext)
 {
-    public async Task PublishMessageAsync<T>(string key, T message)
+    public async Task PublishMessageAsync<T>(string userId, string key, T message)
     {
-        await hubContext.Clients.All.SendAsync(key, message);
+        await hubContext.Clients.User(userId).SendAsync(key, message);
     }
 }

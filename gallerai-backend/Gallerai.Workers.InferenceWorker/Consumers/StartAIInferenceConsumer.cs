@@ -44,7 +44,7 @@ public sealed class StartAIInferenceConsumer(
 
         var publishEndointTask = publishEndpoint.Publish(publishEvent, context.CancellationToken);
 
-        var redisPublishTask = redisPublisher.PublishMessageAsync(MessageChannelConsts.ImageUpdate, publishEvent.Result);
+        var redisPublishTask = redisPublisher.PublishMessageAsync(message.UserId, MessageChannelConsts.ImageUpdate, publishEvent.Result);
 
         var contextSaveTask = dbContext.SaveChangesAsync(context.CancellationToken);
 

@@ -23,7 +23,7 @@ export default function FolderView() {
       startImagePipeline(id, activeFolder!.id, file)
     })
   }
-  console.log('FolderView Render:', activeFolder)
+
   return (
     <FolderViewContext.Provider
       value={{ foldedrId: activeFolder?.id ?? '', setProcessedImageCount, setImageCount }}

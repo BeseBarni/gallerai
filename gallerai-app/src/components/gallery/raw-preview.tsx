@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import type { GalleraiApplicationFeaturesFoldersGetFolderImagesImageDto } from '@shared/src/api/schemas/galleraiApplicationFeaturesFoldersGetFolderImagesImageDto'
 
 import { AICritique } from './ai-critique'
@@ -7,11 +7,11 @@ interface RawPreviewProps {
   image: GalleraiApplicationFeaturesFoldersGetFolderImagesImageDto
 }
 
-export const RawPreview: React.FC<RawPreviewProps> = ({ image }) => {
+export const RawPreview = memo(function RawPreview({ image }: RawPreviewProps) {
   if (!image) return null
 
   const { cdnUrl, status, aestheticScore, critique } = image
-  console.log('Rendering RawPreview with image:', image)
+
   return (
     <div className="bg-card flex flex-col space-y-3 rounded-lg border p-2">
       {/* 1. IMAGE CONTAINER (Fixed Aspect Ratio) */}
@@ -43,4 +43,4 @@ export const RawPreview: React.FC<RawPreviewProps> = ({ image }) => {
       {critique && <AICritique critique={critique} />}
     </div>
   )
-}
+})
