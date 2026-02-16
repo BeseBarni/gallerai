@@ -2,6 +2,7 @@ import { Suspense, use, useEffect, useMemo } from 'react'
 import { useFolderStore } from '@/store/useFolderStore'
 import { useImageStore } from '@/store/useImageStore'
 import { useGetFolderImagesEndpointSuspense } from '@shared/src/api/gallerai/api.gen'
+import { GalleraiDomainEnumsImageStatus } from '@shared/src/api/schemas'
 import { useShallow } from 'zustand/react/shallow'
 
 import { FolderViewContext } from '../folder-view/context'
@@ -30,11 +31,10 @@ function FolderImages() {
 
   useEffect(() => {
     setImageCount(displayImages.length)
-    const processed = displayImages.filter((img) => img.status === 3 || img.critique).length
+    const processed = displayImages.filter(
+      (img) => img.status === GalleraiDomainEnumsImageStatus.READY || img.critique,
+    ).length
     setProcessedImageCount(processed)
-
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayImages, setProcessedImageCount, setImageCount])
 
   return (

@@ -100,7 +100,7 @@ internal sealed class RedisCacheService : ICacheService
     
         -- If key is missing (not current) OR key matches expected status
         if not current or current == ARGV[1] then
-            redis.call('set', KEYS[1], ARGV[2])
+            redis.call('set', KEYS[1], ARGV[2], 'KEEPTTL')
             return 1
         else
             return 0

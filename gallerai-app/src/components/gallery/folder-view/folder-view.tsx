@@ -26,7 +26,7 @@ export default function FolderView() {
 
   return (
     <FolderViewContext.Provider
-      value={{ foldedrId: activeFolder?.id ?? '', setProcessedImageCount, setImageCount }}
+      value={{ folderId: activeFolder?.id ?? '', setProcessedImageCount, setImageCount }}
     >
       <div className="animate-in fade-in flex h-full flex-col space-y-6 p-8 duration-300">
         <div className="flex space-x-4">

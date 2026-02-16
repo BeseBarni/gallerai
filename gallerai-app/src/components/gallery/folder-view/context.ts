@@ -1,13 +1,13 @@
 import { createContext } from 'react'
 
 export type FolderViewContextType = {
-  foldedrId: string
+  folderId: string
   setProcessedImageCount: (count: number) => void
   setImageCount: (count: number) => void
 }
 
 export const FolderViewContext = createContext<FolderViewContextType>({
-  foldedrId: '',
+  folderId: '',
   setProcessedImageCount: () => {},
   setImageCount: () => {},
 })

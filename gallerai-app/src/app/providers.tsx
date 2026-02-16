@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { ReactQueryDevtools } from '@/utils/dev-tools'
 import { setAxiosInstance } from '@gallerai/shared/lib/api-client-base'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -10,7 +11,11 @@ import { InitSignalRBridge } from '@/lib/signalr/signalr-bridge'
 
 export default function AppProvider() {
   setAxiosInstance(axiosInstance)
-  InitSignalRBridge()
+
+  useEffect(() => {
+    InitSignalRBridge()
+  }, [])
+
   return (
     <>
       <QueryClientProvider client={queryClient}>

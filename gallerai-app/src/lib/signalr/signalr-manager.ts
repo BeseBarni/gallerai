@@ -102,7 +102,7 @@ export const signalRManager = SignalRManager.getInstance()
 
 // Module-level state to prevent concurrent retry attempts
 let isRetryInProgress = false
-let retryTimeoutId: NodeJS.Timeout | null = null
+let retryTimeoutId: number | null = null
 
 export const connectWithRetry = async (attempt: number = 0) => {
   // If a retry is already in progress, don't start a new one

@@ -64,7 +64,6 @@ public static class ImagesUploaded
         {
             if (images.TryGetValue(uploadEvent.Key, out var image))
             {
-                var cache = await cacheService.GetAsync<ImageStatus>(image.GetImageStatusCacheKey());
                 var transitioned = await cacheService.TryTransitionStatusAsync(image.GetImageStatusCacheKey(), ImageStatus.UPLOADING, ImageStatus.WAITING_FOR_ANALYSIS);
 
                 if (!transitioned)

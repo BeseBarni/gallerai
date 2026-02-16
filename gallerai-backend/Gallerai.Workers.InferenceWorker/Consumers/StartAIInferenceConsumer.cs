@@ -41,14 +41,13 @@ public sealed class StartAIInferenceConsumer(
             publishEvent = new AIInferenceFinishedEvent(message.Id, message.UserId, true, result);
         }
 
-
-        var publishEndointTask = publishEndpoint.Publish(publishEvent, context.CancellationToken);
-
         var redisPublishTask = redisPublisher.PublishMessageAsync(message.UserId, MessageChannelConsts.ImageUpdate, publishEvent.Result);
 
-        var contextSaveTask = dbContext.SaveChangesAsync(context.CancellationToken);
+        await publishEndpoint.Publish(publishEvent, context.CancellationToken);
 
-        await Task.WhenAll(publishEndointTask, redisPublishTask, contextSaveTask);
+        await dbContext.SaveChangesAsync(context.CancellationToken);
+
+        await Task.WhenAll(redisPublishTask);
 
 
         logger.LogInformation("✅ AI inference completed for image: {Id} | Result: {Result}",
