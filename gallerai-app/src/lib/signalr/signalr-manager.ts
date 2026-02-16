@@ -127,6 +127,7 @@ export const connectWithRetry = async (attempt: number = 0) => {
   try {
     await signalRManager.start()
     // Successfully connected, reset state
+    // Clear timeout in case a retry was scheduled but we succeeded before it fired
     if (retryTimeoutId) {
       clearTimeout(retryTimeoutId)
     }
@@ -140,7 +141,9 @@ export const connectWithRetry = async (attempt: number = 0) => {
       )
 
       retryTimeoutId = setTimeout(() => {
-        connectWithRetry(attempt + 1)
+        connectWithRetry(attempt + 1).catch((err) => {
+          console.error('Error in retry attempt:', err)
+        })
       }, delay)
     } else {
       console.error('SignalR connection failed after maximum retries:', err)
