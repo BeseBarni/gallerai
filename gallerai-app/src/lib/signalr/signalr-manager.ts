@@ -110,14 +110,13 @@ export const connectWithRetry = async (attempt: number = 0) => {
     return
   }
 
-  // Cancel any pending retry timeout when starting fresh
-  if (attempt === 0 && retryTimeoutId) {
-    clearTimeout(retryTimeoutId)
-    retryTimeoutId = null
-  }
-
-  // Only set the flag when starting a new retry sequence
+  // Only set the flag and clear timeouts when starting a new retry sequence
   if (attempt === 0) {
+    // Cancel any pending retry timeout when starting fresh
+    if (retryTimeoutId) {
+      clearTimeout(retryTimeoutId)
+      retryTimeoutId = null
+    }
     isRetryInProgress = true
   }
 
