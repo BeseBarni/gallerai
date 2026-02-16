@@ -127,7 +127,9 @@ export const connectWithRetry = async (attempt: number = 0) => {
   try {
     await signalRManager.start()
     // Successfully connected, reset state
-    clearTimeout(retryTimeoutId)
+    if (retryTimeoutId) {
+      clearTimeout(retryTimeoutId)
+    }
     isRetryInProgress = false
     retryTimeoutId = null
   } catch (err) {
@@ -138,9 +140,9 @@ export const connectWithRetry = async (attempt: number = 0) => {
       )
 
       retryTimeoutId = setTimeout(() => {
-        // Catch any errors from the recursive call to prevent unhandled promise rejections
+        // Catch errors from the recursive call to prevent unhandled promise rejections
         connectWithRetry(attempt + 1).catch((err) => {
-          console.error('Unhandled error during SignalR retry attempt:', err)
+          console.error('Failed to retry SignalR connection:', err)
         })
       }, delay)
     } else {
