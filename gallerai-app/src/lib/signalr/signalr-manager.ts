@@ -100,11 +100,37 @@ class SignalRManager {
 
 export const signalRManager = SignalRManager.getInstance()
 
+// Module-level state to prevent concurrent retry attempts
+let isRetryInProgress = false
+let retryTimeoutId: NodeJS.Timeout | null = null
+
 export const connectWithRetry = async (attempt: number = 0) => {
+  // If a retry is already in progress, don't start a new one
+  if (isRetryInProgress && attempt === 0) {
+    return
+  }
+
+  // Only set the flag and clear timeouts when starting a new retry sequence
+  if (attempt === 0) {
+    // Cancel any pending retry timeout when starting fresh
+    if (retryTimeoutId) {
+      clearTimeout(retryTimeoutId)
+      retryTimeoutId = null
+    }
+    isRetryInProgress = true
+  }
+
   const maxAttempts = env.SIGNALR_RETRY_ATTEMPTS
   const retryDelay = env.SIGNALR_RETRY_DELAY_MS
+
   try {
     await signalRManager.start()
+    // Successfully connected, reset state
+    if (retryTimeoutId) {
+      clearTimeout(retryTimeoutId)
+    }
+    isRetryInProgress = false
+    retryTimeoutId = null
   } catch (err) {
     if (attempt < maxAttempts) {
       const delay = retryDelay * Math.pow(2, attempt)
@@ -112,9 +138,17 @@ export const connectWithRetry = async (attempt: number = 0) => {
         `SignalR connection failed. Retrying in ${delay}ms... (Attempt ${attempt + 1}/${maxAttempts})`,
       )
 
-      setTimeout(() => connectWithRetry(attempt + 1), delay)
+      retryTimeoutId = setTimeout(() => {
+        // Catch errors from the recursive call to prevent unhandled promise rejections
+        connectWithRetry(attempt + 1).catch((err) => {
+          console.error('Failed to retry SignalR connection:', err)
+        })
+      }, delay)
     } else {
       console.error('SignalR connection failed after maximum retries:', err)
+      // Reset state after final failure
+      isRetryInProgress = false
+      retryTimeoutId = null
     }
   }
 }
