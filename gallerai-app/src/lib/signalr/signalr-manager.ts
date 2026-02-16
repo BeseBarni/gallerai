@@ -116,13 +116,20 @@ export const connectWithRetry = async (attempt: number = 0) => {
     retryTimeoutId = null
   }
 
-  isRetryInProgress = true
+  // Only set the flag when starting a new retry sequence
+  if (attempt === 0) {
+    isRetryInProgress = true
+  }
+
   const maxAttempts = env.SIGNALR_RETRY_ATTEMPTS
   const retryDelay = env.SIGNALR_RETRY_DELAY_MS
 
   try {
     await signalRManager.start()
     // Successfully connected, reset state
+    if (retryTimeoutId) {
+      clearTimeout(retryTimeoutId)
+    }
     isRetryInProgress = false
     retryTimeoutId = null
   } catch (err) {
