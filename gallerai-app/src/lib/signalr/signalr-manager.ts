@@ -143,7 +143,7 @@ export const connectWithRetry = async (attempt: number = 0) => {
       retryTimeoutId = setTimeout(() => {
         // Catch any errors from the recursive call to prevent unhandled promise rejections
         connectWithRetry(attempt + 1).catch((err) => {
-          console.error('Error in retry attempt:', err)
+          console.error('Unhandled error during SignalR retry attempt:', err)
         })
       }, delay)
     } else {
