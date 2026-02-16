@@ -127,10 +127,7 @@ export const connectWithRetry = async (attempt: number = 0) => {
   try {
     await signalRManager.start()
     // Successfully connected, reset state
-    // Clear any pending retry timeout
-    if (retryTimeoutId) {
-      clearTimeout(retryTimeoutId)
-    }
+    clearTimeout(retryTimeoutId)
     isRetryInProgress = false
     retryTimeoutId = null
   } catch (err) {
