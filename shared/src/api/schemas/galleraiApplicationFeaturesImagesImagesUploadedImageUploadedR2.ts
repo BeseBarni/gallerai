@@ -6,7 +6,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent {
+export interface GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedR2 {
   key?: string;
   size?: number;
   bucket?: string;

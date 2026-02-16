@@ -14,4 +14,6 @@ export interface GalleraiApplicationFeaturesFoldersGetFolderImagesImageDto {
   status?: GalleraiDomainEnumsImageStatus;
   /** @nullable */
   aestheticScore?: number | null;
+  /** @nullable */
+  critique?: string | null;
 }

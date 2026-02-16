@@ -1,0 +1,154 @@
+import { useAuthStore } from '@/store/useAuthStore'
+import * as signalr from '@microsoft/signalr'
+
+import { env } from '../env'
+
+type HubCallback = (...args: unknown[]) => void
+
+class SignalRManager {
+  private static instance: SignalRManager
+  private connection: signalr.HubConnection
+
+  private listeners: Map<string, Set<HubCallback>> = new Map()
+
+  private isConnectionAuthenticated: boolean = false
+
+  private constructor() {
+    this.connection = new signalr.HubConnectionBuilder()
+      .withUrl(env.VITE_API_HUB_URL, {
+        accessTokenFactory: () => {
+          const token = useAuthStore.getState().token
+          this.isConnectionAuthenticated = !!token
+          return token || ''
+        },
+      })
+      .withAutomaticReconnect()
+      .build()
+
+    this.connection.on('ImageUpdate', (data) => {
+      this.emit('ImageUpdate', data)
+    })
+  }
+
+  public static getInstance(): SignalRManager {
+    if (!SignalRManager.instance) {
+      SignalRManager.instance = new SignalRManager()
+    }
+    return SignalRManager.instance
+  }
+
+  private startPromise: Promise<void> | null = null
+
+  public async start() {
+    const isAuthenticated = useAuthStore.getState().isAuthenticated
+    if (this.connection.state === signalr.HubConnectionState.Connected) {
+      if (this.isConnectionAuthenticated === isAuthenticated) {
+        return
+      }
+      await this.stop()
+    }
+
+    if (this.startPromise) {
+      return this.startPromise
+    }
+
+    if (this.connection.state === signalr.HubConnectionState.Disconnected) {
+      try {
+        this.startPromise = this.connection.start()
+        await this.startPromise
+      } catch (err) {
+        this.startPromise = null
+        console.error('Error while starting SignalR:', err)
+        throw err
+      } finally {
+        this.startPromise = null
+      }
+    }
+  }
+
+  public async stop() {
+    if (this.connection.state !== signalr.HubConnectionState.Disconnected) {
+      try {
+        await this.connection.stop()
+      } catch (err) {
+        console.error('Error while stopping SignalR:', err)
+      }
+    }
+  }
+
+  public on(methodName: string, callback: (...args: unknown[]) => void) {
+    this.connection.on(methodName, callback)
+  }
+
+  public off(methodName: string) {
+    this.connection.off(methodName)
+  }
+
+  private emit(methodName: string, ...args: unknown[]) {
+    this.listeners.get(methodName)?.forEach((callback) => callback(...args))
+  }
+
+  public subscribe(methodName: string, callback: HubCallback) {
+    if (!this.listeners.has(methodName)) {
+      this.listeners.set(methodName, new Set())
+    }
+    this.listeners.get(methodName)!.add(callback)
+
+    return () => this.listeners.get(methodName)?.delete(callback)
+  }
+}
+
+export const signalRManager = SignalRManager.getInstance()
+
+// Module-level state to prevent concurrent retry attempts
+let isRetryInProgress = false
+let retryTimeoutId: number | null = null
+
+export const connectWithRetry = async (attempt: number = 0) => {
+  // If a retry is already in progress, don't start a new one
+  if (isRetryInProgress && attempt === 0) {
+    return
+  }
+
+  // Only set the flag and clear timeouts when starting a new retry sequence
+  if (attempt === 0) {
+    // Cancel any pending retry timeout when starting fresh
+    if (retryTimeoutId) {
+      clearTimeout(retryTimeoutId)
+      retryTimeoutId = null
+    }
+    isRetryInProgress = true
+  }
+
+  const maxAttempts = env.SIGNALR_RETRY_ATTEMPTS
+  const retryDelay = env.SIGNALR_RETRY_DELAY_MS
+
+  try {
+    await signalRManager.start()
+    // Successfully connected, reset state
+    if (retryTimeoutId) {
+      clearTimeout(retryTimeoutId)
+    }
+    isRetryInProgress = false
+    retryTimeoutId = null
+  } catch (err) {
+    if (attempt < maxAttempts) {
+      const delay = retryDelay * Math.pow(2, attempt)
+      console.warn(
+        `SignalR connection failed. Retrying in ${delay}ms... (Attempt ${attempt + 1}/${maxAttempts})`,
+      )
+
+      retryTimeoutId = setTimeout(() => {
+        // Catch errors from the recursive call to prevent unhandled promise rejections
+        connectWithRetry(attempt + 1).catch((err) => {
+          console.error('Failed to retry SignalR connection:', err)
+        })
+      }, delay)
+    } else {
+      console.error('SignalR connection failed after maximum retries:', err)
+      // Reset state after final failure
+      isRetryInProgress = false
+      retryTimeoutId = null
+    }
+  }
+}

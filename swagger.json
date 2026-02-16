@@ -560,12 +560,12 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/GalleraiApplicationFeaturesImagesImagesUploaded_ImageUploadedEvent"
+              "$ref": "#/components/schemas/GalleraiApplicationFeaturesImagesImagesUploaded_ImageUploadedR2"
             }
           }
         }
       },
-      "GalleraiApplicationFeaturesImagesImagesUploaded_ImageUploadedEvent": {
+      "GalleraiApplicationFeaturesImagesImagesUploaded_ImageUploadedR2": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -847,6 +847,10 @@
           "aestheticScore": {
             "type": "number",
             "format": "double",
+            "nullable": true
+          },
+          "critique": {
+            "type": "string",
             "nullable": true
           }
         }

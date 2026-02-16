@@ -6,7 +6,7 @@ import {
 import { getFolderByIdEndpoint } from '@shared/src/api/gallerai/api.gen'
 import { createFileRoute } from '@tanstack/react-router'
 
-import FolderView from '@/components/gallery/folder-view'
+import FolderView from '@/components/gallery/folder-view/folder-view'
 
 export const Route = createFileRoute('/__authenticated/dashboard/folder')({
   validateSearch: (search: FolderViewRoute) => {

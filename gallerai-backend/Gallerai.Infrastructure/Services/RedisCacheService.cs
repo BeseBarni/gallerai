@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Gallerai.Application.Interfaces;
+using Gallerai.Domain.Enums;
 using StackExchange.Redis;
 
 namespace Gallerai.Infrastructure.Services;
@@ -86,5 +87,33 @@ internal sealed class RedisCacheService : ICacheService
         var value = await db.StringGetDeleteAsync(CreateKey(key));
 
         return value.HasValue ? JsonSerializer.Deserialize<T>(value.ToString()) : default;
+    }
+
+    public async Task<bool> TryTransitionStatusAsync(string key, ImageStatus expected, ImageStatus next)
+    {
+        // Lua script: 
+        // "If the value at KEY matches ARGV[1], set it to ARGV[2] and return 1 (true). 
+        //  Otherwise return 0 (false)."
+        key = CreateKey(key);
+        var script = @"
+        local current = redis.call('get', KEYS[1])
+    
+        -- If key is missing (not current) OR key matches expected status
+        if not current or current == ARGV[1] then
+            redis.call('set', KEYS[1], ARGV[2], 'KEEPTTL')
+            return 1
+        else
+            return 0
+        end";
+
+        var result = await db.ScriptEvaluateAsync(
+            script,
+            [key],
+            [(int)expected, (int)next]
+        );
+
+        var success = (int)result == 1;
+
+        return success;
     }
 }

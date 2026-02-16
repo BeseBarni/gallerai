@@ -1,4 +1,5 @@
 using Gallerai.SharedKernel.Events;
+using Gallerai.SignalR.Shared.Consts;
 using Gallerai.Workers.InferenceWorker.Persistance;
 using Gallerai.Workers.InferenceWorker.Services;
 using MassTransit;
@@ -9,7 +10,8 @@ public sealed class StartAIInferenceConsumer(
     ILogger<StartAIInferenceConsumer> logger,
     IInferenceService inferenceService,
     IPublishEndpoint publishEndpoint,
-    WorkerDbContext dbContext) : IConsumer<StartAIInferenceEvent>
+    WorkerDbContext dbContext,
+    RedisPublisher redisPublisher) : IConsumer<StartAIInferenceEvent>
 {
     public async Task Consume(ConsumeContext<StartAIInferenceEvent> context)
     {
@@ -39,9 +41,14 @@ public sealed class StartAIInferenceConsumer(
             publishEvent = new AIInferenceFinishedEvent(message.Id, message.UserId, true, result);
         }
 
+        var redisPublishTask = redisPublisher.PublishMessageAsync(message.UserId, MessageChannelConsts.ImageUpdate, publishEvent.Result);
 
         await publishEndpoint.Publish(publishEvent, context.CancellationToken);
+
         await dbContext.SaveChangesAsync(context.CancellationToken);
+
+        await Task.WhenAll(redisPublishTask);
+
 
         logger.LogInformation("✅ AI inference completed for image: {Id} | Result: {Result}",
             message.Id,

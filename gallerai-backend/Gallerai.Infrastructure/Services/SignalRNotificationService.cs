@@ -1,5 +1,6 @@
 using Gallerai.Application.Interfaces;
-using Gallerai.Infrastructure.Notifications;
+using Gallerai.SignalR.Shared.Consts;
+using Gallerai.SignalR.Shared.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Gallerai.Infrastructure.Services;
@@ -8,6 +9,6 @@ internal sealed class SignalRNotificationService(IHubContext<ImageNotificationsH
 {
     public async Task NotifyUserUpdate<T>(string userId, T message)
     {
-        await hubContext.Clients.User(userId).SendAsync("ReceiveImageNotification", message);
+        await hubContext.Clients.User(userId).SendAsync(MessageChannelConsts.ImageUpdate, message);
     }
 }

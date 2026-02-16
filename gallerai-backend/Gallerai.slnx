@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/SignalR/">
+    <Project Path="Gallerai.SignalR.Shared/Gallerai.SignalR.Shared.csproj" Id="83129995-f01c-4e1f-b3c5-5a81aca19cea" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path="Directory.Packages.props" />

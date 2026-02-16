@@ -4,4 +4,7 @@ public static class CacheKeys
 {
     public static string GetTokenKey(string oneTimeCode) => $"user-token:{oneTimeCode}";
     public static string GetUserFoldersKey(string userId) => $"user-folders:{userId}";
+    public static string GetImageStatusCacheKey(Guid imageId, string userId) => $"image:{imageId}-{userId}";
+
+
 }

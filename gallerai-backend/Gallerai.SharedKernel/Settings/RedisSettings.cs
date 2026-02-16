@@ -3,7 +3,7 @@ using Gallerai.SharedKernel.Interfaces;
 
 namespace Gallerai.SharedKernel.Settings;
 
-[SettingsScope(SettingsScopes.Api)]
+[SettingsScope(SettingsScopes.Shared)]
 public class RedisSettings : ISettings
 {
     public static string SectionName => "Redis";

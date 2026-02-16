@@ -1,3 +1,5 @@
+using Gallerai.Domain.Enums;
+
 namespace Gallerai.Application.Interfaces;
 
 public interface ICacheService
@@ -9,4 +11,5 @@ public interface ICacheService
     Task<T?> GetOrSetAsync<T>(string key, Func<T> factory, TimeSpan expiration);
     Task<T?> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan expiration);
     Task<T?> PopAsync<T>(string key);
+    Task<bool> TryTransitionStatusAsync(string key, ImageStatus expected, ImageStatus next);
 }

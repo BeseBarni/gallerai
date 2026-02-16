@@ -23,7 +23,6 @@ public class AIInferenceFinishedEventConsumer(IGalleraiDbContext dbContext, INot
 
         if (image is null) return;
 
-        // Idempotency check
         if (image.Status.Status is ImageStatus.READY or ImageStatus.ERROR)
             return;
 
@@ -36,10 +35,7 @@ public class AIInferenceFinishedEventConsumer(IGalleraiDbContext dbContext, INot
         var analysis = new ImageAnalysis(message.Result!.Score, message.Result.Critique);
         var imageEvent = image.MarkAsAnalyzed(analysis);
 
-        if (await dbContext.TryAddEventAsync(imageEvent, ct))
-        {
-            await notificationService.NotifyUserUpdate(message.UserId, message.Result);
-        }
+        await dbContext.TryAddEventAsync(imageEvent, ct);
     }
 
 

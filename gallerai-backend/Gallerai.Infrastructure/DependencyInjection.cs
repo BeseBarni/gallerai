@@ -7,6 +7,7 @@ using Gallerai.Infrastructure.Extensions;
 using Gallerai.Infrastructure.Persistance;
 using Gallerai.Infrastructure.Services;
 using Gallerai.SharedKernel.Settings;
+using Gallerai.SignalR.Shared.Consts;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -49,7 +50,8 @@ public static class DependencyInjection
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = "Google";
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddCookie(IdentityConstants.ExternalScheme)
         .AddJwtBearer(options =>
@@ -58,6 +60,8 @@ public static class DependencyInjection
             options.RequireHttpsMetadata = false;
             options.TokenValidationParameters = new TokenValidationParameters
             {
+                NameClaimType = "sub",
+                RoleClaimType = "role",
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
@@ -66,6 +70,20 @@ public static class DependencyInjection
                 ValidAudience = jwtSettings.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
                 ClockSkew = TimeSpan.Zero
+            };
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+
+                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments(HubConsts.ImagesHub))
+                    {
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                }
             };
         })
         .AddGoogle(options =>
@@ -76,6 +94,7 @@ public static class DependencyInjection
             options.CallbackPath = "/signin-google";
             options.CorrelationCookie.SameSite = SameSiteMode.None;
             options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+
         });
 
         services.AddScoped<IGalleraiDbContext>(provider => provider.GetRequiredService<GalleraiDbContext>());
@@ -105,6 +124,7 @@ public static class DependencyInjection
             });
 
             x.AddConsumer<AIInferenceFinishedEventConsumer>();
+            x.AddConsumer<ImageUploadedEventConsumer>();
 
             x.UsingRabbitMq((ctx, cfg) =>
             {
@@ -123,7 +143,7 @@ public static class DependencyInjection
         services.AddSignalR()
             .AddStackExchangeRedis(redisSettings.ConnectionString, options =>
             {
-                options.Configuration.ChannelPrefix = RedisChannel.Literal("Gallerai");
+                options.Configuration.ChannelPrefix = RedisChannel.Literal(ChannelConsts.Gallerai);
             });
 
         services.AddSingleton<IConnectionMultiplexer>(config =>
