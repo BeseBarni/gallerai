@@ -127,8 +127,10 @@ export const connectWithRetry = async (attempt: number = 0) => {
   try {
     await signalRManager.start()
     // Successfully connected, reset state
-    // Clear timeout in case a retry was scheduled but we succeeded before it fired
-    clearTimeout(retryTimeoutId)
+    // Clear any pending retry timeout
+    if (retryTimeoutId) {
+      clearTimeout(retryTimeoutId)
+    }
     isRetryInProgress = false
     retryTimeoutId = null
   } catch (err) {
@@ -139,9 +141,8 @@ export const connectWithRetry = async (attempt: number = 0) => {
       )
 
       retryTimeoutId = setTimeout(() => {
+        // Catch any errors from the recursive call to prevent unhandled promise rejections
         connectWithRetry(attempt + 1).catch((err) => {
-          // If retry fails, the error is already handled in the catch block above
-          // But we log it here for debugging purposes
           console.error('Error in retry attempt:', err)
         })
       }, delay)
