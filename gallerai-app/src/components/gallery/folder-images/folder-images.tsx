@@ -35,7 +35,7 @@ function FolderImages() {
 
     // eslint-disable-next-line react-compiler/react-compiler
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [displayImages.length, setProcessedImageCount, setImageCount])
+  }, [displayImages, setProcessedImageCount, setImageCount])
 
   return (
     <>
