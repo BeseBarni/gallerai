@@ -36,7 +36,6 @@ public class AIInferenceFinishedEventConsumer(IGalleraiDbContext dbContext, INot
         var imageEvent = image.MarkAsAnalyzed(analysis);
 
         await dbContext.TryAddEventAsync(imageEvent, ct);
-        //await notificationService.NotifyUserUpdate("", message.Result);
     }
 
 
