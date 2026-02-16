@@ -140,7 +140,6 @@ export const connectWithRetry = async (attempt: number = 0) => {
       )
 
       retryTimeoutId = setTimeout(() => {
-        retryTimeoutId = null
         connectWithRetry(attempt + 1)
       }, delay)
     } else {
