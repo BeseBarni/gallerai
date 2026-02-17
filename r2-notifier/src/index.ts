@@ -21,12 +21,21 @@ export default {
 
 		for (const message of batch.messages) {
 			const r2Event = message.body;
-			const object = await env.IMAGES_BUCKET.head(r2Event.object.key);
-
-			const traceparent = object?.customMetadata?.['traceparent'] || '';
 
 			// Filter only for uploads
 			if (r2Event.action === 'PutObject') {
+				let traceparent = '';
+
+				try {
+					const object = await env.IMAGES_BUCKET.head(r2Event.object.key);
+					traceparent = object?.customMetadata?.['traceparent'] ?? '';
+				} catch (error) {
+					// If we can't read metadata for this object, continue with an empty traceparent
+					console.error('Failed to read R2 object metadata for traceparent', {
+						key: r2Event.object.key,
+						error,
+					});
+				}
 				eventsToSend.push({
 					key: r2Event.object.key,
 					size: r2Event.object.size,
