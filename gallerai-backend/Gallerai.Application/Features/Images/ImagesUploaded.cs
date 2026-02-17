@@ -80,7 +80,7 @@ public static class ImagesUploaded
                 var parentContext = Propagators.DefaultTextMapPropagator.Extract(
                     default,
                     uploadEvent.Traceparent,
-                    (carrier, key) => [carrier]);
+                    (carrier, key) => key == "traceparent" ? new[] { carrier } : Array.Empty<string>());
 
                 using (var imageActivity = GalleraiActivity.GalleraiActivitySource.StartActivity("ProcessUploadedImage", ActivityKind.Internal, parentContext.ActivityContext))
                 {
