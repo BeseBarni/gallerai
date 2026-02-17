@@ -17,7 +17,7 @@
 			{
 				"queue": "gallerai-upload-notifications",
 				"max_batch_size": 10,
-				"max_batch_timeout": 5, // Wait up to 5s to fill a batch
+				"max_batch_timeout": 0, // Wait up to 5s to fill a batch
 			},
 		],
 	},
