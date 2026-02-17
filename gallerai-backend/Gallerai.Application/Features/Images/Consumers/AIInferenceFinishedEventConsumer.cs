@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gallerai.Application.Features.Images.Consumers;
 
-public class AIInferenceFinishedEventConsumer(IGalleraiDbContext dbContext, INotificationService notificationService) : IConsumer<AIInferenceFinishedEvent>
+public class AIInferenceFinishedEventConsumer(IGalleraiDbContext dbContext) : IConsumer<AIInferenceFinishedEvent>
 {
     public async Task Consume(ConsumeContext<AIInferenceFinishedEvent> context)
     {

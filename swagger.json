@@ -486,6 +486,9 @@
           },
           "cdnUrl": {
             "type": "string"
+          },
+          "traceparent": {
+            "type": "string"
           }
         }
       },
@@ -577,6 +580,9 @@
             "format": "int64"
           },
           "bucket": {
+            "type": "string"
+          },
+          "traceparent": {
             "type": "string"
           },
           "timestamp": {

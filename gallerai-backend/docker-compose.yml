@@ -1,56 +1,4 @@
-networks:
-  dev:
-    driver: bridge
-
 services:
-  gallerai-redis:
-    image: redis:alpine
-    container_name: gallerai-redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    networks:
-      - dev
-  gallerai-rabbitmq:
-    image: rabbitmq:3-management
-    container_name: gallerai-rabbitmq
-    ports:
-      - "5672:5672"   # RabbitMQ communication port
-      - "15672:15672" # Management UI port
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    networks:
-      - dev
-  gallerai-db:
-    image: postgres:16-alpine
-    container_name: gallerai-db
-    ports:
-    - "5432:5432"
-    restart: unless-stopped
-    volumes:
-    - gallerai_data:/var/lib/postgresql/data
-    - ../scripts/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
-    networks:
-    - dev
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
   gallerai.inference-worker:
     profiles: ["worker"]
     container_name: gallerai-inference-worker
@@ -58,13 +6,7 @@ services:
     build:
       context: .
       dockerfile: ../gallerai-backend/Gallerai.Workers.InferenceWorker/Dockerfile
-    depends_on:
-      gallerai-db:
-        condition: service_healthy
-      gallerai-rabbitmq:
-        condition: service_healthy
-    networks:
-    - dev
+    networks: [shared-net]
   gallerai.webapi:
     profiles: ["api"]
     ports:
@@ -75,15 +17,7 @@ services:
     build:
       context: .
       dockerfile: ../gallerai-backend/Gallerai.WebAPI/Dockerfile
-    depends_on:
-      gallerai-db:
-        condition: service_healthy
-      gallerai-rabbitmq:
-        condition: service_healthy
-      gallerai-redis:
-        condition: service_healthy
-    networks:
-    - dev
+    networks: [shared-net]
   gallerai.frontend:
     profiles: ["app"]
     ports:
@@ -96,12 +30,9 @@ services:
       gallerai.webapi:
         condition: service_started
     restart: always
-    networks:
-    - dev
-volumes:
-  rabbitmq_data:
-    driver: local  
-  gallerai_data:
-    driver: local
-  redis_data:
-    driver: local
+    networks: [shared-net]
+
+networks:
+  shared-net:
+    external: true
+    name: gallerai-net

@@ -1,6 +1,6 @@
 import { imagesUploadedEndpoint } from '@shared/src/api/worker/worker.gen';
 import { setBaseUrl } from '@shared/src/lib/worker-client';
-import type { GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent } from '@shared/src/api/schemas';
+import type { GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedR2 } from '@shared/src/api/schemas';
 
 interface R2EventNotification {
 	object: {
@@ -16,11 +16,14 @@ export default {
 	async queue(batch: MessageBatch<R2EventNotification>, env: Env): Promise<void> {
 		setBaseUrl(env.BACKEND_URL);
 
-		const eventsToSend: GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedEvent[] = [];
+		const eventsToSend: GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedR2[] = [];
 		const uploadMessages: Message<R2EventNotification>[] = [];
 
 		for (const message of batch.messages) {
 			const r2Event = message.body;
+			const object = await env.IMAGES_BUCKET.head(r2Event.object.key);
+
+			const traceparent = object?.customMetadata?.['traceparent'] || '';
 
 			// Filter only for uploads
 			if (r2Event.action === 'PutObject') {
@@ -29,6 +32,7 @@ export default {
 					size: r2Event.object.size,
 					bucket: r2Event.bucket,
 					timestamp: new Date().toISOString(),
+					traceparent,
 				});
 				uploadMessages.push(message);
 			} else {
@@ -36,7 +40,7 @@ export default {
 				message.ack();
 			}
 		}
-		
+
 		if (eventsToSend.length === 0) {
 			return;
 		}
@@ -45,12 +49,12 @@ export default {
 			const response = await imagesUploadedEndpoint({ events: eventsToSend });
 
 			if (response.data.isSuccess) {
-				uploadMessages.forEach(msg => msg.ack());
+				uploadMessages.forEach((msg) => msg.ack());
 			} else {
-				uploadMessages.forEach(msg => msg.retry());
+				uploadMessages.forEach((msg) => msg.retry());
 			}
 		} catch (error) {
-			uploadMessages.forEach(msg => msg.retry());
+			uploadMessages.forEach((msg) => msg.retry());
 		}
 	},
 

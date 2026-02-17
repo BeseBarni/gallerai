@@ -7,7 +7,7 @@ namespace Gallerai.Infrastructure.Services;
 
 internal sealed class ImageService(IAmazonS3 s3Client, CloudflareR2Settings cloudflareR2Settings) : IImageService
 {
-    public Task<string> GetImageUrlAsync(string key, string contentType, CancellationToken ct = default)
+    public Task<string> GetImageUrlAsync(string key, string contentType, Dictionary<string, string>? metadata, CancellationToken ct = default)
     {
         var request = new GetPreSignedUrlRequest
         {
@@ -18,6 +18,13 @@ internal sealed class ImageService(IAmazonS3 s3Client, CloudflareR2Settings clou
             ContentType = contentType
         };
 
+        if (metadata is not null)
+        {
+            foreach (var data in metadata)
+            {
+                request.Metadata.Add(data.Key, data.Value);
+            }
+        }
         var url = s3Client.GetPreSignedURL(request);
 
         return Task.FromResult(url);

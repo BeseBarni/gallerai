@@ -7,11 +7,14 @@ const useTypewriter = (text: string, speed: number = 15) => {
   useEffect(() => {
     let i = 0
     setDisplayedText('') // Reset when text changes
+
     const timer = setInterval(() => {
-      setDisplayedText((prev) => prev + text.charAt(i))
       i++
-      if (i >= text.length) clearInterval(timer)
+      setDisplayedText(text.slice(0, i))
+
+      if (i === text.length) clearInterval(timer)
     }, speed)
+
     return () => clearInterval(timer)
   }, [text, speed])
 
@@ -21,7 +24,7 @@ const useTypewriter = (text: string, speed: number = 15) => {
 // --- Critique Section ---
 export const AICritique = ({ critique }: { critique?: string }) => {
   const animatedText = useTypewriter(critique || '', 10) // Quick speed
-
+  console.log('Critique:', critique, 'Animated:', animatedText)
   if (!critique) return null
 
   return (

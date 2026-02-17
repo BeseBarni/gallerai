@@ -1,0 +1,81 @@
+include:
+  - path: infra.override.yml
+
+services:
+  gallerai-redis:
+    profiles: ["infra"]
+    image: redis:alpine
+    container_name: gallerai-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks: [shared-net]
+  gallerai-rabbitmq:
+    profiles: ["infra"]
+    image: rabbitmq:3-management
+    container_name: gallerai-rabbitmq
+    ports:
+      - "5672:5672"   # RabbitMQ communication port
+      - "15672:15672" # Management UI port
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks: [shared-net]
+  gallerai-db:
+    profiles: ["infra"]
+    image: postgres:16-alpine
+    container_name: gallerai-db
+    ports:
+    - "5432:5432"
+    restart: unless-stopped
+    volumes:
+    - gallerai_data:/var/lib/postgresql/data
+    - ../scripts/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
+    networks: [shared-net]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  otel-grafana:
+    profiles: ["infra"]
+    image: grafana/otel-lgtm:latest
+    container_name: otel-grafana
+    ports:
+      - "3000:3000"
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks: [shared-net]
+
+networks:
+  shared-net:
+    external: true
+    name: gallerai-net
+
+volumes:
+  grafana-storage:
+    driver: local
+  rabbitmq_data:
+    driver: local  
+  gallerai_data:
+    driver: local
+  redis_data:
+    driver: local

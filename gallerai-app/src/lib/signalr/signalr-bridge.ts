@@ -12,6 +12,6 @@ export const InitSignalRBridge = () => {
     const updateImage = useImageStore.getState().updateImage
 
     const { imageId, score } = update
-    updateImage(imageId, { aestheticScore: score, critique: update.detailed_critique })
+    updateImage(imageId, { aestheticScore: score * 10, critique: update.detailed_critique })
   })
 }

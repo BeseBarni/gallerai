@@ -10,5 +10,6 @@ export interface GalleraiApplicationFeaturesImagesImagesUploadedImageUploadedR2 
   key?: string;
   size?: number;
   bucket?: string;
+  traceparent?: string;
   timestamp?: string;
 }

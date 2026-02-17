@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Gallerai.Application.Behaviors;
 using Gallerai.Application.Extensions;
 using Gallerai.Application.Interfaces;
@@ -16,7 +17,7 @@ public static class GetImagePresignedURL
     {
         public string? UserId { get; set; }
     }
-    public record Response(string UploadUrl, Guid ImageId, string Key, string CDNUrl);
+    public record Response(string UploadUrl, Guid ImageId, string Key, string CDNUrl, string Traceparent);
 
     public sealed class Handler(IImageService ImageService, IGalleraiDbContext Context, CloudflareR2Settings cloudflareR2Settings, ICacheService cacheService) : IRequestHandler<Command, Result<Response>>
     {
@@ -29,10 +30,20 @@ public static class GetImagePresignedURL
 
             image.SetStorageKey(storageKey);
 
+            var activity = Activity.Current;
+
+            var metadata = new Dictionary<string, string>();
+            string? traceparent = string.Empty;
+            if (activity is not null)
+            {
+                traceparent = $"00-{activity.TraceId}-{activity.SpanId}-01";
+                metadata.Add("traceparent", traceparent);
+            }
 
             var uploadUrl = await ImageService.GetImageUrlAsync(
                         storageKey,
                         request.ContentType,
+                        metadata,
                         ct
                     );
 
@@ -47,7 +58,7 @@ public static class GetImagePresignedURL
 
             await cacheService.SetAsync(image.GetImageStatusCacheKey(), ImageStatus.UPLOADING, TimeSpan.FromMinutes(5));
 
-            return new Response(uploadUrl, image.ImageId, storageKey, string.Join('/', cloudflareR2Settings.PublicURL, storageKey));
+            return new Response(uploadUrl, image.ImageId, storageKey, string.Join('/', cloudflareR2Settings.PublicURL, storageKey), traceparent);
         }
     }
 }
