@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run infra:up && npx concurrently -k -p \"[{name}]\" -n \"API,WEB,WORKER\" -c \"cyan.bold,magenta.bold,yellow.bold\" \"npm:run:api\" \"npm:run:web\"",
     "infra:up": "cd infra && docker compose --profile infra -f infra.yml up -d",
-    "infra:down": "cd infra && docker compose --profile infra -f infra/infra.yml down",
+    "infra:down": "cd infra && docker compose --profile infra -f infra.yml down",
     "run:api": "cd gallerai-backend && dotnet watch --project Gallerai.WebAPI",
     "run:web": "cd gallerai-app && npm run dev",
     "schema:gen": "dotnet run --project ./gallerai-backend/Gallerai.Tools.SchemaExtractor/Gallerai.Tools.SchemaExtractor.csproj --configuration Release",
