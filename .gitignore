@@ -7,3 +7,4 @@
 node_modules
 /deploy/docker-compose.override.yml
 /gallerai-backend/Gallerai.Workers.InferenceWorker/appsettings.Development.json
+/infra/infra.override.yml
