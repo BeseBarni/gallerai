@@ -1,19 +1,22 @@
 using System.Data;
+using System.Diagnostics;
 using Gallerai.Application.Extensions;
 using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Enums;
+using Gallerai.SharedKernel.Activity;
 using Gallerai.SharedKernel.Events;
 using Gallerai.SharedKernel.Models;
 using Gallerai.SharedKernel.Settings;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Context.Propagation;
 
 namespace Gallerai.Application.Features.Images;
 
 public static class ImagesUploaded
 {
-    public record ImageUploadedR2(string Key, long Size, string Bucket, DateTime Timestamp);
+    public record ImageUploadedR2(string Key, long Size, string Bucket, string Traceparent, DateTime Timestamp);
     public record Request(ImageUploadedR2[]? Events);
     public record Command(ImageUploadedR2[] Events) : IRequest<Result<Response>>;
     public record Response(int ProcessedCount, int FailedCount, string[] FailedKeys);
@@ -22,6 +25,8 @@ public static class ImagesUploaded
     {
         public async Task<Result<Response>> Handle(Command request, CancellationToken ct)
         {
+            using var activity = GalleraiActivity.GalleraiActivitySource.StartActivity("ProcessImageBatch");
+
             var processedCount = 0;
             var ignoredCount = 0;
 
@@ -72,16 +77,27 @@ public static class ImagesUploaded
                     return (flowControl: false, value: (processedCount, ignoredCount));
                 }
 
-                await publishEndpoint.Publish(new StartAIInferenceEvent(
-                        image.ImageId,
-                        image.UserId,
-                        image.GetFullPath(cloudflareR2Settings.PublicURL)
-                    ), ct);
+                var parentContext = Propagators.DefaultTextMapPropagator.Extract(
+                    default,
+                    uploadEvent.Traceparent,
+                    (carrier, key) => key == "traceparent" ? new[] { carrier } : Array.Empty<string>());
 
-                await publishEndpoint.Publish(new ImageUploadedEvent(
-                    image.ImageId, uploadEvent.Size, uploadEvent.Timestamp
-                    ), ct);
+                using (var imageActivity = GalleraiActivity.GalleraiActivitySource.StartActivity("ProcessUploadedImage", ActivityKind.Internal, parentContext.ActivityContext))
+                {
+                    imageActivity?.SetTag("gallerai.image_id", image.ImageId);
+                    imageActivity?.SetTag("gallerai.r2_key", uploadEvent.Key);
 
+                    await publishEndpoint.Publish(new StartAIInferenceEvent(
+                            image.ImageId,
+                            image.UserId,
+                            image.GetFullPath(cloudflareR2Settings.PublicURL)
+                        ), ct);
+
+                    await publishEndpoint.Publish(new ImageUploadedEvent(
+                        image.ImageId, uploadEvent.Size, uploadEvent.Timestamp
+                        ), ct);
+
+                }
                 processedCount++;
 
             }

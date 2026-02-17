@@ -8,6 +8,11 @@ using Gallerai.Workers.InferenceWorker.Persistance;
 using Gallerai.Workers.InferenceWorker.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using OpenTelemetry;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +33,12 @@ else
 var rabbitMqSettings = builder.Configuration.GetConfiguration<RabbitMQSettings>();
 var redisSettings = builder.Configuration.GetConfiguration<RedisSettings>();
 var dbConnection = builder.Configuration.GetConfiguration<DatabaseSettings>().ConnectionString;
+
+builder.Logging.AddOpenTelemetry(options =>
+{
+    options.IncludeFormattedMessage = true;
+    options.IncludeScopes = true;
+});
 
 builder.Services.AddDbContext<WorkerDbContext>(options =>
             options.UseNpgsql(dbConnection));
@@ -56,6 +67,24 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(ctx);
     });
 });
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(r => r.AddService("Gallerai-Worker"))
+    .WithMetrics(metrics =>
+    {
+        metrics.AddAspNetCoreInstrumentation();
+        metrics.AddHttpClientInstrumentation();
+        metrics.AddNpgsqlInstrumentation();
+    })
+    .WithTracing(tracing =>
+    {
+        tracing.AddHttpClientInstrumentation();
+        tracing.AddAspNetCoreInstrumentation();
+        tracing.AddNpgsql();
+        tracing.AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName);
+        tracing.AddSource("Microsoft.AspNetCore.SignalR.Server");
+    })
+    .UseOtlpExporter();
 
 builder.Services.AddSignalR()
     .AddStackExchangeRedis(redisSettings.ConnectionString, options =>

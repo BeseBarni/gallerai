@@ -4,6 +4,7 @@ interface UploadOptions {
   url: string
   file: Blob | File
   contentType: string
+  traceparent?: string
   onProgress: (percent: number) => void
 }
 
@@ -11,6 +12,7 @@ export const uploadFileWithProgress = async ({
   url,
   file,
   contentType,
+  traceparent,
   onProgress,
 }: UploadOptions): Promise<void> => {
   await axios.put(url, file, {
@@ -19,6 +21,7 @@ export const uploadFileWithProgress = async ({
       'Content-Type': contentType,
       // explicitly clear any global auth headers just in case
       Authorization: undefined,
+      'x-amz-meta-traceparent': traceparent || '',
     },
 
     // 2. Handle Progress

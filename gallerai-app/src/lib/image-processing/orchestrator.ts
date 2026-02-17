@@ -30,6 +30,7 @@ export const startImagePipeline = async (id: string, folderId: string, file: Fil
       url: result.uploadUrl,
       file: blobToUpload,
       contentType: 'image/jpeg',
+      traceparent: result.traceparent,
       onProgress: () => {},
     })
 

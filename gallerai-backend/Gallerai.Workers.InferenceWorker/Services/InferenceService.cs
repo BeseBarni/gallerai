@@ -3,7 +3,6 @@ using System.Text.Json;
 using Gallerai.SharedKernel.Consts;
 using Gallerai.SharedKernel.DTOs;
 using Gallerai.SharedKernel.Settings;
-using Microsoft.Extensions.Logging;
 using OpenAI;
 using OpenAI.Chat;
 
@@ -49,13 +48,12 @@ public sealed class InferenceService : IInferenceService
             jsonResponse = CleanJsonResponse(jsonResponse);
 
             var result = JsonSerializer.Deserialize<AIInferenceResult>(jsonResponse, JsonOptions);
-            
             if (result is null)
             {
                 _logger.LogError("Deserialization returned null for response: {Response}", jsonResponse);
                 return null;
             }
-            
+
             return result;
         }
         catch (Exception ex)

@@ -11,4 +11,5 @@ export interface GalleraiApplicationFeaturesImagesGetImagePresignedURLResponse {
   imageId?: string;
   key?: string;
   cdnUrl?: string;
+  traceparent?: string;
 }
