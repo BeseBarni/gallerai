@@ -34,9 +34,9 @@ public static class GetImagePresignedURL
 
             var metadata = new Dictionary<string, string>();
             string? traceparent = string.Empty;
-            if (activity is not null)
+            if (activity?.Id is not null)
             {
-                traceparent = $"00-{activity.TraceId}-{activity.SpanId}-01";
+                traceparent = activity.Id;
                 metadata.Add("traceparent", traceparent);
             }
 
