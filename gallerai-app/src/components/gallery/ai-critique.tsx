@@ -9,10 +9,10 @@ const useTypewriter = (text: string, speed: number = 15) => {
     setDisplayedText('') // Reset when text changes
 
     const timer = setInterval(() => {
-      i++
       setDisplayedText(text.slice(0, i))
+      i++
 
-      if (i === text.length) clearInterval(timer)
+      if (i > text.length) clearInterval(timer)
     }, speed)
 
     return () => clearInterval(timer)
