@@ -24,7 +24,7 @@ const useTypewriter = (text: string, speed: number = 15) => {
 // --- Critique Section ---
 export const AICritique = ({ critique }: { critique?: string }) => {
   const animatedText = useTypewriter(critique || '', 10) // Quick speed
-  console.log('Critique:', critique, 'Animated:', animatedText)
+
   if (!critique) return null
 
   return (
