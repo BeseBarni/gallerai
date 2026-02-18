@@ -3,7 +3,6 @@ using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Entities;
 using Gallerai.SharedKernel.Consts;
 using Gallerai.SharedKernel.Models;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gallerai.Application.Features.Folders;
@@ -11,15 +10,15 @@ namespace Gallerai.Application.Features.Folders;
 public static class RenameFolder
 {
     public record Request(Guid FolderId, string NewName);
-    public record Command(Guid FolderId, string NewName) : IRequest<Result<Response>>, IUserRequest
+    public record Command(Guid FolderId, string NewName) : IUserRequest
     {
         public string? UserId { get; set; }
     }
     public record Response(Guid FolderId, string Name);
 
-    public sealed class Handler(IGalleraiDbContext context, ICacheService cacheService) : IRequestHandler<Command, Result<Response>>
+    public sealed class Handler(IGalleraiDbContext context, ICacheService cacheService)
     {
-        public async Task<Result<Response>> Handle(Command request, CancellationToken ct)
+        public async Task<Result<Response>> HandleAsync(Command request, CancellationToken ct)
         {
             var folder = await context.Folders
                 .FirstOrDefaultAsync(f => f.FolderId == request.FolderId && f.UserId == request.UserId && f.DeletedAt == null, ct);

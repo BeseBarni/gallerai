@@ -2,7 +2,7 @@ import { Suspense, use, useEffect, useMemo } from 'react'
 import { useFolderStore } from '@/store/useFolderStore'
 import { useImageStore } from '@/store/useImageStore'
 import { useGetFolderImagesEndpointSuspense } from '@shared/src/api/gallerai/api.gen'
-import { GalleraiDomainEnumsImageStatus } from '@shared/src/api/schemas'
+import { GalleraiSharedKernelEnumsImageStatus } from '@shared/src/api/schemas'
 import { useShallow } from 'zustand/react/shallow'
 
 import { FolderViewContext } from '../folder-view/context'
@@ -22,7 +22,7 @@ function FolderImages() {
   const uploadingImages = useImageStore(
     useShallow((state) => Object.values(state.images).filter((p) => p.folderId === id)),
   )
-  const serverImages = useMemo(() => imageQuery.data?.value?.images ?? [], [imageQuery.data])
+  const serverImages = useMemo(() => imageQuery.data?.images ?? [], [imageQuery.data])
 
   const displayImages = useMemo(() => {
     const combinedImages = [...serverImages, ...uploadingImages]
@@ -32,7 +32,7 @@ function FolderImages() {
   useEffect(() => {
     setImageCount(displayImages.length)
     const processed = displayImages.filter(
-      (img) => img.status === GalleraiDomainEnumsImageStatus.READY || img.critique,
+      (img) => img.status === GalleraiSharedKernelEnumsImageStatus.READY || img.critique,
     ).length
     setProcessedImageCount(processed)
   }, [displayImages, setProcessedImageCount, setImageCount])

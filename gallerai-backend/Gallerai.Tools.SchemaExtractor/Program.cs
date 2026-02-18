@@ -6,6 +6,7 @@ using Gallerai.WebAPI.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using NSwag.Generation;
+using Wolverine;
 
 var bld = WebApplication.CreateBuilder();
 bld.Services.AddApplication();
@@ -14,7 +15,9 @@ bld.Services.AddFastEndpoints(o =>
     o.Assemblies = [typeof(SwaggerExtensions).Assembly];
 });
 bld.Services.AddGalleraiSwagger();
-
+bld.Host.UseWolverine(opts =>
+{
+});
 var app = bld.Build();
 
 app.UseGalleraiFastEndpoints().UseSwaggerGen();

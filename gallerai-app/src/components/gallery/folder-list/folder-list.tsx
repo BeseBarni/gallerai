@@ -7,7 +7,7 @@ import FolderListFallback from './folder-list-fallback'
 
 function FolderList() {
   const foldersQuery = useGetFoldersEndpointSuspense({ query: { queryKey: queryKeys.folders } })
-  const folders = foldersQuery.data.value?.folders ?? []
+  const folders = foldersQuery.data?.folders ?? []
   return (
     <>
       {folders.map((folder) => (

@@ -6,6 +6,8 @@
  * OpenAPI spec version: v1
  */
 
+export * from './fastEndpointsProblemDetails';
+export * from './fastEndpointsProblemDetailsError';
 export * from './galleraiApplicationFeaturesAuthAcquireTokenRequest';
 export * from './galleraiApplicationFeaturesAuthAcquireTokenResponse';
 export * from './galleraiApplicationFeaturesFoldersAddFolderRequest';
@@ -22,15 +24,10 @@ export * from './galleraiApplicationFeaturesImagesGetImagePresignedURLResponse';
 export * from './galleraiApplicationFeaturesImagesImagesUploadedImageUploadedR2';
 export * from './galleraiApplicationFeaturesImagesImagesUploadedRequest';
 export * from './galleraiApplicationFeaturesImagesImagesUploadedResponse';
-export * from './galleraiDomainEnumsImageStatus';
+export * from './galleraiSharedKernelEnumsImageStatus';
 export * from './galleraiSharedKernelModelsError';
 export * from './galleraiSharedKernelModelsResult';
 export * from './galleraiSharedKernelModelsResultOfResponse';
 export * from './galleraiSharedKernelModelsResultOfResponse2';
 export * from './galleraiSharedKernelModelsResultOfResponse3';
-export * from './galleraiSharedKernelModelsResultOfResponse4';
-export * from './galleraiSharedKernelModelsResultOfResponse5';
-export * from './galleraiSharedKernelModelsResultOfResponse6';
-export * from './galleraiSharedKernelModelsResultOfResponse7';
-export * from './galleraiSharedKernelModelsResultOfResponse8';
 export * from './galleraiWebAPIFeaturesHelloHelloResponse';

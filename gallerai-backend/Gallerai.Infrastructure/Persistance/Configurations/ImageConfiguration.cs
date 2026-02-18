@@ -17,13 +17,6 @@ internal sealed class ImageConfiguration : IEntityTypeConfiguration<Image>
         builder.Property(i => i.Size);
 
         builder
-            .HasOne(i => i.Status)
-            .WithOne(s => s.Image)
-            .HasForeignKey<ImageState>(s => s.ImageId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder
             .HasOne(i => i.Metadata)
             .WithOne(m => m.Image)
             .HasForeignKey<ImageMetadata>(m => m.ImageId)

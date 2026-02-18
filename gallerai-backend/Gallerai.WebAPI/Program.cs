@@ -1,16 +1,26 @@
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Gallerai.Application;
+using Gallerai.Application.Behaviors;
 using Gallerai.Infrastructure;
 using Gallerai.SignalR.Shared.Consts;
 using Gallerai.SignalR.Shared.Hubs;
 using Gallerai.WebAPI.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using Wolverine;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Host.UseWolverine(opts =>
+{
+    opts.Discovery.IncludeAssembly(typeof(Gallerai.Application.DependencyInjection).Assembly);
+    opts.Policies
+    .ForMessagesOfType<IUserRequest>()
+    .AddMiddleware(typeof(UserIdMiddleware));
+});
 
 builder.Services.AddHealthChecks();
 

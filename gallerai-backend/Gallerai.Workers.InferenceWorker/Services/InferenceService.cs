@@ -2,6 +2,7 @@ using System.ClientModel;
 using System.Text.Json;
 using Gallerai.SharedKernel.Consts;
 using Gallerai.SharedKernel.DTOs;
+using Gallerai.SharedKernel.Enums;
 using Gallerai.SharedKernel.Settings;
 using OpenAI;
 using OpenAI.Chat;
@@ -10,7 +11,7 @@ namespace Gallerai.Workers.InferenceWorker.Services;
 
 public interface IInferenceService
 {
-    Task<AIInferenceResult?> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default);
+    Task<ImageUpdateNotification> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default);
 }
 
 public sealed class InferenceService : IInferenceService
@@ -32,7 +33,7 @@ public sealed class InferenceService : IInferenceService
         _chatClient = openAiClient.GetChatClient(config.ModelId);
     }
 
-    public async Task<AIInferenceResult?> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
+    public async Task<ImageUpdateNotification> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -47,19 +48,22 @@ public sealed class InferenceService : IInferenceService
 
             jsonResponse = CleanJsonResponse(jsonResponse);
 
-            var result = JsonSerializer.Deserialize<AIInferenceResult>(jsonResponse, JsonOptions);
+            var result = JsonSerializer.Deserialize<ImageUpdateNotification>(jsonResponse, JsonOptions);
+
             if (result is null)
             {
                 _logger.LogError("Deserialization returned null for response: {Response}", jsonResponse);
-                return null;
+                return new ImageUpdateNotification(ImageStatus.ANALYSIS_ERROR);
             }
+
+            result.Status = ImageStatus.READY;
 
             return result;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to analyze image: {Url}", imageUrl);
-            return null;
+            return new ImageUpdateNotification(ImageStatus.ANALYSIS_ERROR);
         }
     }
 
@@ -83,9 +87,9 @@ public sealed class InferenceService : IInferenceService
 
 public sealed class FakeInferenceService : IInferenceService
 {
-    public Task<AIInferenceResult?> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
+    public Task<ImageUpdateNotification> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult<AIInferenceResult?>(new AIInferenceResult(1, "critique"));
+        return Task.FromResult(new ImageUpdateNotification(1, "critique", ImageStatus.READY));
     }
 }
 

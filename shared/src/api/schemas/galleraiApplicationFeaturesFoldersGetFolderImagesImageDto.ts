@@ -5,13 +5,13 @@
  * API for Gallerai system
  * OpenAPI spec version: v1
  */
-import type { GalleraiDomainEnumsImageStatus } from './galleraiDomainEnumsImageStatus';
+import type { GalleraiSharedKernelEnumsImageStatus } from './galleraiSharedKernelEnumsImageStatus';
 
 export interface GalleraiApplicationFeaturesFoldersGetFolderImagesImageDto {
   imageId?: string;
   folderId?: string;
   cdnUrl?: string;
-  status?: GalleraiDomainEnumsImageStatus;
+  status?: GalleraiSharedKernelEnumsImageStatus;
   /** @nullable */
   aestheticScore?: number | null;
   /** @nullable */

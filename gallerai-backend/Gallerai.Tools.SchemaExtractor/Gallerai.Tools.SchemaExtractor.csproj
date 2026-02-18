@@ -10,6 +10,7 @@
         <PackageReference Include="FastEndpoints" />
         <PackageReference Include="FastEndpoints.Swagger" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+        <PackageReference Include="WolverineFx" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Gallerai.Application\Gallerai.Application.csproj" />

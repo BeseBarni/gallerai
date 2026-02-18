@@ -39,6 +39,36 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "security": [
@@ -77,6 +107,36 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -111,6 +171,36 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "security": [
@@ -137,6 +227,36 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -153,13 +273,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse3"
+                  "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolders_Response"
                 }
               }
             }
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "security": [
@@ -192,13 +342,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse4"
+                  "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersAddFolder_Response"
                 }
               }
             }
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "security": [
@@ -244,13 +424,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse5"
+                  "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersRenameFolder_Response"
                 }
               }
             }
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "security": [
@@ -276,18 +486,41 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Success",
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResult"
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
                 }
               }
             }
           },
-          "401": {
-            "description": "Unauthorized"
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "security": [
@@ -318,13 +551,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse6"
+                  "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolderById_Response"
                 }
               }
             }
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "security": [
@@ -357,13 +620,43 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse7"
+                  "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolderImages_Response"
                 }
               }
             }
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "security": [
@@ -382,6 +675,36 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -395,6 +718,36 @@
         "responses": {
           "204": {
             "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -424,7 +777,37 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse8"
+                  "$ref": "#/components/schemas/GalleraiSharedKernelModelsResultOfResponse3"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": true,
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/FastEndpointsProblemDetails"
+                    }
+                  ]
                 }
               }
             }
@@ -467,6 +850,10 @@
           },
           "message": {
             "type": "string"
+          },
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -509,6 +896,72 @@
           "folderId": {
             "type": "string",
             "format": "guid"
+          }
+        }
+      },
+      "FastEndpointsProblemDetails": {
+        "type": "object",
+        "description": "RFC7807 compatible problem details/ error response class. this can be used by configuring startup like so:\napp.UseFastEndpoints(c => c.Errors.UseProblemDetails())",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.1"
+          },
+          "title": {
+            "type": "string",
+            "default": "One or more validation errors occurred."
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "default": 400
+          },
+          "instance": {
+            "type": "string",
+            "default": "/api/route"
+          },
+          "traceId": {
+            "type": "string",
+            "default": "0HMPNHL0JHL76:00000001"
+          },
+          "detail": {
+            "type": "string",
+            "description": "the details of the error",
+            "nullable": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FastEndpointsProblemDetails_Error"
+            }
+          }
+        }
+      },
+      "FastEndpointsProblemDetails_Error": {
+        "type": "object",
+        "description": "the error details object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "the name of the error or property of the dto that caused the error",
+            "default": "Error or field name"
+          },
+          "reason": {
+            "type": "string",
+            "description": "the reason for the error",
+            "default": "Error reason"
+          },
+          "code": {
+            "type": "string",
+            "description": "the code of the error",
+            "nullable": true
+          },
+          "severity": {
+            "type": "string",
+            "description": "the severity of the error",
+            "nullable": true
           }
         }
       },
@@ -615,29 +1068,6 @@
           }
         }
       },
-      "GalleraiSharedKernelModelsResultOfResponse3": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "isFailure": {
-            "type": "boolean"
-          },
-          "error": {
-            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
-          },
-          "value": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolders_Response"
-              }
-            ]
-          }
-        }
-      },
       "GalleraiApplicationFeaturesFoldersGetFolders_Response": {
         "type": "object",
         "additionalProperties": false,
@@ -667,29 +1097,6 @@
           }
         }
       },
-      "GalleraiSharedKernelModelsResultOfResponse4": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "isFailure": {
-            "type": "boolean"
-          },
-          "error": {
-            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
-          },
-          "value": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersAddFolder_Response"
-              }
-            ]
-          }
-        }
-      },
       "GalleraiApplicationFeaturesFoldersAddFolder_Response": {
         "type": "object",
         "additionalProperties": false,
@@ -709,29 +1116,6 @@
         "properties": {
           "name": {
             "type": "string"
-          }
-        }
-      },
-      "GalleraiSharedKernelModelsResultOfResponse5": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "isFailure": {
-            "type": "boolean"
-          },
-          "error": {
-            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
-          },
-          "value": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersRenameFolder_Response"
-              }
-            ]
           }
         }
       },
@@ -757,29 +1141,6 @@
           }
         }
       },
-      "GalleraiSharedKernelModelsResultOfResponse6": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "isFailure": {
-            "type": "boolean"
-          },
-          "error": {
-            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
-          },
-          "value": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolderById_Response"
-              }
-            ]
-          }
-        }
-      },
       "GalleraiApplicationFeaturesFoldersGetFolderById_Response": {
         "type": "object",
         "additionalProperties": false,
@@ -794,29 +1155,6 @@
           "imageCount": {
             "type": "integer",
             "format": "int32"
-          }
-        }
-      },
-      "GalleraiSharedKernelModelsResultOfResponse7": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "isFailure": {
-            "type": "boolean"
-          },
-          "error": {
-            "$ref": "#/components/schemas/GalleraiSharedKernelModelsError"
-          },
-          "value": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/GalleraiApplicationFeaturesFoldersGetFolderImages_Response"
-              }
-            ]
           }
         }
       },
@@ -848,7 +1186,7 @@
             "type": "string"
           },
           "status": {
-            "$ref": "#/components/schemas/GalleraiDomainEnumsImageStatus"
+            "$ref": "#/components/schemas/GalleraiSharedKernelEnumsImageStatus"
           },
           "aestheticScore": {
             "type": "number",
@@ -861,15 +1199,15 @@
           }
         }
       },
-      "GalleraiDomainEnumsImageStatus": {
+      "GalleraiSharedKernelEnumsImageStatus": {
         "type": "integer",
         "description": "",
         "x-enumNames": [
+          "PROCESSING",
           "UPLOADING",
-          "WAITING_FOR_ANALYSIS",
           "ANALYZING",
           "READY",
-          "ERROR"
+          "ANALYSIS_ERROR"
         ],
         "enum": [
           0,
@@ -879,7 +1217,7 @@
           4
         ]
       },
-      "GalleraiSharedKernelModelsResultOfResponse8": {
+      "GalleraiSharedKernelModelsResultOfResponse3": {
         "type": "object",
         "additionalProperties": false,
         "properties": {

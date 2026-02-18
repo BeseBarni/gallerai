@@ -6,20 +6,21 @@
  * OpenAPI spec version: v1
  */
 import type {
+  FastEndpointsProblemDetails,
   GalleraiApplicationFeaturesAuthAcquireTokenRequest,
   GalleraiApplicationFeaturesFoldersAddFolderRequest,
+  GalleraiApplicationFeaturesFoldersAddFolderResponse,
+  GalleraiApplicationFeaturesFoldersGetFolderByIdResponse,
+  GalleraiApplicationFeaturesFoldersGetFolderImagesResponse,
+  GalleraiApplicationFeaturesFoldersGetFoldersResponse,
   GalleraiApplicationFeaturesFoldersRenameFolderRequest,
+  GalleraiApplicationFeaturesFoldersRenameFolderResponse,
   GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest,
   GalleraiApplicationFeaturesImagesImagesUploadedRequest,
   GalleraiSharedKernelModelsResult,
   GalleraiSharedKernelModelsResultOfResponse,
   GalleraiSharedKernelModelsResultOfResponse2,
   GalleraiSharedKernelModelsResultOfResponse3,
-  GalleraiSharedKernelModelsResultOfResponse4,
-  GalleraiSharedKernelModelsResultOfResponse5,
-  GalleraiSharedKernelModelsResultOfResponse6,
-  GalleraiSharedKernelModelsResultOfResponse7,
-  GalleraiSharedKernelModelsResultOfResponse8,
   GalleraiWebAPIFeaturesHelloHelloResponse
 } from '../schemas';
 
@@ -30,15 +31,25 @@ export type imagePresignedUrlResponse200 = {
   status: 200
 }
 
+export type imagePresignedUrlResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
+}
+
 export type imagePresignedUrlResponse401 = {
   data: void
   status: 401
+}
+
+export type imagePresignedUrlResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
 }
     
 export type imagePresignedUrlResponseSuccess = (imagePresignedUrlResponse200) & {
   headers: Headers;
 };
-export type imagePresignedUrlResponseError = (imagePresignedUrlResponse401) & {
+export type imagePresignedUrlResponseError = (imagePresignedUrlResponse400 | imagePresignedUrlResponse401 | imagePresignedUrlResponse500) & {
   headers: Headers;
 };
 
@@ -70,13 +81,25 @@ export type imagesUploadedEndpointResponse200 = {
   data: GalleraiSharedKernelModelsResultOfResponse2
   status: 200
 }
+
+export type imagesUploadedEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
+}
+
+export type imagesUploadedEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
 export type imagesUploadedEndpointResponseSuccess = (imagesUploadedEndpointResponse200) & {
   headers: Headers;
 };
-;
+export type imagesUploadedEndpointResponseError = (imagesUploadedEndpointResponse400 | imagesUploadedEndpointResponse500) & {
+  headers: Headers;
+};
 
-export type imagesUploadedEndpointResponse = (imagesUploadedEndpointResponseSuccess)
+export type imagesUploadedEndpointResponse = (imagesUploadedEndpointResponseSuccess | imagesUploadedEndpointResponseError)
 
 export const getImagesUploadedEndpointUrl = () => {
 
@@ -105,15 +128,25 @@ export type removeImageEndpointResponse200 = {
   status: 200
 }
 
+export type removeImageEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
+}
+
 export type removeImageEndpointResponse401 = {
   data: void
   status: 401
+}
+
+export type removeImageEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
 }
     
 export type removeImageEndpointResponseSuccess = (removeImageEndpointResponse200) & {
   headers: Headers;
 };
-export type removeImageEndpointResponseError = (removeImageEndpointResponse401) & {
+export type removeImageEndpointResponseError = (removeImageEndpointResponse400 | removeImageEndpointResponse401 | removeImageEndpointResponse500) & {
   headers: Headers;
 };
 
@@ -147,13 +180,25 @@ export type helloEndpointResponse200 = {
   data: GalleraiWebAPIFeaturesHelloHelloResponse
   status: 200
 }
+
+export type helloEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
+}
+
+export type helloEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
 export type helloEndpointResponseSuccess = (helloEndpointResponse200) & {
   headers: Headers;
 };
-;
+export type helloEndpointResponseError = (helloEndpointResponse400 | helloEndpointResponse500) & {
+  headers: Headers;
+};
 
-export type helloEndpointResponse = (helloEndpointResponseSuccess)
+export type helloEndpointResponse = (helloEndpointResponseSuccess | helloEndpointResponseError)
 
 export const getHelloEndpointUrl = () => {
 
@@ -177,19 +222,29 @@ export const helloEndpoint = async ( options?: RequestInit): Promise<helloEndpoi
 
 
 export type getFoldersEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse3
+  data: GalleraiApplicationFeaturesFoldersGetFoldersResponse
   status: 200
+}
+
+export type getFoldersEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
 }
 
 export type getFoldersEndpointResponse401 = {
   data: void
   status: 401
 }
+
+export type getFoldersEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
 export type getFoldersEndpointResponseSuccess = (getFoldersEndpointResponse200) & {
   headers: Headers;
 };
-export type getFoldersEndpointResponseError = (getFoldersEndpointResponse401) & {
+export type getFoldersEndpointResponseError = (getFoldersEndpointResponse400 | getFoldersEndpointResponse401 | getFoldersEndpointResponse500) & {
   headers: Headers;
 };
 
@@ -217,19 +272,29 @@ export const getFoldersEndpoint = async ( options?: RequestInit): Promise<getFol
 
 
 export type addFolderEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse4
+  data: GalleraiApplicationFeaturesFoldersAddFolderResponse
   status: 200
+}
+
+export type addFolderEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
 }
 
 export type addFolderEndpointResponse401 = {
   data: void
   status: 401
 }
+
+export type addFolderEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
 export type addFolderEndpointResponseSuccess = (addFolderEndpointResponse200) & {
   headers: Headers;
 };
-export type addFolderEndpointResponseError = (addFolderEndpointResponse401) & {
+export type addFolderEndpointResponseError = (addFolderEndpointResponse400 | addFolderEndpointResponse401 | addFolderEndpointResponse500) & {
   headers: Headers;
 };
 
@@ -258,19 +323,29 @@ export const addFolderEndpoint = async (galleraiApplicationFeaturesFoldersAddFol
 
 
 export type renameFolderEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse5
+  data: GalleraiApplicationFeaturesFoldersRenameFolderResponse
   status: 200
+}
+
+export type renameFolderEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
 }
 
 export type renameFolderEndpointResponse401 = {
   data: void
   status: 401
 }
+
+export type renameFolderEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
 export type renameFolderEndpointResponseSuccess = (renameFolderEndpointResponse200) & {
   headers: Headers;
 };
-export type renameFolderEndpointResponseError = (renameFolderEndpointResponse401) & {
+export type renameFolderEndpointResponseError = (renameFolderEndpointResponse400 | renameFolderEndpointResponse401 | renameFolderEndpointResponse500) & {
   headers: Headers;
 };
 
@@ -299,20 +374,30 @@ export const renameFolderEndpoint = async (folderId: string,
 
 
 
-export type removeFolderEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResult
-  status: 200
+export type removeFolderEndpointResponse204 = {
+  data: void
+  status: 204
+}
+
+export type removeFolderEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
 }
 
 export type removeFolderEndpointResponse401 = {
   data: void
   status: 401
 }
+
+export type removeFolderEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
-export type removeFolderEndpointResponseSuccess = (removeFolderEndpointResponse200) & {
+export type removeFolderEndpointResponseSuccess = (removeFolderEndpointResponse204) & {
   headers: Headers;
 };
-export type removeFolderEndpointResponseError = (removeFolderEndpointResponse401) & {
+export type removeFolderEndpointResponseError = (removeFolderEndpointResponse400 | removeFolderEndpointResponse401 | removeFolderEndpointResponse500) & {
   headers: Headers;
 };
 
@@ -340,19 +425,29 @@ export const removeFolderEndpoint = async (folderId: string, options?: RequestIn
 
 
 export type getFolderByIdEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse6
+  data: GalleraiApplicationFeaturesFoldersGetFolderByIdResponse
   status: 200
+}
+
+export type getFolderByIdEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
 }
 
 export type getFolderByIdEndpointResponse401 = {
   data: void
   status: 401
 }
+
+export type getFolderByIdEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
 export type getFolderByIdEndpointResponseSuccess = (getFolderByIdEndpointResponse200) & {
   headers: Headers;
 };
-export type getFolderByIdEndpointResponseError = (getFolderByIdEndpointResponse401) & {
+export type getFolderByIdEndpointResponseError = (getFolderByIdEndpointResponse400 | getFolderByIdEndpointResponse401 | getFolderByIdEndpointResponse500) & {
   headers: Headers;
 };
 
@@ -380,19 +475,29 @@ export const getFolderByIdEndpoint = async (folderId: string, options?: RequestI
 
 
 export type getFolderImagesEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse7
+  data: GalleraiApplicationFeaturesFoldersGetFolderImagesResponse
   status: 200
+}
+
+export type getFolderImagesEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
 }
 
 export type getFolderImagesEndpointResponse401 = {
   data: void
   status: 401
 }
+
+export type getFolderImagesEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
 export type getFolderImagesEndpointResponseSuccess = (getFolderImagesEndpointResponse200) & {
   headers: Headers;
 };
-export type getFolderImagesEndpointResponseError = (getFolderImagesEndpointResponse401) & {
+export type getFolderImagesEndpointResponseError = (getFolderImagesEndpointResponse400 | getFolderImagesEndpointResponse401 | getFolderImagesEndpointResponse500) & {
   headers: Headers;
 };
 
@@ -423,13 +528,25 @@ export type googleLoginEndpointResponse204 = {
   data: void
   status: 204
 }
+
+export type googleLoginEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
+}
+
+export type googleLoginEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
 export type googleLoginEndpointResponseSuccess = (googleLoginEndpointResponse204) & {
   headers: Headers;
 };
-;
+export type googleLoginEndpointResponseError = (googleLoginEndpointResponse400 | googleLoginEndpointResponse500) & {
+  headers: Headers;
+};
 
-export type googleLoginEndpointResponse = (googleLoginEndpointResponseSuccess)
+export type googleLoginEndpointResponse = (googleLoginEndpointResponseSuccess | googleLoginEndpointResponseError)
 
 export const getGoogleLoginEndpointUrl = () => {
 
@@ -456,13 +573,25 @@ export type googleCallbackEndpointResponse204 = {
   data: void
   status: 204
 }
+
+export type googleCallbackEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
+}
+
+export type googleCallbackEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
+}
     
 export type googleCallbackEndpointResponseSuccess = (googleCallbackEndpointResponse204) & {
   headers: Headers;
 };
-;
+export type googleCallbackEndpointResponseError = (googleCallbackEndpointResponse400 | googleCallbackEndpointResponse500) & {
+  headers: Headers;
+};
 
-export type googleCallbackEndpointResponse = (googleCallbackEndpointResponseSuccess)
+export type googleCallbackEndpointResponse = (googleCallbackEndpointResponseSuccess | googleCallbackEndpointResponseError)
 
 export const getGoogleCallbackEndpointUrl = () => {
 
@@ -486,16 +615,28 @@ export const googleCallbackEndpoint = async ( options?: RequestInit): Promise<go
 
 
 export type acquireTokenEndpointResponse200 = {
-  data: GalleraiSharedKernelModelsResultOfResponse8
+  data: GalleraiSharedKernelModelsResultOfResponse3
   status: 200
+}
+
+export type acquireTokenEndpointResponse400 = {
+  data: FastEndpointsProblemDetails | null
+  status: 400
+}
+
+export type acquireTokenEndpointResponse500 = {
+  data: FastEndpointsProblemDetails | null
+  status: 500
 }
     
 export type acquireTokenEndpointResponseSuccess = (acquireTokenEndpointResponse200) & {
   headers: Headers;
 };
-;
+export type acquireTokenEndpointResponseError = (acquireTokenEndpointResponse400 | acquireTokenEndpointResponse500) & {
+  headers: Headers;
+};
 
-export type acquireTokenEndpointResponse = (acquireTokenEndpointResponseSuccess)
+export type acquireTokenEndpointResponse = (acquireTokenEndpointResponseSuccess | acquireTokenEndpointResponseError)
 
 export const getAcquireTokenEndpointUrl = () => {
 

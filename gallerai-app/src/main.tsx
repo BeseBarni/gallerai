@@ -3,10 +3,13 @@ import { createRoot } from 'react-dom/client'
 
 import './index.css'
 
+import { LoadingBoundary } from './app/app-loading-boundary'
 import AppProvider from './app/providers'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AppProvider></AppProvider>
+    <LoadingBoundary>
+      <AppProvider />
+    </LoadingBoundary>
   </StrictMode>,
 )

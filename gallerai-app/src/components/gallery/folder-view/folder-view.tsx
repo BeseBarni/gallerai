@@ -20,10 +20,17 @@ export default function FolderView() {
   const onUpload = (newFiles: File[]) => {
     newFiles.forEach((file) => {
       const id = crypto.randomUUID()
-      startImagePipeline(id, activeFolder!.id, file)
+      if (!activeFolder) return
+      startImagePipeline(id, activeFolder.id, file)
     })
   }
-
+  if (!activeFolder) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="text-muted-foreground">No folder selected</p>
+      </div>
+    )
+  }
   return (
     <FolderViewContext.Provider
       value={{ folderId: activeFolder?.id ?? '', setProcessedImageCount, setImageCount }}
@@ -34,14 +41,15 @@ export default function FolderView() {
             variant="ghost"
             size="icon"
             onClick={() => {
-              setActiveFolder(null)
-              Navigate({ to: '/dashboard' })
+              Navigate({ to: '/dashboard' }).then(() => {
+                setActiveFolder(null)
+              })
             }}
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">{activeFolder!.name}</h2>
+            <h2 className="text-2xl font-bold tracking-tight">{activeFolder?.name}</h2>
             <p className="text-muted-foreground">Manage assets for this folder</p>
           </div>
           <AIProcessCounter

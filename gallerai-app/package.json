@@ -33,6 +33,8 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-dropzone": "^14.3.8",
+    "react-error-boundary": "^6.1.1",
+    "react-toastify": "^11.0.5",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "update": "^0.4.2",

@@ -1,4 +1,4 @@
-using Gallerai.Domain.Enums;
+using Gallerai.SharedKernel.Enums;
 
 namespace Gallerai.Application.Interfaces;
 

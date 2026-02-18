@@ -1,11 +1,12 @@
 using FastEndpoints;
 using Gallerai.Application.Features.Folders;
 using Gallerai.SharedKernel.Models;
-using MediatR;
+using Gallerai.WebAPI.Extensions;
+using Wolverine;
 
 namespace Gallerai.WebAPI.Features.Folders;
 
-public class GetFoldersEndpoint(IMediator mediator) : EndpointWithoutRequest<Result<GetFolders.Response>>
+public class GetFoldersEndpoint(IMessageBus bus) : EndpointWithoutRequest<GetFolders.Response>
 {
     public override void Configure()
     {
@@ -14,13 +15,13 @@ public class GetFoldersEndpoint(IMediator mediator) : EndpointWithoutRequest<Res
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var result = await mediator.Send(new GetFolders.Command(), ct);
+        var result = await bus.InvokeAsync<Result<GetFolders.Response>>(new GetFolders.Command(), ct);
 
-        await Send.OkAsync(result, cancellation: ct);
+        await this.HandleResultAsync(result, ct);
     }
 }
 
-public class AddFolderEndpoint(IMediator mediator) : Endpoint<AddFolder.Request, Result<AddFolder.Response>>
+public class AddFolderEndpoint(IMessageBus bus) : Endpoint<AddFolder.Request, AddFolder.Response>
 {
     public override void Configure()
     {
@@ -29,13 +30,17 @@ public class AddFolderEndpoint(IMediator mediator) : Endpoint<AddFolder.Request,
 
     public override async Task HandleAsync(AddFolder.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new AddFolder.Command(req.Name), ct);
+        var result = await bus.InvokeAsync<Result<AddFolder.Response>>(new AddFolder.Command(req.Name), ct);
 
-        await Send.CreatedAtAsync<GetFoldersEndpoint>(null, result, cancellation: ct);
+        await this.HandleCreatedAsync(
+            result,
+            nameof(GetFolderByIdEndpoint),
+            new { result.Value?.FolderId },
+            ct);
     }
 }
 
-public class RenameFolderEndpoint(IMediator mediator) : Endpoint<RenameFolder.Request, Result<RenameFolder.Response>>
+public class RenameFolderEndpoint(IMessageBus bus) : Endpoint<RenameFolder.Request, RenameFolder.Response>
 {
     public override void Configure()
     {
@@ -44,19 +49,13 @@ public class RenameFolderEndpoint(IMediator mediator) : Endpoint<RenameFolder.Re
 
     public override async Task HandleAsync(RenameFolder.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new RenameFolder.Command(req.FolderId, req.NewName), ct);
+        var result = await bus.InvokeAsync<Result<RenameFolder.Response>>(new RenameFolder.Command(req.FolderId, req.NewName), ct);
 
-        if (result.IsFailure)
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-
-        await Send.OkAsync(result, cancellation: ct);
+        await this.HandleResultAsync(result, ct);
     }
 }
 
-public class RemoveFolderEndpoint(IMediator mediator) : Endpoint<RemoveFolder.Request, Result>
+public class RemoveFolderEndpoint(IMessageBus bus) : Endpoint<RemoveFolder.Request, object>
 {
     public override void Configure()
     {
@@ -65,19 +64,13 @@ public class RemoveFolderEndpoint(IMediator mediator) : Endpoint<RemoveFolder.Re
 
     public override async Task HandleAsync(RemoveFolder.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new RemoveFolder.Command(req.FolderId), ct);
+        var result = await bus.InvokeAsync<Result>(new RemoveFolder.Command(req.FolderId), ct);
 
-        if (result.IsFailure)
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-
-        await Send.NoContentAsync(ct);
+        await this.HandleNoContentResultAsync(result, ct);
     }
 }
 
-public class GetFolderByIdEndpoint(IMediator mediator) : Endpoint<GetFolderById.Request, Result<GetFolderById.Response>>
+public class GetFolderByIdEndpoint(IMessageBus bus) : Endpoint<GetFolderById.Request, GetFolderById.Response>
 {
     public override void Configure()
     {
@@ -86,19 +79,13 @@ public class GetFolderByIdEndpoint(IMediator mediator) : Endpoint<GetFolderById.
 
     public override async Task HandleAsync(GetFolderById.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new GetFolderById.Command(req.FolderId), ct);
+        var result = await bus.InvokeAsync<Result<GetFolderById.Response>>(new GetFolderById.Command(req.FolderId), ct);
 
-        if (result.IsFailure)
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-
-        await Send.OkAsync(result, cancellation: ct);
+        await this.HandleResultAsync(result, ct);
     }
 }
 
-public class GetFolderImagesEndpoint(IMediator mediator) : Endpoint<GetFolderImages.Request, Result<GetFolderImages.Response>>
+public class GetFolderImagesEndpoint(IMessageBus bus) : Endpoint<GetFolderImages.Request, GetFolderImages.Response>
 {
     public override void Configure()
     {
@@ -107,14 +94,8 @@ public class GetFolderImagesEndpoint(IMediator mediator) : Endpoint<GetFolderIma
 
     public override async Task HandleAsync(GetFolderImages.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new GetFolderImages.Command(req.FolderId), ct);
+        var result = await bus.InvokeAsync<Result<GetFolderImages.Response>>(new GetFolderImages.Command(req.FolderId), ct);
 
-        if (result.IsFailure)
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-
-        await Send.OkAsync(result, cancellation: ct);
+        await this.HandleResultAsync(result, ct);
     }
 }

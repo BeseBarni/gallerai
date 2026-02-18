@@ -12,17 +12,12 @@ public interface IGalleraiDbContext
     DbSet<Image> Images { get; }
     DbSet<ImageMetadata> ImageMetadata { get; }
     DbSet<ImageAnalysis> ImageAnalyses { get; }
-    DbSet<ImageState> ImageStates { get; }
     DbSet<ImageEvent> ImageEvents { get; }
     DbSet<ImageTag> ImageTags { get; }
-
     DatabaseFacade Database { get; }
 
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-
-    Task LockImagesAndStatuses(string[] keys, CancellationToken cancellationToken = default);
-
     Task<bool> TryAddEventAsync(ImageEvent imageEvent, CancellationToken ct = default);
 }

@@ -1,9 +1,9 @@
 using Gallerai.Application.Behaviors;
 using Gallerai.Application.Interfaces;
-using Gallerai.Domain.Enums;
+using Gallerai.Domain.Entities;
+using Gallerai.SharedKernel.Enums;
 using Gallerai.SharedKernel.Models;
 using Gallerai.SharedKernel.Settings;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -12,7 +12,7 @@ namespace Gallerai.Application.Features.Folders;
 public static class GetFolderImages
 {
     public record Request(Guid FolderId);
-    public record Command(Guid FolderId) : IRequest<Result<Response>>, IUserRequest
+    public record Command(Guid FolderId) : IUserRequest
     {
         public string? UserId { get; set; }
     }
@@ -29,9 +29,9 @@ public static class GetFolderImages
 
     public sealed class Handler(
         IGalleraiDbContext context,
-        IOptions<CloudflareR2Settings> r2Settings) : IRequestHandler<Command, Result<Response>>
+        IOptions<CloudflareR2Settings> r2Settings)
     {
-        public async Task<Result<Response>> Handle(Command request, CancellationToken ct)
+        public async Task<Result<Response>> HandleAsync(Command request, CancellationToken ct)
         {
             var folderExists = await context.Folders
                 .AnyAsync(f => f.FolderId == request.FolderId
@@ -40,12 +40,13 @@ public static class GetFolderImages
 
             if (!folderExists)
             {
-                return Result<Response>.Failure(new Error("Folder.NotFound", "Folder not found."));
+                return Result<Response>.Failure(Error.NotFound(nameof(Folder), request.FolderId));
             }
 
             var publicUrl = r2Settings.Value.PublicURL;
 
             var images = await context.Images
+                .AsNoTracking()
                 .Where(i => i.FolderId == request.FolderId
                          && i.UserId == request.UserId
                          && i.DeletedAt == null)
@@ -53,7 +54,10 @@ public static class GetFolderImages
                     i.ImageId,
                     i.FolderId,
                     i.R2Key != null ? $"{publicUrl.TrimEnd('/')}/{i.R2Key}" : string.Empty,
-                    i.Status.Status,
+                    i.ImageEvents
+                        .OrderByDescending(ie => ie.Status)
+                        .Select(ie => ie.Status)
+                        .First(),
                     i.Analysis != null ? i.Analysis.AestheticScore : null,
                     i.Analysis != null ? i.Analysis.Critique : null))
                 .ToListAsync(ct);

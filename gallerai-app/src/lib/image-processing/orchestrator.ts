@@ -2,6 +2,7 @@ import { useImageStore } from '@/store/useImageStore'
 import { processImage } from '@/utils/image-helpers'
 import { uploadFileWithProgress } from '@/utils/upload-helpers'
 import { imagePresignedUrl } from '@gallerai/shared/web'
+import { GalleraiSharedKernelEnumsImageStatus } from '@shared/src/api/schemas'
 
 export const startImagePipeline = async (id: string, folderId: string, file: File) => {
   const store = useImageStore.getState()
@@ -9,13 +10,20 @@ export const startImagePipeline = async (id: string, folderId: string, file: Fil
   let localUrl: string | null = null
 
   try {
-    store.addImage({ folderId, imageId: id, status: 0 })
+    store.addImage({
+      folderId,
+      imageId: id,
+      status: GalleraiSharedKernelEnumsImageStatus.PROCESSING,
+    })
 
     const blobToUpload = await processImage(file)
 
     localUrl = URL.createObjectURL(blobToUpload)
 
-    store.updateImage(id, { cdnUrl: localUrl, status: 1 })
+    store.updateImage(id, {
+      cdnUrl: localUrl,
+      status: GalleraiSharedKernelEnumsImageStatus.UPLOADING,
+    })
 
     const result = await imagePresignedUrl({
       key: id,
@@ -36,10 +44,10 @@ export const startImagePipeline = async (id: string, folderId: string, file: Fil
 
     store.updateImage(id, {
       cdnUrl: result.cdnUrl,
-      status: 2,
+      status: GalleraiSharedKernelEnumsImageStatus.READY,
     })
   } catch (error) {
-    store.updateImage(id, { status: 4 })
+    store.updateImage(id, { status: GalleraiSharedKernelEnumsImageStatus.ANALYSIS_ERROR })
     console.error('Error in image pipeline:', error)
   } finally {
     if (localUrl) {

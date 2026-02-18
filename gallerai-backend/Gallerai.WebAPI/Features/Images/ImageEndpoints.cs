@@ -1,11 +1,11 @@
 using FastEndpoints;
 using Gallerai.Application.Features.Images;
 using Gallerai.SharedKernel.Models;
-using MediatR;
+using Wolverine;
 
 namespace Gallerai.WebAPI.Features.Images;
 
-public class ImagePresignedUrl(IMediator mediator) : Endpoint<GetImagePresignedURL.Request, Result<GetImagePresignedURL.Response>>
+public class ImagePresignedUrl(IMessageBus bus) : Endpoint<GetImagePresignedURL.Request, Result<GetImagePresignedURL.Response>>
 {
     public override void Configure()
     {
@@ -14,13 +14,13 @@ public class ImagePresignedUrl(IMediator mediator) : Endpoint<GetImagePresignedU
 
     public override async Task HandleAsync(GetImagePresignedURL.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new GetImagePresignedURL.Command(req.Key, req.FileName, req.ContentType, req.FolderId), ct);
+        var result = await bus.InvokeAsync<Result<GetImagePresignedURL.Response>>(new GetImagePresignedURL.Command(req.Key, req.FileName, req.ContentType, req.FolderId), ct);
 
         await Send.OkAsync(result, cancellation: ct);
     }
 }
 
-public class ImagesUploadedEndpoint(IMediator mediator) : Endpoint<ImagesUploaded.Request, Result<ImagesUploaded.Response>>
+public class ImagesUploadedEndpoint(IMessageBus bus) : Endpoint<ImagesUploaded.Request, Result<ImagesUploaded.Response>>
 {
     public override void Configure()
     {
@@ -30,13 +30,13 @@ public class ImagesUploadedEndpoint(IMediator mediator) : Endpoint<ImagesUploade
 
     public override async Task HandleAsync(ImagesUploaded.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new ImagesUploaded.Command(req.Events ?? Array.Empty<ImagesUploaded.ImageUploadedR2>()), ct);
+        var result = await bus.InvokeAsync<Result<ImagesUploaded.Response>>(new ImagesUploaded.Command(req.Events ?? Array.Empty<ImagesUploaded.ImageUploadedR2>()), ct);
 
         await Send.OkAsync(result, cancellation: ct);
     }
 }
 
-public class RemoveImageEndpoint(IMediator mediator) : Endpoint<RemoveImage.Request, Result>
+public class RemoveImageEndpoint(IMessageBus bus) : Endpoint<RemoveImage.Request, Result>
 {
     public override void Configure()
     {
@@ -45,7 +45,7 @@ public class RemoveImageEndpoint(IMediator mediator) : Endpoint<RemoveImage.Requ
 
     public override async Task HandleAsync(RemoveImage.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new RemoveImage.Command(req.ImageId), ct);
+        var result = await bus.InvokeAsync<Result>(new RemoveImage.Command(req.ImageId), ct);
 
         if (result.IsFailure)
         {

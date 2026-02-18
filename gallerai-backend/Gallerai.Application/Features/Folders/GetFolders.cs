@@ -2,7 +2,6 @@ using Gallerai.Application.Behaviors;
 using Gallerai.Application.Interfaces;
 using Gallerai.SharedKernel.Consts;
 using Gallerai.SharedKernel.Models;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gallerai.Application.Features.Folders;
@@ -10,18 +9,18 @@ namespace Gallerai.Application.Features.Folders;
 public static class GetFolders
 {
     public record Request();
-    public record Command() : IRequest<Result<Response>>, IUserRequest
+    public record Command() : IUserRequest
     {
         public string? UserId { get; set; }
     }
     public record FolderDto(Guid FolderId, string Name, int ImageCount);
     public record Response(IReadOnlyCollection<FolderDto> Folders);
 
-    public sealed class Handler(IGalleraiDbContext context, ICacheService cacheService) : IRequestHandler<Command, Result<Response>>
+    public sealed class Handler(IGalleraiDbContext context, ICacheService cacheService)
     {
         private static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(10);
 
-        public async Task<Result<Response>> Handle(Command request, CancellationToken ct)
+        public async Task<Result<Response>> HandleAsync(Command request, CancellationToken ct)
         {
             var cacheKey = CacheKeys.GetUserFoldersKey(request.UserId!);
 

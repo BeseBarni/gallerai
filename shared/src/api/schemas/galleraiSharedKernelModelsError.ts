@@ -9,4 +9,5 @@
 export interface GalleraiSharedKernelModelsError {
   code?: string;
   message?: string;
+  statusCode?: number;
 }

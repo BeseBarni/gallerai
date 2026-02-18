@@ -1,5 +1,5 @@
 using Gallerai.Domain.Entities.Abstract;
-using Gallerai.Domain.Enums;
+using Gallerai.SharedKernel.Enums;
 
 namespace Gallerai.Domain.Entities.ImageEntities;
 

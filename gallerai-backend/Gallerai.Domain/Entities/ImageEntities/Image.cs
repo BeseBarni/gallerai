@@ -1,5 +1,5 @@
 using Gallerai.Domain.Entities.Abstract;
-using Gallerai.Domain.Enums;
+using Gallerai.SharedKernel.Enums;
 
 namespace Gallerai.Domain.Entities.ImageEntities;
 
@@ -17,10 +17,8 @@ public sealed class Image : ImageIdEntity
     public long? Size { get; private set; }
     public DateTime? UploadedAt { get; private set; }
     public Folder Folder { get; private set; } = null!;
-    public ImageState Status { get; private set; } = null!;
     public ImageAnalysis Analysis { get; private set; } = null!;
     public ImageMetadata Metadata { get; private set; } = null!;
-
     public IReadOnlyCollection<ImageEvent> ImageEvents => _imageEvents;
     public IReadOnlyCollection<ImageTag> ImageTags => _imageTags;
     public DateTime? DeletedAt { get; set; }
@@ -31,7 +29,6 @@ public sealed class Image : ImageIdEntity
         image.UserId = userId;
         image.FolderId = folderId;
         var status = ImageStatus.UPLOADING;
-        image.SetStatus(new ImageState(status));
         image.AddEvent(new ImageEvent(status, DateTime.UtcNow));
 
         return image;
@@ -46,10 +43,6 @@ public sealed class Image : ImageIdEntity
     {
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
         R2Key = key;
-    }
-    public void SetStatus(ImageState status)
-    {
-        Status = status ?? throw new ArgumentNullException(nameof(status));
     }
 
     public void SetAnalysis(ImageAnalysis analysis)
@@ -85,7 +78,7 @@ public sealed class Image : ImageIdEntity
     {
         Size = size;
         UploadedAt = uploadedAt;
-        var status = ImageStatus.WAITING_FOR_ANALYSIS;
+        var status = ImageStatus.ANALYZING;
         return new ImageEvent(ImageId, status, DateTime.UtcNow);
     }
 
@@ -93,14 +86,12 @@ public sealed class Image : ImageIdEntity
     {
         SetAnalysis(analysis);
         var status = ImageStatus.READY;
-        Status.SetStatus(status);
         return new ImageEvent(ImageId, status, DateTime.UtcNow);
     }
 
     public ImageEvent MarkAsError()
     {
-        var status = ImageStatus.ERROR;
-        Status.SetStatus(status);
+        var status = ImageStatus.ANALYSIS_ERROR;
         return new ImageEvent(ImageId, status, DateTime.UtcNow);
     }
 

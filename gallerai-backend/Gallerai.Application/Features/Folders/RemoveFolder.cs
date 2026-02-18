@@ -3,7 +3,6 @@ using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Entities;
 using Gallerai.SharedKernel.Consts;
 using Gallerai.SharedKernel.Models;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gallerai.Application.Features.Folders;
@@ -11,14 +10,14 @@ namespace Gallerai.Application.Features.Folders;
 public static class RemoveFolder
 {
     public record Request(Guid FolderId);
-    public record Command(Guid FolderId) : IRequest<Result>, IUserRequest
+    public record Command(Guid FolderId) : IUserRequest
     {
         public string? UserId { get; set; }
     }
 
-    public sealed class Handler(IGalleraiDbContext context, ICacheService cacheService) : IRequestHandler<Command, Result>
+    public sealed class Handler(IGalleraiDbContext context, ICacheService cacheService)
     {
-        public async Task<Result> Handle(Command request, CancellationToken ct)
+        public async Task<Result> HandleAsync(Command request, CancellationToken ct)
         {
             var folder = await context.Folders
                 .Include(f => f.ImageList)

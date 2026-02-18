@@ -27,19 +27,8 @@ public sealed class StartAIInferenceConsumer(
 
         AIInferenceFinishedEvent publishEvent;
 
-        if (result is null)
-        {
-            logger.LogWarning("⚠️ AI inference failed for image: {Id} | URL: {Url}",
-                message.Id,
-                message.PublicUrl);
-
-            publishEvent = new AIInferenceFinishedEvent(message.Id, message.UserId, false, null);
-        }
-        else
-        {
-            result.ImageId = message.Id;
-            publishEvent = new AIInferenceFinishedEvent(message.Id, message.UserId, true, result);
-        }
+        result.ImageId = message.Id;
+        publishEvent = new AIInferenceFinishedEvent(message.Id, message.UserId, true, result);
 
         var redisPublishTask = redisPublisher.PublishMessageAsync(message.UserId, MessageChannelConsts.ImageUpdate, publishEvent.Result);
 
@@ -48,7 +37,6 @@ public sealed class StartAIInferenceConsumer(
         await dbContext.SaveChangesAsync(context.CancellationToken);
 
         await Task.WhenAll(redisPublishTask);
-
 
         logger.LogInformation("✅ AI inference completed for image: {Id} | Result: {Result}",
             message.Id,

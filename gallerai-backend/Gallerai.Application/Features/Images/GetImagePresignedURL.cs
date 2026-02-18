@@ -3,25 +3,24 @@ using Gallerai.Application.Behaviors;
 using Gallerai.Application.Extensions;
 using Gallerai.Application.Interfaces;
 using Gallerai.Domain.Entities.ImageEntities;
-using Gallerai.Domain.Enums;
+using Gallerai.SharedKernel.Enums;
 using Gallerai.SharedKernel.Models;
 using Gallerai.SharedKernel.Settings;
-using MediatR;
 
 namespace Gallerai.Application.Features.Images;
 
 public static class GetImagePresignedURL
 {
     public record Request(Guid Key, string FileName, string ContentType, Guid FolderId);
-    public record Command(Guid Key, string FileName, string ContentType, Guid FolderId) : IRequest<Result<Response>>, IUserRequest
+    public record Command(Guid Key, string FileName, string ContentType, Guid FolderId) : IUserRequest
     {
         public string? UserId { get; set; }
     }
     public record Response(string UploadUrl, Guid ImageId, string Key, string CDNUrl, string Traceparent);
 
-    public sealed class Handler(IImageService ImageService, IGalleraiDbContext Context, CloudflareR2Settings cloudflareR2Settings, ICacheService cacheService) : IRequestHandler<Command, Result<Response>>
+    public sealed class Handler(IImageService ImageService, IGalleraiDbContext Context, CloudflareR2Settings cloudflareR2Settings, ICacheService cacheService)
     {
-        public async Task<Result<Response>> Handle(Command request, CancellationToken ct)
+        public async Task<Result<Response>> HandleAsync(Command request, CancellationToken ct)
         {
             var image = Image.Create(request.Key, request.UserId!, request.FolderId);
 
@@ -49,7 +48,7 @@ public static class GetImagePresignedURL
 
             if (uploadUrl is null)
             {
-                return Result<Response>.Failure(new Error("IM_U_F", "Failed to generate presigned URL"));
+                return Result<Response>.Failure(new Error("IM_U_F", "Failed to generate presigned URL", 500));
             }
 
             Context.Images.Add(image);

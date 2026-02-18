@@ -1,6 +1,6 @@
 using System.Text.Json;
 using Gallerai.Application.Interfaces;
-using Gallerai.Domain.Enums;
+using Gallerai.SharedKernel.Enums;
 using StackExchange.Redis;
 
 namespace Gallerai.Infrastructure.Services;

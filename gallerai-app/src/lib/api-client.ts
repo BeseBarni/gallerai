@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 import { env } from './env'
 
@@ -31,7 +32,10 @@ axiosInstance.interceptors.response.use(
       localStorage.removeItem('auth-storage')
       window.location.href = '/login'
     }
-    return Promise.reject(error)
+
+    toast.error(error.response?.data?.message ?? 'An error occurred')
+
+    return Promise.resolve(error.response) // Resolve with response to prevent unhandled rejections
   },
 )
 

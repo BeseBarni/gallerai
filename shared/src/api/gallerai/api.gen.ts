@@ -23,20 +23,21 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  FastEndpointsProblemDetails,
   GalleraiApplicationFeaturesAuthAcquireTokenRequest,
   GalleraiApplicationFeaturesFoldersAddFolderRequest,
+  GalleraiApplicationFeaturesFoldersAddFolderResponse,
+  GalleraiApplicationFeaturesFoldersGetFolderByIdResponse,
+  GalleraiApplicationFeaturesFoldersGetFolderImagesResponse,
+  GalleraiApplicationFeaturesFoldersGetFoldersResponse,
   GalleraiApplicationFeaturesFoldersRenameFolderRequest,
+  GalleraiApplicationFeaturesFoldersRenameFolderResponse,
   GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest,
   GalleraiApplicationFeaturesImagesImagesUploadedRequest,
   GalleraiSharedKernelModelsResult,
   GalleraiSharedKernelModelsResultOfResponse,
   GalleraiSharedKernelModelsResultOfResponse2,
   GalleraiSharedKernelModelsResultOfResponse3,
-  GalleraiSharedKernelModelsResultOfResponse4,
-  GalleraiSharedKernelModelsResultOfResponse5,
-  GalleraiSharedKernelModelsResultOfResponse6,
-  GalleraiSharedKernelModelsResultOfResponse7,
-  GalleraiSharedKernelModelsResultOfResponse8,
   GalleraiWebAPIFeaturesHelloHelloResponse
 } from '../schemas';
 
@@ -68,7 +69,7 @@ export const imagePresignedUrl = (
   
 
 
-export const getImagePresignedUrlMutationOptions = <TError = ErrorType<void>,
+export const getImagePresignedUrlMutationOptions = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof imagePresignedUrl>>, TError,{data: GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof imagePresignedUrl>>, TError,{data: GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest}, TContext> => {
 
@@ -97,9 +98,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ImagePresignedUrlMutationResult = NonNullable<Awaited<ReturnType<typeof imagePresignedUrl>>>
     export type ImagePresignedUrlMutationBody = GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest
-    export type ImagePresignedUrlMutationError = ErrorType<void>
+    export type ImagePresignedUrlMutationError = ErrorType<FastEndpointsProblemDetails | null | void>
 
-    export const useImagePresignedUrl = <TError = ErrorType<void>,
+    export const useImagePresignedUrl = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof imagePresignedUrl>>, TError,{data: GalleraiApplicationFeaturesImagesGetImagePresignedURLRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof imagePresignedUrl>>,
@@ -126,7 +127,7 @@ export const imagesUploadedEndpoint = (
   
 
 
-export const getImagesUploadedEndpointMutationOptions = <TError = ErrorType<unknown>,
+export const getImagesUploadedEndpointMutationOptions = <TError = ErrorType<FastEndpointsProblemDetails | null>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof imagesUploadedEndpoint>>, TError,{data: GalleraiApplicationFeaturesImagesImagesUploadedRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof imagesUploadedEndpoint>>, TError,{data: GalleraiApplicationFeaturesImagesImagesUploadedRequest}, TContext> => {
 
@@ -155,9 +156,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type ImagesUploadedEndpointMutationResult = NonNullable<Awaited<ReturnType<typeof imagesUploadedEndpoint>>>
     export type ImagesUploadedEndpointMutationBody = GalleraiApplicationFeaturesImagesImagesUploadedRequest
-    export type ImagesUploadedEndpointMutationError = ErrorType<unknown>
+    export type ImagesUploadedEndpointMutationError = ErrorType<FastEndpointsProblemDetails | null>
 
-    export const useImagesUploadedEndpoint = <TError = ErrorType<unknown>,
+    export const useImagesUploadedEndpoint = <TError = ErrorType<FastEndpointsProblemDetails | null>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof imagesUploadedEndpoint>>, TError,{data: GalleraiApplicationFeaturesImagesImagesUploadedRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof imagesUploadedEndpoint>>,
@@ -182,7 +183,7 @@ export const removeImageEndpoint = (
   
 
 
-export const getRemoveImageEndpointMutationOptions = <TError = ErrorType<void>,
+export const getRemoveImageEndpointMutationOptions = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeImageEndpoint>>, TError,{imageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof removeImageEndpoint>>, TError,{imageId: string}, TContext> => {
 
@@ -211,9 +212,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type RemoveImageEndpointMutationResult = NonNullable<Awaited<ReturnType<typeof removeImageEndpoint>>>
     
-    export type RemoveImageEndpointMutationError = ErrorType<void>
+    export type RemoveImageEndpointMutationError = ErrorType<FastEndpointsProblemDetails | null | void>
 
-    export const useRemoveImageEndpoint = <TError = ErrorType<void>,
+    export const useRemoveImageEndpoint = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeImageEndpoint>>, TError,{imageId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof removeImageEndpoint>>,
@@ -249,7 +250,7 @@ export const getHelloEndpointQueryKey = () => {
     }
 
     
-export const getHelloEndpointQueryOptions = <TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getHelloEndpointQueryOptions = <TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -268,14 +269,14 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type HelloEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof helloEndpoint>>>
-export type HelloEndpointQueryError = ErrorType<unknown>
+export type HelloEndpointQueryError = ErrorType<FastEndpointsProblemDetails | null>
 
 
 /**
  * @summary Simple hello-world test endpoint
  */
 
-export function useHelloEndpoint<TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<unknown>>(
+export function useHelloEndpoint<TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>(
   options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -290,7 +291,7 @@ export function useHelloEndpoint<TData = Awaited<ReturnType<typeof helloEndpoint
 
 
 
-export const getHelloEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getHelloEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -309,14 +310,14 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type HelloEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof helloEndpoint>>>
-export type HelloEndpointSuspenseQueryError = ErrorType<unknown>
+export type HelloEndpointSuspenseQueryError = ErrorType<FastEndpointsProblemDetails | null>
 
 
 /**
  * @summary Simple hello-world test endpoint
  */
 
-export function useHelloEndpointSuspense<TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<unknown>>(
+export function useHelloEndpointSuspense<TData = Awaited<ReturnType<typeof helloEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>(
   options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof helloEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -338,7 +339,7 @@ export const getFoldersEndpoint = (
 ) => {
       
       
-      return customInstance<GalleraiSharedKernelModelsResultOfResponse3>(
+      return customInstance<GalleraiApplicationFeaturesFoldersGetFoldersResponse>(
       {url: `/api/folders`, method: 'GET', signal
     },
       options);
@@ -354,7 +355,7 @@ export const getGetFoldersEndpointQueryKey = () => {
     }
 
     
-export const getGetFoldersEndpointQueryOptions = <TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFoldersEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetFoldersEndpointQueryOptions = <TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFoldersEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -373,11 +374,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetFoldersEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof getFoldersEndpoint>>>
-export type GetFoldersEndpointQueryError = ErrorType<void>
+export type GetFoldersEndpointQueryError = ErrorType<FastEndpointsProblemDetails | null | void>
 
 
 
-export function useGetFoldersEndpoint<TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<void>>(
+export function useGetFoldersEndpoint<TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(
   options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFoldersEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -392,7 +393,7 @@ export function useGetFoldersEndpoint<TData = Awaited<ReturnType<typeof getFolde
 
 
 
-export const getGetFoldersEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<void>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFoldersEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetFoldersEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFoldersEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -411,11 +412,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetFoldersEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFoldersEndpoint>>>
-export type GetFoldersEndpointSuspenseQueryError = ErrorType<void>
+export type GetFoldersEndpointSuspenseQueryError = ErrorType<FastEndpointsProblemDetails | null | void>
 
 
 
-export function useGetFoldersEndpointSuspense<TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<void>>(
+export function useGetFoldersEndpointSuspense<TData = Awaited<ReturnType<typeof getFoldersEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(
   options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFoldersEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -437,7 +438,7 @@ export const addFolderEndpoint = (
 ) => {
       
       
-      return customInstance<GalleraiSharedKernelModelsResultOfResponse4>(
+      return customInstance<GalleraiApplicationFeaturesFoldersAddFolderResponse>(
       {url: `/api/folders`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: galleraiApplicationFeaturesFoldersAddFolderRequest, signal
@@ -447,7 +448,7 @@ export const addFolderEndpoint = (
   
 
 
-export const getAddFolderEndpointMutationOptions = <TError = ErrorType<void>,
+export const getAddFolderEndpointMutationOptions = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addFolderEndpoint>>, TError,{data: GalleraiApplicationFeaturesFoldersAddFolderRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof addFolderEndpoint>>, TError,{data: GalleraiApplicationFeaturesFoldersAddFolderRequest}, TContext> => {
 
@@ -476,9 +477,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type AddFolderEndpointMutationResult = NonNullable<Awaited<ReturnType<typeof addFolderEndpoint>>>
     export type AddFolderEndpointMutationBody = GalleraiApplicationFeaturesFoldersAddFolderRequest
-    export type AddFolderEndpointMutationError = ErrorType<void>
+    export type AddFolderEndpointMutationError = ErrorType<FastEndpointsProblemDetails | null | void>
 
-    export const useAddFolderEndpoint = <TError = ErrorType<void>,
+    export const useAddFolderEndpoint = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addFolderEndpoint>>, TError,{data: GalleraiApplicationFeaturesFoldersAddFolderRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof addFolderEndpoint>>,
@@ -496,7 +497,7 @@ export const renameFolderEndpoint = (
 ) => {
       
       
-      return customInstance<GalleraiSharedKernelModelsResultOfResponse5>(
+      return customInstance<GalleraiApplicationFeaturesFoldersRenameFolderResponse>(
       {url: `/api/folders/${folderId}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: galleraiApplicationFeaturesFoldersRenameFolderRequest, signal
@@ -506,7 +507,7 @@ export const renameFolderEndpoint = (
   
 
 
-export const getRenameFolderEndpointMutationOptions = <TError = ErrorType<void>,
+export const getRenameFolderEndpointMutationOptions = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof renameFolderEndpoint>>, TError,{folderId: string;data: GalleraiApplicationFeaturesFoldersRenameFolderRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof renameFolderEndpoint>>, TError,{folderId: string;data: GalleraiApplicationFeaturesFoldersRenameFolderRequest}, TContext> => {
 
@@ -535,9 +536,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type RenameFolderEndpointMutationResult = NonNullable<Awaited<ReturnType<typeof renameFolderEndpoint>>>
     export type RenameFolderEndpointMutationBody = GalleraiApplicationFeaturesFoldersRenameFolderRequest
-    export type RenameFolderEndpointMutationError = ErrorType<void>
+    export type RenameFolderEndpointMutationError = ErrorType<FastEndpointsProblemDetails | null | void>
 
-    export const useRenameFolderEndpoint = <TError = ErrorType<void>,
+    export const useRenameFolderEndpoint = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof renameFolderEndpoint>>, TError,{folderId: string;data: GalleraiApplicationFeaturesFoldersRenameFolderRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof renameFolderEndpoint>>,
@@ -554,7 +555,7 @@ export const removeFolderEndpoint = (
 ) => {
       
       
-      return customInstance<GalleraiSharedKernelModelsResult>(
+      return customInstance<void>(
       {url: `/api/folders/${folderId}`, method: 'DELETE', signal
     },
       options);
@@ -562,7 +563,7 @@ export const removeFolderEndpoint = (
   
 
 
-export const getRemoveFolderEndpointMutationOptions = <TError = ErrorType<void>,
+export const getRemoveFolderEndpointMutationOptions = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeFolderEndpoint>>, TError,{folderId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof removeFolderEndpoint>>, TError,{folderId: string}, TContext> => {
 
@@ -591,9 +592,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type RemoveFolderEndpointMutationResult = NonNullable<Awaited<ReturnType<typeof removeFolderEndpoint>>>
     
-    export type RemoveFolderEndpointMutationError = ErrorType<void>
+    export type RemoveFolderEndpointMutationError = ErrorType<FastEndpointsProblemDetails | null | void>
 
-    export const useRemoveFolderEndpoint = <TError = ErrorType<void>,
+    export const useRemoveFolderEndpoint = <TError = ErrorType<FastEndpointsProblemDetails | null | void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removeFolderEndpoint>>, TError,{folderId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof removeFolderEndpoint>>,
@@ -610,7 +611,7 @@ export const getFolderByIdEndpoint = (
 ) => {
       
       
-      return customInstance<GalleraiSharedKernelModelsResultOfResponse6>(
+      return customInstance<GalleraiApplicationFeaturesFoldersGetFolderByIdResponse>(
       {url: `/api/folders/${folderId}`, method: 'GET', signal
     },
       options);
@@ -626,7 +627,7 @@ export const getGetFolderByIdEndpointQueryKey = (folderId: string,) => {
     }
 
     
-export const getGetFolderByIdEndpointQueryOptions = <TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<void>>(folderId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetFolderByIdEndpointQueryOptions = <TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(folderId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -645,11 +646,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetFolderByIdEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderByIdEndpoint>>>
-export type GetFolderByIdEndpointQueryError = ErrorType<void>
+export type GetFolderByIdEndpointQueryError = ErrorType<FastEndpointsProblemDetails | null | void>
 
 
 
-export function useGetFolderByIdEndpoint<TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<void>>(
+export function useGetFolderByIdEndpoint<TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(
  folderId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -664,7 +665,7 @@ export function useGetFolderByIdEndpoint<TData = Awaited<ReturnType<typeof getFo
 
 
 
-export const getGetFolderByIdEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<void>>(folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetFolderByIdEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -683,11 +684,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetFolderByIdEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderByIdEndpoint>>>
-export type GetFolderByIdEndpointSuspenseQueryError = ErrorType<void>
+export type GetFolderByIdEndpointSuspenseQueryError = ErrorType<FastEndpointsProblemDetails | null | void>
 
 
 
-export function useGetFolderByIdEndpointSuspense<TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<void>>(
+export function useGetFolderByIdEndpointSuspense<TData = Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(
  folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderByIdEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -709,7 +710,7 @@ export const getFolderImagesEndpoint = (
 ) => {
       
       
-      return customInstance<GalleraiSharedKernelModelsResultOfResponse7>(
+      return customInstance<GalleraiApplicationFeaturesFoldersGetFolderImagesResponse>(
       {url: `/api/folders/${folderId}/images`, method: 'GET', signal
     },
       options);
@@ -725,7 +726,7 @@ export const getGetFolderImagesEndpointQueryKey = (folderId: string,) => {
     }
 
     
-export const getGetFolderImagesEndpointQueryOptions = <TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<void>>(folderId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetFolderImagesEndpointQueryOptions = <TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(folderId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -744,11 +745,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetFolderImagesEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderImagesEndpoint>>>
-export type GetFolderImagesEndpointQueryError = ErrorType<void>
+export type GetFolderImagesEndpointQueryError = ErrorType<FastEndpointsProblemDetails | null | void>
 
 
 
-export function useGetFolderImagesEndpoint<TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<void>>(
+export function useGetFolderImagesEndpoint<TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(
  folderId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -763,7 +764,7 @@ export function useGetFolderImagesEndpoint<TData = Awaited<ReturnType<typeof get
 
 
 
-export const getGetFolderImagesEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<void>>(folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGetFolderImagesEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -782,11 +783,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetFolderImagesEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getFolderImagesEndpoint>>>
-export type GetFolderImagesEndpointSuspenseQueryError = ErrorType<void>
+export type GetFolderImagesEndpointSuspenseQueryError = ErrorType<FastEndpointsProblemDetails | null | void>
 
 
 
-export function useGetFolderImagesEndpointSuspense<TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<void>>(
+export function useGetFolderImagesEndpointSuspense<TData = Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null | void>>(
  folderId: string, options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof getFolderImagesEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -824,7 +825,7 @@ export const getGoogleLoginEndpointQueryKey = () => {
     }
 
     
-export const getGoogleLoginEndpointQueryOptions = <TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGoogleLoginEndpointQueryOptions = <TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -843,11 +844,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GoogleLoginEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof googleLoginEndpoint>>>
-export type GoogleLoginEndpointQueryError = ErrorType<unknown>
+export type GoogleLoginEndpointQueryError = ErrorType<FastEndpointsProblemDetails | null>
 
 
 
-export function useGoogleLoginEndpoint<TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<unknown>>(
+export function useGoogleLoginEndpoint<TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>(
   options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -862,7 +863,7 @@ export function useGoogleLoginEndpoint<TData = Awaited<ReturnType<typeof googleL
 
 
 
-export const getGoogleLoginEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGoogleLoginEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -881,11 +882,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GoogleLoginEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof googleLoginEndpoint>>>
-export type GoogleLoginEndpointSuspenseQueryError = ErrorType<unknown>
+export type GoogleLoginEndpointSuspenseQueryError = ErrorType<FastEndpointsProblemDetails | null>
 
 
 
-export function useGoogleLoginEndpointSuspense<TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<unknown>>(
+export function useGoogleLoginEndpointSuspense<TData = Awaited<ReturnType<typeof googleLoginEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>(
   options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleLoginEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -923,7 +924,7 @@ export const getGoogleCallbackEndpointQueryKey = () => {
     }
 
     
-export const getGoogleCallbackEndpointQueryOptions = <TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGoogleCallbackEndpointQueryOptions = <TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -942,11 +943,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GoogleCallbackEndpointQueryResult = NonNullable<Awaited<ReturnType<typeof googleCallbackEndpoint>>>
-export type GoogleCallbackEndpointQueryError = ErrorType<unknown>
+export type GoogleCallbackEndpointQueryError = ErrorType<FastEndpointsProblemDetails | null>
 
 
 
-export function useGoogleCallbackEndpoint<TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<unknown>>(
+export function useGoogleCallbackEndpoint<TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>(
   options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -961,7 +962,7 @@ export function useGoogleCallbackEndpoint<TData = Awaited<ReturnType<typeof goog
 
 
 
-export const getGoogleCallbackEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<unknown>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export const getGoogleCallbackEndpointSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>( options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -980,11 +981,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GoogleCallbackEndpointSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof googleCallbackEndpoint>>>
-export type GoogleCallbackEndpointSuspenseQueryError = ErrorType<unknown>
+export type GoogleCallbackEndpointSuspenseQueryError = ErrorType<FastEndpointsProblemDetails | null>
 
 
 
-export function useGoogleCallbackEndpointSuspense<TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<unknown>>(
+export function useGoogleCallbackEndpointSuspense<TData = Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError = ErrorType<FastEndpointsProblemDetails | null>>(
   options?: { query?:UseSuspenseQueryOptions<Awaited<ReturnType<typeof googleCallbackEndpoint>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
   
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } {
@@ -1006,7 +1007,7 @@ export const acquireTokenEndpoint = (
 ) => {
       
       
-      return customInstance<GalleraiSharedKernelModelsResultOfResponse8>(
+      return customInstance<GalleraiSharedKernelModelsResultOfResponse3>(
       {url: `/api/auth/acquire-token`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: galleraiApplicationFeaturesAuthAcquireTokenRequest, signal
@@ -1016,7 +1017,7 @@ export const acquireTokenEndpoint = (
   
 
 
-export const getAcquireTokenEndpointMutationOptions = <TError = ErrorType<unknown>,
+export const getAcquireTokenEndpointMutationOptions = <TError = ErrorType<FastEndpointsProblemDetails | null>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof acquireTokenEndpoint>>, TError,{data: GalleraiApplicationFeaturesAuthAcquireTokenRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof acquireTokenEndpoint>>, TError,{data: GalleraiApplicationFeaturesAuthAcquireTokenRequest}, TContext> => {
 
@@ -1045,9 +1046,9 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type AcquireTokenEndpointMutationResult = NonNullable<Awaited<ReturnType<typeof acquireTokenEndpoint>>>
     export type AcquireTokenEndpointMutationBody = GalleraiApplicationFeaturesAuthAcquireTokenRequest
-    export type AcquireTokenEndpointMutationError = ErrorType<unknown>
+    export type AcquireTokenEndpointMutationError = ErrorType<FastEndpointsProblemDetails | null>
 
-    export const useAcquireTokenEndpoint = <TError = ErrorType<unknown>,
+    export const useAcquireTokenEndpoint = <TError = ErrorType<FastEndpointsProblemDetails | null>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof acquireTokenEndpoint>>, TError,{data: GalleraiApplicationFeaturesAuthAcquireTokenRequest}, TContext>, request?: SecondParameter<typeof customInstance>}
  ): UseMutationResult<
         Awaited<ReturnType<typeof acquireTokenEndpoint>>,

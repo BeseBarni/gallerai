@@ -1,12 +1,13 @@
 using FastEndpoints;
 using Gallerai.Application.Features.Auth;
+using Gallerai.SharedKernel.DTOs;
 using Gallerai.SharedKernel.Models;
-using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Wolverine;
 
 namespace Gallerai.WebAPI.Features.Auth;
 
-public class GoogleLoginEndpoint(IMediator mediator) : EndpointWithoutRequest
+public class GoogleLoginEndpoint(IMessageBus bus) : EndpointWithoutRequest
 {
     public override void Configure()
     {
@@ -16,7 +17,7 @@ public class GoogleLoginEndpoint(IMediator mediator) : EndpointWithoutRequest
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var result = await mediator.Send(new GoogleLogin.Command(), ct);
+        var result = await bus.InvokeAsync<Result<ExternalAuthProperties>>(new GoogleLogin.Command());
 
         if (result.IsFailure)
         {
@@ -33,7 +34,7 @@ public class GoogleLoginEndpoint(IMediator mediator) : EndpointWithoutRequest
     }
 }
 
-public class GoogleCallbackEndpoint(IMediator mediator) : EndpointWithoutRequest
+public class GoogleCallbackEndpoint(IMessageBus bus) : EndpointWithoutRequest
 {
     public override void Configure()
     {
@@ -43,7 +44,7 @@ public class GoogleCallbackEndpoint(IMediator mediator) : EndpointWithoutRequest
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var result = await mediator.Send(new GoogleCallback.Command(), ct);
+        var result = await bus.InvokeAsync<Result<GoogleCallback.GoogleCallbackResponse>>(new GoogleCallback.Command(), ct);
 
         if (result.IsFailure || result is null)
         {
@@ -56,7 +57,7 @@ public class GoogleCallbackEndpoint(IMediator mediator) : EndpointWithoutRequest
     }
 }
 
-public class AcquireTokenEndpoint(IMediator mediator) : Endpoint<AcquireToken.Request, Result<AcquireToken.Response>>
+public class AcquireTokenEndpoint(IMessageBus bus) : Endpoint<AcquireToken.Request, Result<AcquireToken.Response>>
 {
     public override void Configure()
     {
@@ -65,7 +66,7 @@ public class AcquireTokenEndpoint(IMediator mediator) : Endpoint<AcquireToken.Re
     }
     public override async Task HandleAsync(AcquireToken.Request req, CancellationToken ct)
     {
-        var result = await mediator.Send(new AcquireToken.Command(req.oneTimeCode), ct);
+        var result = await bus.InvokeAsync<Result<AcquireToken.Response>>(new AcquireToken.Command(req.oneTimeCode), ct);
 
         if (result.IsFailure)
         {

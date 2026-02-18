@@ -14,12 +14,14 @@ export const Route = createFileRoute('/__authenticated/dashboard/folder')({
   },
   loaderDeps: ({ search: { folderId } }) => ({ folderId }),
   loader: async ({ deps: { folderId } }) => {
+    console.log('Loading folder with ID:', folderId)
     if (useFolderStore.getState().activeFolder?.id === folderId) {
+      console.log('Folder already active in store, skipping load')
       return
     }
 
-    const folder = await getFolderByIdEndpoint(folderId).then((p) => p.value)
-
+    const folder = await getFolderByIdEndpoint(folderId).then((p) => p)
+    console.log('Loaded folder data:', folder)
     if (!folder) return
 
     useFolderStore.setState({
