@@ -57,6 +57,7 @@ class ImageProcessorPool {
 
     try {
       const buffer = await task.file.arrayBuffer()
+      console.log('Main thread read file buffer of size:', buffer.byteLength)
       const result = await worker.api.process(Comlink.transfer(buffer, [buffer]))
       task.resolve(result)
     } catch (err) {

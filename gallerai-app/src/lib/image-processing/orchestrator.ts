@@ -44,14 +44,14 @@ export const startImagePipeline = async (id: string, folderId: string, file: Fil
 
     store.updateImage(id, {
       cdnUrl: result.cdnUrl,
-      status: GalleraiSharedKernelEnumsImageStatus.READY,
+      status: undefined,
     })
   } catch (error) {
     store.updateImage(id, { status: GalleraiSharedKernelEnumsImageStatus.ANALYSIS_ERROR })
     console.error('Error in image pipeline:', error)
   } finally {
-    if (localUrl) {
-      URL.revokeObjectURL(localUrl)
-    }
+    // if (localUrl) {
+    //   URL.revokeObjectURL(localUrl)
+    // }
   }
 }

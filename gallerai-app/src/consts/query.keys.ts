@@ -1,4 +1,4 @@
 export const queryKeys = {
   folders: ['folders'] as const,
-  IMAGES: 'images',
+  folderImages: (folderId: string) => ['folderImages', folderId] as const,
 }

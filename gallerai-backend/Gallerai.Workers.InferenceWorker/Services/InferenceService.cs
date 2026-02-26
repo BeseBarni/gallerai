@@ -87,9 +87,10 @@ public sealed class InferenceService : IInferenceService
 
 public sealed class FakeInferenceService : IInferenceService
 {
-    public Task<ImageUpdateNotification> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
+    public async Task<ImageUpdateNotification> AnalyzeImageAsync(string imageUrl, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(new ImageUpdateNotification(1, "critique", ImageStatus.READY));
+        await Task.Delay(2000, cancellationToken); // Simulate some processing delay
+        return await Task.FromResult(new ImageUpdateNotification(1, "critique", ImageStatus.READY));
     }
 }
 

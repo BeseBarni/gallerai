@@ -50,7 +50,7 @@ export const optimizeStandardImage = async (file: File): Promise<Blob> => {
 export const processImage = async (file: File) => {
   if (isRaw(file)) {
     const buffer = await imageProcessor.process(file)
-
+    console.log('Raw processing result buffer size:', buffer?.byteLength)
     if (!buffer) throw new Error('Failed to develop RAW')
 
     return new Blob([buffer], { type: 'image/jpeg' })

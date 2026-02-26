@@ -5,6 +5,7 @@ import { developRaw } from '@/lib/image-processing/libraw-engine'
 const api = {
   async process(buffer: ArrayBuffer) {
     try {
+      console.log('Worker received buffer of size:', buffer.byteLength)
       const result = await developRaw(buffer)
       if (result) return Comlink.transfer(result, [result])
 

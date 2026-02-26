@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 
 // --- Typewriter Hook ---
 const useTypewriter = (text: string, speed: number = 15) => {
@@ -21,8 +21,11 @@ const useTypewriter = (text: string, speed: number = 15) => {
   return displayedText
 }
 
+type AICritiqueProps = {
+  critique: string | undefined | null
+}
 // --- Critique Section ---
-export const AICritique = ({ critique }: { critique?: string }) => {
+export const AICritique = ({ critique }: AICritiqueProps) => {
   const animatedText = useTypewriter(critique || '', 10) // Quick speed
 
   if (!critique) return null
@@ -36,3 +39,7 @@ export const AICritique = ({ critique }: { critique?: string }) => {
     </div>
   )
 }
+
+export const AICritiqueSection = memo(function ({ critique }: AICritiqueProps) {
+  return <>{critique && <AICritique critique={critique} />}</>
+})
