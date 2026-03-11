@@ -116,4 +116,31 @@ internal sealed class RedisCacheService : ICacheService
 
         return success;
     }
+
+    public async Task<bool[]> TryTransitionStatusBatchAsync(string[] keys, ImageStatus expected, ImageStatus next)
+    {
+        var redisKeys = keys.Select(k => (RedisKey)CreateKey(k)).ToArray();
+
+        var script = @"
+            local results = {}
+            for i, key in ipairs(KEYS) do
+                local current = redis.call('get', key)
+                if not current or current == ARGV[1] then
+                    redis.call('set', key, ARGV[2], 'KEEPTTL')
+                    results[i] = 1
+                else
+                    results[i] = 0
+                end
+            end
+            return results";
+
+        var result = await db.ScriptEvaluateAsync(
+                script,
+                redisKeys,
+                [(int)expected, (int)next]
+        );
+
+        return ((int[]?)result)?.Select(r => r == 1).ToArray() ?? [];
+
+    }
 }

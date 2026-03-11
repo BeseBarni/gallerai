@@ -7,30 +7,30 @@ export const developRaw = async (buffer: ArrayBuffer): Promise<ArrayBuffer | nul
   const uint8View = new Uint8Array(buffer)
 
   try {
-    // await instance.open(uint8View)
+    await instance.open(uint8View)
 
-    // try {
-    //   const thumb = await instance.thumbnailData()
+    try {
+      const thumb = await instance.thumbnailData()
 
-    //   if (thumb && thumb.data && thumb.data.length > 50000) {
-    //     const cleanBuffer = new Uint8Array(thumb.data).buffer
+      if (thumb && thumb.data && thumb.data.length > 50000) {
+        const cleanBuffer = new Uint8Array(thumb.data).buffer
 
-    //     return cleanBuffer as ArrayBuffer
-    //   }
-    // } catch (thumbError) {
-    //   console.warn('Fast extraction failed, falling back to raw development', thumbError)
-    // }
+        return cleanBuffer as ArrayBuffer
+      }
+    } catch (thumbError) {
+      console.warn('Fast extraction failed, falling back to raw development', thumbError)
+    }
 
     await instance.open(uint8View, {
       useCameraWb: true,
-      // noAutoBright: false,
-      // halfSize: true, // Speeds up demosaicing significantly
-      // userQual: 0,
-      // outputBps: 8,
-      // medPasses: 0,
-      // fbddNoiserd: 0,
-      // highlight: 0,
-      // outputColor: 1, // sRGB
+      noAutoBright: false,
+      halfSize: true, // Speeds up demosaicing significantly
+      userQual: 0,
+      outputBps: 8,
+      medPasses: 0,
+      fbddNoiserd: 0,
+      highlight: 0,
+      outputColor: 1, // sRGB
     })
 
     const imageData = await instance.imageData()

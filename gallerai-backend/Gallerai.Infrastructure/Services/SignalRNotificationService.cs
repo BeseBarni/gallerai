@@ -7,7 +7,7 @@ namespace Gallerai.Infrastructure.Services;
 
 internal sealed class SignalRNotificationService(IHubContext<ImageNotificationsHub> hubContext) : INotificationService
 {
-    public async Task NotifyUserUpdate<T>(string userId, T message)
+    public async ValueTask NotifyUserUpdate<T>(string userId, T message)
     {
         await hubContext.Clients.User(userId).SendAsync(MessageChannelConsts.ImageUpdate, message);
     }

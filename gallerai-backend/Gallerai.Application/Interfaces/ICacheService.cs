@@ -12,4 +12,5 @@ public interface ICacheService
     Task<T?> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan expiration);
     Task<T?> PopAsync<T>(string key);
     Task<bool> TryTransitionStatusAsync(string key, ImageStatus expected, ImageStatus next);
+    Task<bool[]> TryTransitionStatusBatchAsync(string[] keys, ImageStatus expected, ImageStatus next);
 }

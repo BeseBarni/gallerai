@@ -39,7 +39,7 @@ public static class GetImagePresignedURL
                 metadata.Add("traceparent", traceparent);
             }
 
-            var uploadUrl = await ImageService.GetImageUrlAsync(
+            var uploadUrl = ImageService.GetImageUrlAsync(
                         storageKey,
                         request.ContentType,
                         metadata,
@@ -50,12 +50,12 @@ public static class GetImagePresignedURL
             {
                 return Result<Response>.Failure(new Error("IM_U_F", "Failed to generate presigned URL", 500));
             }
+            await cacheService.SetAsync(image.GetImageStatusCacheKey(), ImageStatus.UPLOADING, TimeSpan.FromMinutes(5));
 
             Context.Images.Add(image);
 
             await Context.SaveChangesAsync(ct);
 
-            await cacheService.SetAsync(image.GetImageStatusCacheKey(), ImageStatus.UPLOADING, TimeSpan.FromMinutes(5));
 
             return new Response(uploadUrl, image.ImageId, storageKey, string.Join('/', cloudflareR2Settings.PublicURL, storageKey), traceparent);
         }

@@ -8,12 +8,12 @@ public sealed class Image : ImageIdEntity
     private readonly List<ImageEvent> _imageEvents = new();
     private readonly List<ImageTag> _imageTags = new();
 
-    private Image()
+    public Image()
     {
     }
-    public string UserId { get; private set; } = null!;
+    public string UserId { get; set; } = null!;
     public Guid FolderId { get; private set; }
-    public string? R2Key { get; private set; }
+    public string? R2Key { get; set; }
     public long? Size { get; private set; }
     public DateTime? UploadedAt { get; private set; }
     public Folder Folder { get; private set; } = null!;
